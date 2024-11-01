@@ -1,11 +1,40 @@
-@startuml
+@startuml like
 'https://plantuml.com/sequence-diagram
 
+skinparam ResponseMessageBelowArrow true
 autonumber
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+database redis order 30
+participant server order 20 
+database db order 40
+participant client order 15
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+==个人信息详情==
+client --[#Blue]> server: POST /like
+note right of client: 用户进行点赞，前端点赞数量增减、点赞状态变更并做防抖处理后\n参数 fromId、toId、全局 token 请求 server
+
+group 异步操作 [失败重试]
+
+    server -> redis: isExist? key(fromId+toId)
+
+    alt 存在该 key
+        redis -[#red]> server: <font color=red>**重复请求，抛出异常**
+    else 不存在该 key
+        server -> redis: setnx key(fromId+toId)
+        group 事务+乐观锁更新
+            server -> db++: user表更新点赞数量
+            autonumber stop
+            note right of db: 用户表 user
+            return 成功
+
+            autonumber resume
+            server -> db++: like表更新点赞状态
+            autonumber stop
+            note right of db: 点赞表 like
+            return 成功
+        end
+    end
+
+end
+
 @enduml
