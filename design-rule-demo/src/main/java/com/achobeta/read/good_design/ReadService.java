@@ -31,8 +31,7 @@ public class ReadService extends AbstractPostProcessor<ReaderBO> {
                 .build();
 
         PostContext<ReaderBO> readerContext = PostContext.<ReaderBO>builder()
-//                .bizId(SnowflakeIdUtil.nextIdStr())
-                .bizId("123456678")
+                .bizId(SnowflakeIdUtil.nextIdStr())
                 .bizName("文本渲染")
                 .bizData(readerBO)
                 .build();
@@ -77,8 +76,7 @@ public class ReadService extends AbstractPostProcessor<ReaderBO> {
                 .build();
 
         PostContext<ReaderBO> readerContext = PostContext.<ReaderBO>builder()
-//                .bizId(SnowflakeIdUtil.nextIdStr())
-                .bizId("123456678")
+                .bizId(SnowflakeIdUtil.nextIdStr())
                 .bizName("文本渲染")
                 .bizData(readerBO)
                 .build();

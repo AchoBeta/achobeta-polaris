@@ -1,5 +1,6 @@
 package com.achobeta.read.good_design;
 
+import cn.hutool.core.date.SystemClock;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -85,13 +86,13 @@ public class SnowflakeIdUtil {
     }
 
     // ==============================Methods=================================
-//    public static long nextId() {
-//        return nextId(SystemClock.now() / 1000);
-//    }
+    public static long nextId() {
+        return nextId(SystemClock.now() / 1000);
+    }
 
-//    public static String nextIdStr() {
-//        return nextId() + "";
-//    }
+    public static String nextIdStr() {
+        return nextId() + "";
+    }
 
     /**
      * 主机器自增序列
@@ -143,11 +144,11 @@ public class SnowflakeIdUtil {
      */
     private static long nextIdBackup(long timestamp) {
         if (timestamp < lastTimestampBak) {
-//            if (lastTimestampBak - SystemClock.now() / 1000 <= BACK_TIME_MAX) {
-//                timestamp = lastTimestampBak;
-//            } else {
-//                throw new RuntimeException(String.format("时钟回拨: now: [%d] last: [%d]", timestamp, lastTimestampBak));
-//            }
+            if (lastTimestampBak - SystemClock.now() / 1000 <= BACK_TIME_MAX) {
+                timestamp = lastTimestampBak;
+            } else {
+                throw new RuntimeException(String.format("时钟回拨: now: [%d] last: [%d]", timestamp, lastTimestampBak));
+            }
         }
 
         if (timestamp != lastTimestampBak) {
