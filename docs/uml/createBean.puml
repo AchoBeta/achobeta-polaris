@@ -1,0 +1,54 @@
+@startuml createBean
+
+skinparam ResponseMessageBelowArrow true
+hide unlinked
+autonumber
+
+participant createBean as bean
+
+participant 扩展点 as point
+
+participant 收集器 as box
+
+activate bean
+
+bean -> bean--++: 完善 beanClass
+
+bean -> bean--++: 完善 beanClass 对应的覆盖方法
+
+bean -> point++: <font color="red"><b>驱动扩展点</b></font>
+
+autonumber 3.1
+
+point -> box++: applyBeanPostProcessorBeforeInitialization\n调度<b>前置处理器</b>执行前扩展点方法
+
+autonumber 3.1.1
+
+box -> box: getBeanPostPocessors\n获取扩展点集合
+
+box -> box: postPocessBeforeInitialization\n真正调用扩展点自定义方法\n遍历扩展点集合，调度扩展方法
+
+autonumber stop
+
+return
+' point <- box --:
+
+point -> point --++:
+
+autonumber 3.2
+point -> box ++: applyBeanPostProcessAfterInitialization\n调度<b>后置处理器</b>执行后扩展点方法
+
+autonumber 3.2.1
+box -> box: getBeanPostPocessors\n获取扩展点集合
+
+box -> box: postPocessAfterInitialization\n真正调用扩展点自定义方法\n遍历扩展点集合，调度扩展方法
+
+autonumber stop
+return
+
+point -> bean --:
+
+autonumber 4
+bean -> bean --++: 实例化 Bean 对象\n（属性注入等操作）
+
+@enduml

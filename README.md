@@ -85,3 +85,10 @@ fix: fix a bug
 
 ## content
 please delete useless import. You can also use the shortcut key ctrl + alt + o to automatically delete useless import by setting idea.
+
+## You Mast Know
+1. Do not submit any sensitive information, such as api_key, address, or password in any code.
+
+2. application-dev.yml. application-prod.yml The latest configuration should be kept internally by the team, and should not be uploaded to git, which is not allowed in any way, because once git is committed, the record will exist forever
+
+3. Never use git push --force unless you know what you are doing.
