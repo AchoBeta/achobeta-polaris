@@ -85,3 +85,10 @@ fix: fix a bug
 
 ## 提交内容
 无用 import 请删除，快捷键 ctrl + alt + o 也可以通过设置 idea 自动删除无用 import
+
+## 你必须知道
+1. 不要提交任何敏感信息，例如 api_key、address 或 password。
+
+2. application-dev.yml、application-prod.yml 最新配置请团队内部保管，不要上传到 git，任何方式都不被允许，因为 git 一旦提交，记录永久存在
+
+3. 任何时候不要用 git push --force 除非你知道你在干什么。
