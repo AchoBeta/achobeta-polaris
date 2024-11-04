@@ -92,11 +92,6 @@
             <groupId>com.achobeta</groupId>
             <artifactId>polaris-infrastructure</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.achobeta</groupId>
-            <artifactId>design-rule-demo</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>

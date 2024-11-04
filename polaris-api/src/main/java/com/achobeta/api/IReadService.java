@@ -1,6 +1,7 @@
 package com.achobeta.api;
 
-import com.achobeta.api.dto.ReadRequestDTO;
+import com.achobeta.api.dto.RenderRequestDTO;
+import com.achobeta.api.dto.RenderResponseDTO;
 import com.achobeta.api.response.Response;
 
 /**
@@ -9,6 +10,8 @@ import com.achobeta.api.response.Response;
  */
 public interface IReadService {
 
-    Response<String> read(ReadRequestDTO readRequestDTO);
+//    Response<String> read(ReadRequestDTO readRequestDTO);
+
+    Response<RenderResponseDTO> render(RenderRequestDTO readRequestDTO);
 
 }
