@@ -38,13 +38,13 @@ class ReadServiceTest {
     @Test
     void read1() {
         ReflectionTestUtils.setField(textDAO, "content", "这是 AchoBeta Polaris 北极星系统");
-        log.info("readService1.read(\"10001\") = " + readService1.read("10001"));
+        log.info("readService1.renderText(\"10001\") = " + readService1.read("10001"));
     }
 
     @Test
     void read2() {
         ReflectionTestUtils.setField(textDAO, "content", "这是 AchoBeta Polaris 北极星系统, AchoBeta 6.0 Java 组复试项目");
-        log.info("readService2.read(\"10001\") = " + readService2.read("10001"));
+        log.info("readService2.renderText(\"10001\") = " + readService2.read("10001"));
     }
 
     @Test
@@ -53,12 +53,12 @@ class ReadServiceTest {
         UserInfo userInfoA = UserInfo.builder()
                 .name("AchoBeta 5.0")
                 .isAuth(true).build();
-        log.info("readService3.read(" + userInfoA + ", \"10001\") = " + readService3.read(userInfoA, "10001"));
+        log.info("readService3.renderText(" + userInfoA + ", \"10001\") = " + readService3.read(userInfoA, "10001"));
 
         UserInfo userInfoB = UserInfo.builder()
                 .name("AchoBeta 7.0")
                 .isAuth(false).build();
-        log.info("readService3.read(" + userInfoB + ", \"10001\") = " + readService3.read(userInfoB, "10001"));
+        log.info("readService3.renderText(" + userInfoB + ", \"10001\") = " + readService3.read(userInfoB, "10001"));
     }
 
     @Test
@@ -67,12 +67,12 @@ class ReadServiceTest {
         UserInfo userInfoA = UserInfo.builder()
                 .name("AchoBeta 5.0")
                 .isAuth(true).build();
-        log.info("readService4.read(" + userInfoA + ", \"10001\") = " + readService4.read(userInfoA, "10001"));
+        log.info("readService4.renderText(" + userInfoA + ", \"10001\") = " + readService4.read(userInfoA, "10001"));
 
         UserInfo userInfoB = UserInfo.builder()
                 .name("AchoBeta 6.0")
                 .isAuth(true).build();
-        log.info("readService4.read(" + userInfoB + ", \"10001\") = " + readService4.read(userInfoB, "10001"));
+        log.info("readService4.renderText(" + userInfoB + ", \"10001\") = " + readService4.read(userInfoB, "10001"));
     }
 
     @Test
@@ -81,7 +81,7 @@ class ReadServiceTest {
         UserInfo userInfo = UserInfo.builder()
                 .name("【Java萌新】半糖同学")
                 .isAuth(false).build();
-        log.info("readService5.read(" + userInfo + ", \"10001\") = " + readService5.read(userInfo, "10001"));
+        log.info("readService5.renderText(" + userInfo + ", \"10001\") = " + readService5.read(userInfo, "10001"));
     }
     
 }
