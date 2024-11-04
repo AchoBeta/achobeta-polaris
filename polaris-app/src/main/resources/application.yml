@@ -2,4 +2,4 @@ spring:
   config:
     name: polaris-app
   profiles:
-    active: test
+    active: prod
