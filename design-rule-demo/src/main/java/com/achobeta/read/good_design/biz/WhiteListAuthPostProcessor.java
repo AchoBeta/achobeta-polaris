@@ -1,9 +1,10 @@
 package com.achobeta.read.good_design.biz;
 
-import com.achobeta.read.bad_design.AuthHolder;
+import com.achobeta.read.AuthHolder;
 import com.achobeta.read.good_design.ReaderBO;
 import com.achobeta.read.good_design.TextReadPostProcessor;
 import com.achobeta.read.good_design.postprocessor.PostContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  * 这里隐藏的一个逻辑是白名单优先级一定是低于用户组的优先级的，因此需要重写优先级
  * @create 2024/11/3
  */
+@Slf4j
 @Component
 public class WhiteListAuthPostProcessor implements TextReadPostProcessor {
 

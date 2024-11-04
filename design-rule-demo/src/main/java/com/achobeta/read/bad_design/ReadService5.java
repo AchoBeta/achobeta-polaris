@@ -1,5 +1,6 @@
 package com.achobeta.read.bad_design;
 
+import com.achobeta.read.AuthHolder;
 import com.achobeta.read.TextDAO;
 import com.achobeta.read.UserInfo;
 import com.achobeta.read.PatternStrUtil;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReadService5 {
 
-    public static final String REPLACE_VAR_REGEX = "(AchoBeta\\s+\\d+\\.\\d+|AchoBeta\\s+Polaris)";
     private final TextDAO textDAO;
     
     public String read(UserInfo userInfo, String textId) {
@@ -29,10 +29,12 @@ public class ReadService5 {
         if (!AuthHolder.authGroup(userInfo) && !AuthHolder.isInWhiteList(userInfo)) {
             throw new RuntimeException("鉴权失败! 部门 " + userInfo.getName() + " 暂无访问 read 方法权限!");
         }
+        // 主流程
         String text = textDAO.getTextById(textId);
         // 需求4: 增添 if - else 应对不同部门展示不同效果的逻辑
         if ("AchoBeta 5.0".equals(userInfo.getName())) {
-            return PatternStrUtil.replaceText(text, "<br>", "</br>");
+            // 100
+            return PatternStrUtil.replaceText(text, "<b>", "</b>");
         }
         if ("AchoBeta 6.0".equals(userInfo.getName())) {
             return PatternStrUtil.replaceText(text, "<font color=\"red\">", "</font>");

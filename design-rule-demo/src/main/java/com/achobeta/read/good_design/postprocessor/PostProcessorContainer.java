@@ -7,10 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author chensongmin
@@ -22,11 +19,13 @@ import java.util.Map;
 @Component
 public class PostProcessorContainer <T> implements ApplicationContextAware {
 
-    public static final String AND_MODEL = "AND";
-    public static final String OR_MODEL = "OR";
-
     private Class<T> postProcessorClassList;
 
+    /**
+     * <p>需要 ApplicationContext 提供的 getBeanOfType() 来获取接口实现类集合</p>
+     * <p>Spring 内部 Bean 无法通过正常方式注入，只能通过 Aware 接口透传过来</p>
+     * <p><b>Aware 接口实际上是一种迪米特法则 IoD</b></p>
+     */
     private static ApplicationContext applicationContext;
 
     @Override
@@ -40,49 +39,57 @@ public class PostProcessorContainer <T> implements ApplicationContextAware {
     private PostProcessorContainer() {}
 
     /**
-     * 使用静态类工厂方法生成单例的扩展点集成收集器
-     * 静态方法会在项目启动之初加上类锁，不会出现并发问题
-     * @param postProcessorClassList
-     * @return
-     * @param <T>
+     * 使用静态内部类生成单例的扩展点集成收集器
+     * <p>当 PostProcessorContainer 类加载时，静态内部类 SingletonHolder 没有被加载进内存。
+     * 只有当调用 getUniqueInstance() 方法从而触发 SingletonHolder.INSTANCE 时
+     * SingletonHolder 才会被加载，此时初始化 INSTANCE 实例</p>
+     * <p><b>JVM在类初始化阶段会对类加上类锁，防止多线程并发初始化同一个类</b></p>
      */
+    private static class SingletonHolder {
+        private static final PostProcessorContainer INSTANCE = new PostProcessorContainer<>();
+    }
+
+    @SuppressWarnings("all")
     public static <T> PostProcessorContainer getInstance(Class<T> postProcessorClassList) {
-        PostProcessorContainer postProcessorContainer = new PostProcessorContainer<>();
-        postProcessorContainer.postProcessorClassList = postProcessorClassList;
-        return postProcessorContainer;
+        SingletonHolder.INSTANCE.postProcessorClassList = postProcessorClassList;
+        return SingletonHolder.INSTANCE;
     }
 
     /**
-     *
-     * @param postContext
-     * @param model 选择与模式、或模式
-     * @return
-     * @param <E>
+     * 前置执行器驱动方法
+     * <p>通过 ApplicationContext 获取 <? extends BasePostProcessor> 接口类型下的
+     * 所有扩展实现子类，按照优先级的顺序组织成链表串联执行。</p>
+     * <br>如果前置执行回返了 false，说明前置流程执行失败，
+     * 将干预主流程的执行。
+     * </p>
+     * @param postContext 数据传输上下文
+     * @return 前置流程都通过，返回值才是 true，否则只要执行到第一个 false 都会直接终止后续校验
+     * @param <E> PostContext<T> 类型
      */
-    public <E extends PostContext<?>> boolean doHandleBefore(E postContext, String model) {
+    @SuppressWarnings("all")
+    public <E extends PostContext<?>> boolean doHandleBefore(E postContext) {
         List<? extends BasePostProcessor<T>> postProcessorList = getBeanOfType(postProcessorClassList);
         if (CollectionUtils.isEmpty(postProcessorList)) {
             return true;
         }
         boolean isContinue = true;
         // 优先级越高，越靠近主流程
-        postProcessorList.sort(Comparator.comparing((BasePostProcessor<T> o) -> o.getPriority()));
-//        postProcessorList.sort(Comparator.comparing(BasePostProcessor::getPriority));
+        postProcessorList.sort(Comparator.comparing(BasePostProcessor::getPriority));
 
         for (BasePostProcessor<T> postProcessor : postProcessorList) {
-            if (AND_MODEL.equals(model)) {
-                isContinue &= postProcessor.handleBefore((PostContext<T>) postContext);
-            } else if (OR_MODEL.equals(model)) {
-                isContinue |= postProcessor.handleBefore((PostContext<T>) postContext);
-            }
+            isContinue = isContinue && postProcessor.handleBefore((PostContext<T>) postContext);
+            // 出现第一个不通过，后续流程都不执行
+            if (!isContinue) return isContinue;
         }
         return isContinue;
     }
 
     /**
-     *
-     * @param postContext
-     * @param <E>
+     * 后置执行器驱动方法
+     * <p>通过 ApplicationContext 获取 <? extends BasePostProcessor> 接口类型下的
+     * 所有扩展实现子类，按照优先级的顺序组织成链表串联执行。</p>
+     * @param postContext 数据传输上下文
+     * @param <E> PostContext<T> 类型
      */
     public <E extends PostContext<?>> void doHandleAfter(E postContext) {
         List<? extends BasePostProcessor<T>> postProcessorList = getBeanOfType(postProcessorClassList);

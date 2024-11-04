@@ -17,11 +17,6 @@ import lombok.*;
 public class PostContext<T> {
 
     /**
-     * 业务ID，雪花算法承载，便于后续全链路追踪
-     */
-    private String bizId;
-
-    /**
      * 业务名称
      */
     private String bizName;

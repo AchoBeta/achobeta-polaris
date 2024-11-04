@@ -18,7 +18,7 @@ public class GroupAReadPostProcessor implements TextReadPostProcessor {
     public void handleAfter(PostContext<ReaderBO> postContext) {
         ReaderBO readerBO = postContext.getBizData();
         if ("AchoBeta 5.0".equals(readerBO.getUser().getName())) {
-            String text = PatternStrUtil.replaceText(readerBO.getText(), "<br>", "</br>");
+            String text = PatternStrUtil.replaceText(readerBO.getText(), "<b>", "</b>");
             readerBO.setText(text);
             postContext.setBizData(readerBO);
         }

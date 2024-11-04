@@ -1,6 +1,6 @@
 package com.achobeta.read.good_design.biz;
 
-import com.achobeta.read.bad_design.AuthHolder;
+import com.achobeta.read.AuthHolder;
 import com.achobeta.read.good_design.ReaderBO;
 import com.achobeta.read.good_design.TextReadPostProcessor;
 import com.achobeta.read.good_design.postprocessor.PostContext;
@@ -21,12 +21,12 @@ public class AuthValidatePostProcessor implements TextReadPostProcessor {
     public boolean handleBefore(PostContext<ReaderBO> postContext) {
         ReaderBO readerBO = postContext.getBizData();
         if (!AuthHolder.authGroup(readerBO.getUser()) && !AuthHolder.isInWhiteList(readerBO.getUser())) {
-            throw new RuntimeException("鉴权失败! 部门 " + readerBO.getUser().getName() + " 暂无访问 read 方法权限!");
+            log.error("鉴权失败! 部门 " + readerBO.getUser().getName() + " 暂无访问 read 方法权限!");
+            // 干预主流程继续执行
+            return false;
         }
         // 不干预主流程继续执行
         return true;
-        // 测试，干预主流程继续执行
-//        return false;
     }
 
     @Override

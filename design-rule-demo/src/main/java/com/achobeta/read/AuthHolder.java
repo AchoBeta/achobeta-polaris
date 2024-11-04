@@ -1,6 +1,4 @@
-package com.achobeta.read.bad_design;
-
-import com.achobeta.read.UserInfo;
+package com.achobeta.read;
 
 /**
  * @author chensongmin
