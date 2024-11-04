@@ -18,32 +18,32 @@ public abstract class AbstractPostProcessor <E> {
                 PostProcessorContainer.getInstance(postProcessor);
 
         // 分支流程[前置扩展]逻辑
-        log.info("bizId: {}, bizName: {} - 分支流程[前置扩展]逻辑开始执行！",
-                postContext.getBizId(), postContext.getBizName());
-        boolean isContinue = postProcessorContainer.doHandleBefore(postContext, PostProcessorContainer.AND_MODEL);
+        log.info("模块:{} 分支流程[前置扩展]逻辑开始执行！",
+                postContext.getBizName());
+        boolean isContinue = postProcessorContainer.doHandleBefore(postContext);
 
         if (!isContinue) {
-            log.info("bizId: {}, bizName: {} - 前置逻辑执行完毕，当前决策为：中断主流程执行！",
-                    postContext.getBizId(), postContext.getBizName());
+            log.info("模块:{} 前置逻辑执行决策：中断主流程执行！",
+                    postContext.getBizName());
             return doInterruptMainProcessor(postContext);
         } else {
-            log.info("bizId: {}, bizName: {} - 前置逻辑执行完毕，当前决策为：不干预主流程执行！",
-                    postContext.getBizId(), postContext.getBizName());
+            log.info("模块:{} 前置逻辑执行完毕，当前决策为：不干预主流程执行！",
+                    postContext.getBizName());
         }
 
         // 主流程逻辑
-        log.info("bizId: {}, bizName: {} - 主流程逻辑开始执行！",
-                postContext.getBizId(), postContext.getBizName());
+        log.info("模块:{} 主流程逻辑开始执行！",
+                postContext.getBizName());
         postContext = doMainProcessor(postContext);
-        log.info("bizId: {}, bizName: {} - 主流程逻辑执行完毕！",
-                postContext.getBizId(), postContext.getBizName());
+        log.info("模块:{} 主流程逻辑执行完毕！",
+                postContext.getBizName());
 
         // 分支流程[后置扩展]逻辑
-        log.info("bizId: {}, bizName: {} - 分支流程[后置扩展]逻辑开始执行！",
-                postContext.getBizId(), postContext.getBizName());
+        log.info("模块:{} 分支流程[后置扩展]逻辑开始执行！",
+                postContext.getBizName());
         postProcessorContainer.doHandleAfter(postContext);
-        log.info("bizId: {}, bizName: {} - 分支流程[后置扩展]逻辑执行结束！",
-                postContext.getBizId(), postContext.getBizName());
+        log.info("模块:{} 分支流程[后置扩展]逻辑执行结束！",
+                postContext.getBizName());
 
         return postContext;
     }

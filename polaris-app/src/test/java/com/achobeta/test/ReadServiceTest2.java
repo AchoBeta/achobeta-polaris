@@ -50,9 +50,9 @@ public class ReadServiceTest2 {
 
     @Test
     public void testReadGroupShow() {
-        log.info("readService.reader(" + userInfoA + ", \"10001\") = " + readService.reader(userInfoA, "10001"));
-        log.info("readService.reader(" + userInfoB + ", \"10001\") = " + readService.reader(userInfoB, "10001"));
-        log.info("readService.reader(" + userInfoC + ", \"10001\") = " + readService.reader(userInfoC, "10001"));
+        log.info("readService.readTemplate(" + userInfoA + ", \"10001\") = " + readService.readTemplate(userInfoA, "10001"));
+        log.info("readService.readTemplate(" + userInfoB + ", \"10001\") = " + readService.readTemplate(userInfoB, "10001"));
+        log.info("readService.readTemplate(" + userInfoC + ", \"10001\") = " + readService.readTemplate(userInfoC, "10001"));
     }
 
     @Test

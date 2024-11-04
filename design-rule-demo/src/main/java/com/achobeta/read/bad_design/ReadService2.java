@@ -21,7 +21,7 @@ public class ReadService2 {
 
     public String read(String textId) {
         String text = textDAO.getTextById(textId);
-        return PatternStrUtil.replaceText(text, "<br>", "</br>");
+        return PatternStrUtil.replaceText(text, "<b>", "</b>");
     }
 
 }

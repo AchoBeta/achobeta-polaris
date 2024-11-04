@@ -1,5 +1,6 @@
 package com.achobeta.read.bad_design;
 
+import com.achobeta.read.AuthHolder;
 import com.achobeta.read.TextDAO;
 import com.achobeta.read.UserInfo;
 import com.achobeta.read.PatternStrUtil;
@@ -31,7 +32,7 @@ public class ReadService4 {
         String text = textDAO.getTextById(textId);
         // 需求4: 增添 if - else 应对不同部门展示不同效果的逻辑
         if ("AchoBeta 5.0".equals(userInfo.getName())) {
-            return PatternStrUtil.replaceText(text, "<br>", "</br>");
+            return PatternStrUtil.replaceText(text, "<b>", "</b>");
         }
         if ("AchoBeta 6.0".equals(userInfo.getName())) {
             return PatternStrUtil.replaceText(text, "<font color=\"red\">", "</font>");
