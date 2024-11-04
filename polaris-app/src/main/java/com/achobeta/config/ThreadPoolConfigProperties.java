@@ -12,7 +12,7 @@ public class ThreadPoolConfigProperties {
     /** 最大线程数 */
     private Integer maxPoolSize = 200;
     /** 最大等待时间 */
-    private Long keepAliveTime = 10L;
+    private Integer keepAliveTime = 10;
     /** 最大队列数 */
     private Integer blockQueueSize = 5000;
     /*
