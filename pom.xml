@@ -8,7 +8,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>design-rule-demo</module>
         <module>polaris-api</module>
         <module>polaris-app</module>
         <module>polaris-domain</module>
@@ -113,6 +112,11 @@
                 <artifactId>hutool-all</artifactId>
                 <version>5.5.1</version>
             </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>3.26.0</version>
+            </dependency>
 
             <!-- 工程模块 -->
             <dependency>
@@ -138,11 +142,6 @@
             <dependency>
                 <groupId>com.achobeta</groupId>
                 <artifactId>polaris-trigger</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.achobeta</groupId>
-                <artifactId>design-rule-demo</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
