@@ -3,6 +3,7 @@ package com.achobeta.infrastructure.adapter.repository;
 import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.UserMapper;
+import com.achobeta.infrastructure.dao.po.UserPO;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -20,6 +21,22 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public UserEntity queryUserInfo(String userId) {
-        return userMapper.getUserByUserId(userId);
+        UserPO userPO = userMapper.getUserByUserId(userId);
+
+        return UserEntity.builder()
+                    .userId(userPO.getUserId())
+                    .userName(userPO.getUserName())
+                    .phone(userPO.getPhone())
+                    .gender(userPO.getGender())
+                    .idCard(userPO.getIdCard())
+                    .email(userPO.getEmail())
+                    .grade(userPO.getGrade())
+                    .major(userPO.getMajor())
+                    .studentId(userPO.getStudentId())
+                    .experience(userPO.getExperience())
+                    .currentStatus(userPO.getCurrentStatus())
+                    .entryTime(userPO.getEntryTime())
+                    .likeCount(userPO.getLikeCount())
+                .build();
     }
 }
