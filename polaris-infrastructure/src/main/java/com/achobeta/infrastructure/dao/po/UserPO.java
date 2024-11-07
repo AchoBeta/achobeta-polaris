@@ -2,6 +2,8 @@ package com.achobeta.infrastructure.dao.po;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author yangzhiyao
  * @description user持久类对象
@@ -80,9 +82,9 @@ public class UserPO {
     /**
      * 创建时间
      */
-    private String createTime;
+    private LocalDateTime createTime;
     /**
      * 更新时间
      */
-    private String updateTime;
+    private LocalDateTime updateTime;
 }

@@ -26,10 +26,10 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
 
 
     @Override
-    public UserInfoVO getUserInfo(String userId) {
+    public UserEntity getUserInfo(String userId) {
         PostContext<UserBO> userContext = buildPostContext(userId);
         userContext = super.doPostProcessor(userContext, UserInfoPostProcessor.class);
-        return UserInfoVO.builder()
+        return UserEntity.builder()
                 .userId(userContext.getBizData().getUserEntity().getUserId())
                 .userName(userContext.getBizData().getUserEntity().getUserName())
                 .email(userContext.getBizData().getUserEntity().getEmail())
@@ -49,10 +49,11 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
     @Override
     public PostContext<UserBO> doMainProcessor(PostContext<UserBO> postContext) {
         UserBO userBO = postContext.getBizData();
-
+        log.info("开始查询用户信息，userId:{}",userBO.getUserEntity().getUserId());
         UserEntity userEntity = repository.queryUserInfo(userBO.getUserEntity().getUserId());
         // TODO:待添加获取用户点赞状态，以及用户所属团队职位分组
 
+        log.info("查询用户信息成功，userId:{}",userBO.getUserEntity().getUserId());
         postContext.setBizData(UserBO.builder().userEntity(userEntity).build());
         return postContext;
     }

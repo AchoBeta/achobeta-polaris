@@ -4,6 +4,7 @@ import com.achobeta.api.IUserService;
 import com.achobeta.api.dto.user.UserInfoRequestDTO;
 import com.achobeta.api.dto.user.UserInfoResponseDTO;
 import com.achobeta.api.response.Response;
+import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.user.model.valobj.UserInfoVO;
 import com.achobeta.domain.user.service.IUserInfoService;
 import com.achobeta.types.common.Constants;
@@ -37,7 +38,7 @@ public class UserController implements IUserService {
         try {
             log.info("用户访问个人中心信息页面系统开始，userId:{}", userInfoRequestDTO.getUserId());
 
-            UserInfoVO userInfoVO = userService.getUserInfo(userInfoRequestDTO.getUserId());
+            UserEntity userEntity = userService.getUserInfo(userInfoRequestDTO.getUserId());
             log.info("用户访问个人中心信息页面系统结束，userId:{}", userInfoRequestDTO.getUserId());
 
             return Response.<UserInfoResponseDTO>builder()
@@ -45,21 +46,21 @@ public class UserController implements IUserService {
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())
                     .data(UserInfoResponseDTO.builder()
-                            .userId(userInfoVO.getUserId())
-                            .userName(userInfoVO.getUserName())
-                            .phone(userInfoVO.getPhone())
-                            .gender(userInfoVO.getGender())
-                            .idCard(userInfoVO.getIdCard())
-                            .email(userInfoVO.getEmail())
-                            .grade(userInfoVO.getGrade())
-                            .major(userInfoVO.getMajor())
-                            .studentId(userInfoVO.getStudentId())
-                            .experience(userInfoVO.getExperience())
-                            .currentStatus(userInfoVO.getCurrentStatus())
-                            .entryTime(userInfoVO.getEntryTime())
-                            .likeCount(userInfoVO.getLikeCount())
-                            .liked(userInfoVO.getLiked())
-                            .positions(userInfoVO.getPositions())
+                            .userId(userEntity.getUserId())
+                            .userName(userEntity.getUserName())
+                            .phone(userEntity.getPhone())
+                            .gender(userEntity.getGender())
+                            .idCard(userEntity.getIdCard())
+                            .email(userEntity.getEmail())
+                            .grade(userEntity.getGrade())
+                            .major(userEntity.getMajor())
+                            .studentId(userEntity.getStudentId())
+                            .experience(userEntity.getExperience())
+                            .currentStatus(userEntity.getCurrentStatus())
+                            .entryTime(userEntity.getEntryTime())
+                            .likeCount(userEntity.getLikeCount())
+                            .liked(userEntity.getLiked())
+                            .positions(userEntity.getPositions())
                             .build())
                     .build();
         } catch (Exception e) {

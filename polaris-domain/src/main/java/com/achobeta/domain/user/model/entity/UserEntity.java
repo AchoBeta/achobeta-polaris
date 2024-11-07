@@ -2,6 +2,8 @@ package com.achobeta.domain.user.model.entity;
 
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 用户实体对象
@@ -65,4 +67,12 @@ public class UserEntity {
      * 用户所获得赞数量
      */
     private Integer likeCount;
+    /**
+     * 用户点赞状态
+     */
+    private Boolean liked;
+    /**
+     * 用户所属职位/分组
+     */
+    private List<String> positions;
 }

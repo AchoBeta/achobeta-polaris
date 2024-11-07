@@ -17,6 +17,10 @@
     </resultMap>
 
     <select id="getUserByUserId" resultMap="UserResultMap">
-        SELECT * FROM user WHERE user_id = #{userId}
+        SELECT id,user_name,id_card,student_id,current_status,
+               entry_time,like_count,create_by,create_time,update_by,
+               update_time ,phone,gender,email,grade,major,experience
+        FROM user
+        WHERE user_id = #{userId} and is_deleted = 0
     </select>
 </mapper>

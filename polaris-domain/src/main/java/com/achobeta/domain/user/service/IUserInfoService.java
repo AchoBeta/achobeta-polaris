@@ -1,6 +1,6 @@
 package com.achobeta.domain.user.service;
 
-import com.achobeta.domain.user.model.valobj.UserInfoVO;
+import com.achobeta.domain.user.model.entity.UserEntity;
 
 /**
  * @author yangzhiyao
@@ -9,6 +9,6 @@ import com.achobeta.domain.user.model.valobj.UserInfoVO;
  */
 public interface IUserInfoService {
 
-    UserInfoVO getUserInfo(String userId);
+    UserEntity getUserInfo(String userId);
 
 }
