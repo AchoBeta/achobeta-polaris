@@ -1,6 +1,13 @@
 name: CI-CD Pipeline
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - master
+      - feat-bantanger-cicd-pipeline
+#  pull_request:
+#    branches:
+#      -
 
 env:
   IMAGE_TAG: ${{ github.sha }}
@@ -45,7 +52,7 @@ jobs:
 
       - name: docker compose build and push
         run: |
-          docker build -t bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f polaris/polaris-app/Dockerfile .
+          docker build -t bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f polaris-app/Dockerfile .
 
       - name: Push Image
         run: |
