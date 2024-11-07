@@ -2,6 +2,8 @@ package com.achobeta.domain.user.model.valobj;
 
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 用户个人中心信息展示对象
@@ -69,4 +71,8 @@ public class UserInfoVO {
      * 用户点赞状态
      */
     private Boolean liked;
+    /**
+     * 用户所属职位/分组
+     */
+    private List<String> positions;
 }

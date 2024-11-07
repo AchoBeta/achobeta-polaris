@@ -2,6 +2,8 @@ package com.achobeta.api.dto.user;
 
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 用户个人信息相应DTO
@@ -69,4 +71,8 @@ public class UserInfoResponseDTO {
      * 点赞状态
      */
     private Boolean liked;
+    /**
+     * 用户所属职位/分组
+     */
+    private List<String> positions;
 }
