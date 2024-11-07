@@ -57,7 +57,7 @@ jobs:
 
       - name: Push Image
         run: |
-          docker push bantanger/achobeta/polaris-app:1.0-SNAPSHOT
+          docker push ghcr.io/bantanger/achobeta/polaris-app:1.0-SNAPSHOT
 
   # Docker 自动部署
   deploy-docker:
