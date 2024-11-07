@@ -10,10 +10,20 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="deleted" column="is_deleted"/>
     </resultMap>
 
     <select id="listSubordinateByPositionId" resultMap="PositionResultMap">
-        select * from position where position_id = #{positionId} and level = #{nextLevel} and is_deleted = 0
+        select id,position_id,position_name,level,subordinate,
+               create_by,create_time,update_by,update_time
+        from position
+        where position_id = #{positionId} and level = #{nextLevel} and is_deleted = 0
     </select>
+
+    <select id="listTeamByUserId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,
+               create_by,create_time,update_by,update_time
+        from position
+        where create_by = #{userId} and is_deleted = 0
+    </select>
+
 </mapper>

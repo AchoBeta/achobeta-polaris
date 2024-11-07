@@ -13,4 +13,6 @@ public interface IPositionRepository {
 
     List<PositionEntity> querySubordinatePosition(String positionId);
 
+    List<PositionEntity> queryTeams(String userId);
+
 }

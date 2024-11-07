@@ -51,8 +51,4 @@ public class PositionPO {
      * 更新时间
      */
     private LocalDateTime updateTime;
-    /**
-     * 软删除标识
-     */
-    private Boolean deleted;
 }
