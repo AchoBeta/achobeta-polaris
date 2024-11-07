@@ -40,11 +40,7 @@
             <groupId>com.achobeta</groupId>
             <artifactId>polaris-domain</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.achobeta</groupId>
-            <artifactId>design-rule-demo</artifactId>
-        </dependency>
-    </dependencies>
+        </dependencies>
 
     <build>
         <finalName>polaris-trigger</finalName>
