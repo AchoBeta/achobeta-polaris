@@ -53,7 +53,7 @@ jobs:
       - name: docker compose build and push
         run: |
           cd polaris-app
-          docker rmi polaris-app:1.0-SNAPSHOT
+          # docker rmi ghcr.io/bantanger/achobeta/polaris-app:1.0-snapshot
           docker build -t ghcr.io/bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f ./Dockerfile .
 
       - name: Push Image
