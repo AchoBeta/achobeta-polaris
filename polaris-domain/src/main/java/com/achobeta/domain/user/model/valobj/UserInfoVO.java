@@ -65,4 +65,8 @@ public class UserInfoVO {
      * 用户所获得赞数量
      */
     private Integer likeCount;
+    /**
+     * 用户点赞状态
+     */
+    private Boolean liked;
 }

@@ -58,6 +58,7 @@ public class UserController implements IUserService {
                             .currentStatus(userInfoVO.getCurrentStatus())
                             .entryTime(userInfoVO.getEntryTime())
                             .likeCount(userInfoVO.getLikeCount())
+                            .liked(userInfoVO.getLiked())
                             .build())
                     .build();
         } catch (Exception e) {
