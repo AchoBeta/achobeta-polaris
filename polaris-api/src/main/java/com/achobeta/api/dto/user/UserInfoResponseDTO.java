@@ -2,6 +2,7 @@ package com.achobeta.api.dto.user;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public class UserInfoResponseDTO {
     /**
      * 用户加入时间
      */
-    private String entryTime;
+    private LocalDateTime entryTime;
     /**
      * 用户所获得赞数量
      */
