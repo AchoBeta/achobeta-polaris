@@ -52,7 +52,8 @@ jobs:
 
       - name: docker compose build and push
         run: |
-          docker build -t bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f ./polaris-app/Dockerfile .
+          cd polaris-app
+          docker build -t bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f ./Dockerfile .
 
       - name: Push Image
         run: |
