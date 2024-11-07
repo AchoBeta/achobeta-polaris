@@ -31,7 +31,14 @@ public class PositionRepository implements IPositionRepository {
      */
     @Override
     public List<PositionEntity> querySubordinatePosition(String positionId) {
+        log.info("repository querySubordinatePosition start，positionId: {}", positionId);
+
+        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) start: {}", positionId);
         List<PositionPO> positionPOList = positionMapper.listSubordinateByPositionId(positionId);
+        if(positionPOList == null || positionPOList.isEmpty()) {
+            return null;
+        }
+        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) over: {}", positionId);
 
         List<PositionEntity> positionEntityList = new ArrayList<>();
         for (PositionPO positionPO : positionPOList) {
@@ -43,6 +50,7 @@ public class PositionRepository implements IPositionRepository {
                     .build());
         }
 
+        log.info("repository querySubordinatePosition over，positionId: {}", positionId);
         return positionEntityList;
     }
 
@@ -58,6 +66,9 @@ public class PositionRepository implements IPositionRepository {
 
         log.info("queryTeams positionMapper.listTeamByUserId(userId) start: {}", userId);
         List<PositionPO> positionPOList = positionMapper.listTeamByUserId(userId);
+        if(positionPOList == null || positionPOList.isEmpty()) {
+            return null;
+        }
         log.info("queryTeams positionMapper.listTeamByUserId(userId) over: {}", userId);
 
         List<PositionEntity> positionEntityList = new ArrayList<>();
