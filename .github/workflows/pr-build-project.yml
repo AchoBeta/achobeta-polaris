@@ -2,12 +2,9 @@ name: CI-CD Pipeline
 
 on:
   push:
-    branches:
-      - master
-      - feat-bantanger-cicd-pipeline
-#  pull_request:
-#    branches:
-#      -
+    branches: [ master, test, prod]
+  pull_request:
+    branches: [ master, test, prod]
 
 env:
   IMAGE_TAG: ${{ github.sha }}
@@ -17,10 +14,10 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
-      - name: 拉取最新提交的代码
+      - name: pull commit head^3
         uses: actions/checkout@v3
 
-      - name: 设置jdk
+      - name: setup java 8
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -30,18 +27,11 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
-      - name: try java project build
+      - name: start build java project
         run: mvn clean install package -Dmaven.test.skip=true
 
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v1
-
-      # - name: login docker hub
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: "ccr.ccs.tencentyun.com"
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: login ghcr.io
         uses: docker/login-action@v2
@@ -53,47 +43,9 @@ jobs:
       - name: docker compose build and push
         run: |
           cd polaris-app
-          # docker rmi ghcr.io/bantanger/achobeta/polaris-app:1.0-snapshot
-          docker build -t ghcr.io/bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f ./Dockerfile .
+          sudo sh build.sh
+          # docker build -t ghcr.io/bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f ./Dockerfile .
 
       - name: Push Image
         run: |
-          docker push ghcr.io/bantanger/achobeta/polaris-app:1.0-SNAPSHOT
-
-  # Docker 自动部署
-  deploy-docker:
-    needs: [build-image]
-    name: Deploy Docker
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_IP }} # 服务器ip
-          username: ${{ secrets.REMOTE_USER }} # 服务器登录用户名
-          password: ${{ secrets.REMOTE_PWD }} # 服务器登录密码
-          port: 22 # 服务器ssh端口
-          script: |
-            # 切换工作区
-            cd polaris
-            # 下载 docker-compose.yml
-            # wget -O docker-compose.yml https://raw.githubusercontent.com/yiyungent/SimCaptcha/master/docker-compose.yml
-            # 停止并删除旧 容器、网络、挂载点
-            # docker-compose down                          # TODO: docker-compose: command not found. 不知道为什么找不到 docker-compose，但直接连接服务器执行就可以
-            # /usr/local/python3/bin/docker-compose down
-            docker stop polaris
-            # 删除旧镜像
-            docker rmi bantanger/achobeta/polaris 
-            # 登录镜像服务器
-            docker login --username=${{ github.repository_owner }} --password ${{ secrets.GHCR_IO_TOKEN }} 
-            # 创建并启动容器
-            docker-compose up -d --build
-            #/usr/local/python3/bin/docker-compose up -d --build
-#      - name: 删除旧的jar包以及运行脚本
-#        run: sshpass -p ${{secrets.REMOTE_PWD}} ssh -o StrictHostKeyChecking=no root@${{secrets.REMOTE_IP}} "cd /root/GitHub_Action && rm -rf ./*"
-#
-#      - name: 上传jar包和启动脚本到服务器中
-#        run: sshpass -p ${{secrets.REMOTE_PWD}} scp -r -o StrictHostKeyChecking=no ./target/GitHub_Action-0.0.1-SNAPSHOT.jar ./run.sh root@${{secrets.REMOTE_IP}}:/root/GitHub_Action
-#
-#      - name: 启动项目
-#        run: sshpass -p ${{secrets.REMOTE_PWD}} ssh -o StrictHostKeyChecking=no root@${{secrets.REMOTE_IP}} "cd /root/GitHub_Action && chmod +x run.sh && ./run.sh"
+          docker push ghcr.io/bantanger/achobeta/polaris-app:1.0
