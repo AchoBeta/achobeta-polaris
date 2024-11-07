@@ -51,6 +51,7 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
         UserBO userBO = postContext.getBizData();
 
         UserEntity userEntity = repository.queryUserInfo(userBO.getUserEntity().getUserId());
+        // TODO:待添加获取用户点赞状态，以及用户所属团队职位分组
 
         postContext.setBizData(UserBO.builder().userEntity(userEntity).build());
         return postContext;
