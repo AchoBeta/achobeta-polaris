@@ -3,6 +3,8 @@ package com.achobeta.infrastructure.dao;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 职位/分组dao
@@ -11,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PositionMapper {
 
-    PositionPO getPositionByPositionId(String positionId);
+    List<PositionPO> listSubordinateByPositionId(String positionId);
 
 }

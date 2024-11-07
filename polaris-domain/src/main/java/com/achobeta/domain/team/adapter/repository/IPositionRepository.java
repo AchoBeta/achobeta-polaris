@@ -1,5 +1,9 @@
 package com.achobeta.domain.team.adapter.repository;
 
+import com.achobeta.domain.render.model.entity.PositionEntity;
+
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 职位仓储接口
@@ -7,6 +11,6 @@ package com.achobeta.domain.team.adapter.repository;
  */
 public interface IPositionRepository {
 
-
+    List<PositionEntity> querySubordinatePosition(String positionId);
 
 }
