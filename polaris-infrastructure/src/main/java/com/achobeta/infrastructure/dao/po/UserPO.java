@@ -66,7 +66,7 @@ public class UserPO {
     /**
      * 用户加入时间
      */
-    private String entryTime;
+    private LocalDateTime entryTime;
     /**
      * 用户所获得赞数量
      */
