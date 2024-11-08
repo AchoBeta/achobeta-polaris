@@ -1,5 +1,9 @@
 package com.achobeta.api;
 
+import com.achobeta.api.dto.StructureRequestDTO;
+import com.achobeta.api.dto.StructureResponseDTO;
+import com.achobeta.api.response.Response;
+
 /**
  * @author yangzhiyao
  * @description 团队服务接口
@@ -7,6 +11,6 @@ package com.achobeta.api;
  */
 public interface ITeamService {
 
-    Response<>
+    Response<StructureResponseDTO> structure(StructureRequestDTO structureRequestDTO);
 
 }
