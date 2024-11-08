@@ -4,6 +4,8 @@ import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.UserPO;
+import com.achobeta.types.exception.AppException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -13,6 +15,7 @@ import javax.annotation.Resource;
  * @description 用户仓储接口实现类
  * @date 2024/11/6
  */
+@Slf4j
 @Repository
 public class UserRepository implements IUserRepository {
 
@@ -22,6 +25,10 @@ public class UserRepository implements IUserRepository {
     @Override
     public UserEntity queryUserInfo(String userId) {
         UserPO userPO = userMapper.getUserByUserId(userId);
+        if(userPO == null) {
+            log.error("用户不存在！userId：{}",userId);
+            throw new AppException("A0201", "用户不存在");
+        }
 
         return UserEntity.builder()
                     .userId(userPO.getUserId())
