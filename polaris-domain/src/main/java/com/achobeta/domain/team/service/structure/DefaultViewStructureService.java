@@ -1,6 +1,6 @@
 package com.achobeta.domain.team.service.structure;
 
-import com.achobeta.domain.render.model.entity.PositionEntity;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.bo.PositionBO;
 import com.achobeta.domain.team.service.IViewStructureService;

@@ -1,6 +1,6 @@
 package com.achobeta.domain.team.adapter.repository;
 
-import com.achobeta.domain.render.model.entity.PositionEntity;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 
 import java.util.List;
 

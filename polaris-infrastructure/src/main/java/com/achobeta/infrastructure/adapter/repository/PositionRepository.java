@@ -1,6 +1,6 @@
 package com.achobeta.infrastructure.adapter.repository;
 
-import com.achobeta.domain.render.model.entity.PositionEntity;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;

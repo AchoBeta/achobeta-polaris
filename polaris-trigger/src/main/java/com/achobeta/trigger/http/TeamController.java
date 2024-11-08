@@ -4,7 +4,7 @@ import com.achobeta.api.ITeamService;
 import com.achobeta.api.dto.StructureRequestDTO;
 import com.achobeta.api.dto.StructureResponseDTO;
 import com.achobeta.api.response.Response;
-import com.achobeta.domain.render.model.entity.PositionEntity;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.service.IViewStructureService;
 import com.achobeta.types.common.Constants;
 import lombok.RequiredArgsConstructor;

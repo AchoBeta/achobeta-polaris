@@ -1,4 +1,4 @@
-package com.achobeta.domain.render.model.entity;
+package com.achobeta.domain.team.model.entity;
 
 import lombok.*;
 

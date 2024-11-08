@@ -1,8 +1,6 @@
 package com.achobeta.domain.team.service;
 
-import com.achobeta.domain.render.model.entity.PositionEntity;
-
-import java.util.List;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 
 /**
  * @author yangzhiyao
