@@ -45,8 +45,8 @@ jobs:
         run:
           # cd polaris-app
           # sudo sh build.sh
-          docker build -t ${{ IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }} -f ./Dockerfile .
+          docker build -t ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }} -f ./Dockerfile .
 
       - name: Push Image
         run:
-          docker push ${{ IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }}
+          docker push ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }}
