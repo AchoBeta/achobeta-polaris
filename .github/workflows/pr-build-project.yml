@@ -3,11 +3,13 @@ name: CI-CD Pipeline
 on:
   push:
     branches: [ master, test, prod]
-  pull_request:
-    branches: [ master, test, prod]
+    tags:
+      - v*
+#  pull_request:
+#    branches: [ master, test, prod]
 
 env:
-  IMAGE_TAG: ${{ github.ref/refs\/tags\/v }}
+  IMAGE_TAG: ${{ github.ref }}
   IMAGE_ENV: ghcr.io
   IMAGE_REGISTRY: bantanger/achobeta
 
@@ -45,8 +47,8 @@ jobs:
         run:
           # cd polaris-app
           # sudo sh build.sh
-          docker build -t ${{ IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }} -f ./Dockerfile .
+          docker build -t ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }} -f ./Dockerfile .
 
       - name: Push Image
         run:
-          docker push ${{ IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }}
+          docker push ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }}
