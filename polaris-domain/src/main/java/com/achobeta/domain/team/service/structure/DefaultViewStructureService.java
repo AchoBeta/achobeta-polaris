@@ -48,7 +48,7 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
         queue.add(positionEntity);
         while(!queue.isEmpty()) {
             PositionEntity tempPosition = queue.poll();
-            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId());
+            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionName());
             tempPosition.setSubordinates(subordinates);
             if(subordinates!= null && !subordinates.isEmpty()) {
                 queue.addAll(subordinates);

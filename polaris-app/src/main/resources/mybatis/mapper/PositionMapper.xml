@@ -17,7 +17,7 @@
         select id,position_id,position_name,level,subordinate,team_name
                create_by,create_time,update_by,update_time
         from position
-        where position_id = #{positionId} and is_deleted = 0
+        where position_name = #{positionName} and team_name = #{teamName} and is_deleted = 0
     </select>
 
 </mapper>

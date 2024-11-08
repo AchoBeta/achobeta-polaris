@@ -25,20 +25,20 @@ public class PositionRepository implements IPositionRepository {
 
     /**
      * 查询某职位/分组下一级的所有职位/分组
-     * @param positionId
+     * @param positionName
      * @return 下级职位/分组列表
      * @date 2024/11/7
      */
     @Override
-    public List<PositionEntity> querySubordinatePosition(String positionId) {
-        log.info("repository querySubordinatePosition start，positionId: {}", positionId);
+    public List<PositionEntity> querySubordinatePosition(String positionName, String teamName) {
+        log.info("repository querySubordinatePosition start，positionName: {}，teamName: {}", positionName, teamName);
 
-        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) start: {}", positionId);
-        List<PositionPO> positionPOList = positionMapper.listSubordinateByPositionId(positionId);
+        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) start: positionName: {}，teamName: {}", positionName, teamName);
+        List<PositionPO> positionPOList = positionMapper.listSubordinateByPositionId(positionName, teamName);
         if(positionPOList == null || positionPOList.isEmpty()) {
             return null;
         }
-        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) over: {}", positionId);
+        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) over: positionName: {}，teamName: {}", positionName, teamName);
 
         List<PositionEntity> positionEntityList = new ArrayList<>();
         for (PositionPO positionPO : positionPOList) {
@@ -49,7 +49,7 @@ public class PositionRepository implements IPositionRepository {
                     .build());
         }
 
-        log.info("repository querySubordinatePosition over，positionId: {}", positionId);
+        log.info("repository querySubordinatePosition over，positionName: {}，teamName: {}", positionName, teamName);
         return positionEntityList;
     }
 

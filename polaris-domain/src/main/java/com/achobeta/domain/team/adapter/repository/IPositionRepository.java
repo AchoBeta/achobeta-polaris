@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface IPositionRepository {
 
-    List<PositionEntity> querySubordinatePosition(String positionId);
+    List<PositionEntity> querySubordinatePosition(String positionName, String teamName);
 
 }
