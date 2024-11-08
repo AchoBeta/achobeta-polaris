@@ -3,8 +3,10 @@ name: CI-CD Pipeline
 on:
   push:
     branches: [ master, test, prod]
-  pull_request:
-    branches: [ master, test, prod]
+    tags:
+      - v*
+#  pull_request:
+#    branches: [ master, test, prod]
 
 env:
   IMAGE_TAG: ${{ github.ref }}
