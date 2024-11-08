@@ -4,6 +4,7 @@
 
     <resultMap id="PositionResultMap" type="com.polaris.infrastructure.dao.po.PositionPO">
         <id property="id" column="id"/>
+        <result property="teamName" column="team_name"/>
         <result property="positionName" column="position_name"/>
         <result property="positionId" column="position_id"/>
         <result property="createBy" column="create_by"/>
@@ -13,17 +14,10 @@
     </resultMap>
 
     <select id="listSubordinateByPositionId" resultMap="PositionResultMap">
-        select id,position_id,position_name,level,subordinate,
+        select id,position_id,position_name,level,subordinate,team_name
                create_by,create_time,update_by,update_time
         from position
         where position_id = #{positionId} and level = #{nextLevel} and is_deleted = 0
-    </select>
-
-    <select id="listTeamByUserId" resultMap="PositionResultMap">
-        select id,position_id,position_name,level,subordinate,
-               create_by,create_time,update_by,update_time
-        from position
-        where create_by = #{userId} and is_deleted = 0
     </select>
 
 </mapper>

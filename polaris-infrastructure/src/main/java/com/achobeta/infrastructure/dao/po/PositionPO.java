@@ -28,6 +28,10 @@ public class PositionPO {
      */
     private String positionName;
     /**
+     * 团队名称
+     */
+    private String teamName;
+    /**
      * 团队架构中的等级 0-根节点/团队 1-一级节点 2-二级节点 3-三级节点 4-四级节点
      */
     private Byte level;

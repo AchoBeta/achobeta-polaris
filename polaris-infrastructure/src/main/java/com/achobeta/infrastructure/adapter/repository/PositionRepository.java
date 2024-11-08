@@ -46,7 +46,6 @@ public class PositionRepository implements IPositionRepository {
                     .positionId(positionPO.getPositionId())
                     .positionName(positionPO.getPositionName())
                     .level(positionPO.getLevel())
-                    .subordinate(positionPO.getSubordinate())
                     .build());
         }
 
@@ -54,34 +53,4 @@ public class PositionRepository implements IPositionRepository {
         return positionEntityList;
     }
 
-    /**
-     * 查询用户所属团队信息
-     * @param userId
-     * @return 下级职位/分组列表
-     * @date 2024/11/7
-     */
-    @Override
-    public List<PositionEntity> queryTeams(String userId) {
-        log.info("repository queryTeams start，userId: {}", userId);
-
-        log.info("queryTeams positionMapper.listTeamByUserId(userId) start: {}", userId);
-        List<PositionPO> positionPOList = positionMapper.listTeamByUserId(userId);
-        if(positionPOList == null || positionPOList.isEmpty()) {
-            return null;
-        }
-        log.info("queryTeams positionMapper.listTeamByUserId(userId) over: {}", userId);
-
-        List<PositionEntity> positionEntityList = new ArrayList<>();
-        for (PositionPO positionPO : positionPOList) {
-            positionEntityList.add(PositionEntity.builder()
-                    .positionId(positionPO.getPositionId())
-                    .positionName(positionPO.getPositionName())
-                    .level(positionPO.getLevel())
-                    .subordinate(positionPO.getSubordinate())
-                    .build());
-        }
-
-        log.info("repository queryTeams over，userId: {}", userId);
-        return positionEntityList;
-    }
 }

@@ -2,6 +2,8 @@ package com.achobeta.domain.render.model.entity;
 
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 职位实体类
@@ -26,7 +28,7 @@ public class PositionEntity {
      */
     private Byte level;
     /**
-     * 层级关系的子节点/下级分组业务id
+     * 层级关系的子节点/下级分组
      */
-    private String subordinate;
+    private List<PositionEntity> subordinates;
 }
