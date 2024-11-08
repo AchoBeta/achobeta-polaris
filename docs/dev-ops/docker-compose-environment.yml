@@ -1,4 +1,4 @@
-# 命令执行 docker-compose -f docker-compose-environment-aliyun.yml up -d
+# 命令执行 docker-compose -f docker-compose-environment.yml up -d
 version: '3.9'
 services:
   mysql:

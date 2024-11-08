@@ -12,6 +12,8 @@ services:
     environment:
       - TZ=PRC
       - SERVER_PORT=8091
+      - REDIS_SDK_CONFIG_HOST=redis
+      - REDIS_SDK_CONFIG_PORT=16379
     volumes:
       - ./log:/data/log
     logging:
