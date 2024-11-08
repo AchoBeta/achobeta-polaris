@@ -21,10 +21,6 @@
             <groupId>com.achobeta</groupId>
             <artifactId>polaris-types</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.achobeta</groupId>
-            <artifactId>polaris-types</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
