@@ -8,7 +8,6 @@ usage(){
   exit 1
 }
 
-# 为脚本赋予权限
 # shellcheck disable=SC2164
 cd docs/dev-ops
 
@@ -34,12 +33,12 @@ fi
 
 # 启动基础环境（必须）
 base(){
-  $COMPOSE_COMMAND up -f docker-compose-environment.yml -d
+  $COMPOSE_COMMAND -f docker-compose-environment.yml up -d
 }
 
 # 启动程序模块（必须）
 services(){
-  $COMPOSE_COMMAND up -f docker-compose-app.yml -d
+  $COMPOSE_COMMAND -f docker-compose-app.yml up -d
 }
 
 # 关闭服务模块
