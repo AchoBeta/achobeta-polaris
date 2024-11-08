@@ -11,7 +11,7 @@ on:
 #    types: [ created ] # 表示在创建新的 Release 时触发
 
 env:
-  IMAGE_TAG: ${{ github.ref }}
+  IMAGE_TAG: ${{ github.ref_name }}
   IMAGE_ENV: ghcr.io
   IMAGE_REGISTRY: bantanger/achobeta
 
