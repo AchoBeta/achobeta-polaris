@@ -11,7 +11,6 @@ usage(){
 # 为脚本赋予权限
 # shellcheck disable=SC2164
 cd docs/dev-ops
-chmod +x *.sh
 
 # Check if Docker is installed
 if ! command -v docker >/dev/null 2>&1; then
@@ -35,12 +34,12 @@ fi
 
 # 启动基础环境（必须）
 base(){
-  $COMPOSE_COMMAND up -f docker-compose-environment.yml up -d
+  $COMPOSE_COMMAND up -f docker-compose-environment.yml -d
 }
 
 # 启动程序模块（必须）
 services(){
-  $COMPOSE_COMMAND up -f docker-compose-app.yml up -d
+  $COMPOSE_COMMAND up -f docker-compose-app.yml -d
 }
 
 # 关闭服务模块
