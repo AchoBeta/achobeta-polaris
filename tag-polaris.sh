@@ -31,7 +31,7 @@ if [ "$2" != "app" ]; then
   exit 1
 fi
 
-prefix="neo-"$2"-"
+prefix="v-"$2"-"
 echo $prefix
 
 function storage-tag() {
