@@ -36,19 +36,22 @@ base(){
   $COMPOSE_COMMAND -f docker-compose-environment.yml up -d
 }
 
+CONTAINER_NAME=polaris
+#IMAGE_NAME=ghcr.io/bantanger/achobeta/polaris-app:latest
+
 # 启动程序模块（必须）
 services(){
-  $COMPOSE_COMMAND -f docker-compose-app.yml up -d
+  $COMPOSE_COMMAND -f docker-compose-app.yml up
 }
 
 # 关闭服务模块
 stop(){
-  $COMPOSE_COMMAND stop polaris
+  $COMPOSE_COMMAND stop ${CONTAINER_NAME}
 }
 
 # 删除服务模块
 rm(){
-  $COMPOSE_COMMAND rm polaris
+  $COMPOSE_COMMAND rm ${CONTAINER_NAME}
 }
 
 # 删除所有未使用的镜像
