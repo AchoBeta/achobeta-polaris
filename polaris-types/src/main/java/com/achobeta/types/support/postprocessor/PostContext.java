@@ -26,6 +26,12 @@ import lombok.ToString;
 public class PostContext<T> {
 
     /**
+     * 业务ID，全局唯一
+     * <p>新开一个业务模块，就需要在 {@link Constants.BizModule} 多开一个枚举映射上</p>
+     */
+    private String bizId;
+
+    /**
      * 业务名称
      * <p>新开一个业务模块，就需要在 {@link Constants.BizModule} 多开一个枚举映射上</p>
      */
