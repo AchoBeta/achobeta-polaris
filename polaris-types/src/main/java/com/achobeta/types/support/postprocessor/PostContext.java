@@ -1,9 +1,15 @@
 package com.achobeta.types.support.postprocessor;
 
+import com.achobeta.types.common.BaseRequestParam;
 import com.achobeta.types.common.Constants;
-import lombok.*;
-
+import java.util.HashMap;
 import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author chensongmin
@@ -26,6 +32,12 @@ public class PostContext<T> {
     private String bizName;
 
     /**
+     * 请求体 Request 可以在定义之初就继承 BaseRequestParam 以便做出统一标识
+     * <p>如 {@link com.achobeta.api.dto.RenderRequestDTO } 所示</p>
+     */
+    private BaseRequestParam requestParam;
+
+    /**
      * 业务数据
      */
     private T bizData;
@@ -40,5 +52,19 @@ public class PostContext<T> {
      * Value：变量值</pre>
      */
     private Map<String, Object> extra;
+
+    public void addExtraData(String key, Object value) {
+        if (null == extra) {
+            extra = new HashMap<>();
+        }
+        extra.put(key, value);
+    }
+
+    public Object getExtraData(String key) {
+        if (null == extra) {
+            return null;
+        }
+        return extra.get(key);
+    }
 
 }
