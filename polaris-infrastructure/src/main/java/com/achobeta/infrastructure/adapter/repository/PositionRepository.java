@@ -33,12 +33,19 @@ public class PositionRepository implements IPositionRepository {
     public List<PositionEntity> querySubordinatePosition(String positionName, String teamName) {
         log.info("repository querySubordinatePosition start，positionName: {}，teamName: {}", positionName, teamName);
 
-        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) start: positionName: {}，teamName: {}", positionName, teamName);
-        List<PositionPO> positionPOList = positionMapper.listSubordinateByPositionId(positionName, teamName);
+        log.info("queryTeams positionMapper.listSubordinateIdByPositionNameAndTeamName start: positionName: {}，teamName: {}", positionName, teamName);
+        List<String> positionIdList = positionMapper.listSubordinateIdByPositionNameAndTeamName(positionName, teamName);
+        log.info("queryTeams positionMapper.listSubordinateIdByPositionNameAndTeamName over: positionName: {}，teamName: {}", positionName, teamName);
+        if(positionIdList == null || positionIdList.isEmpty()) {
+            return null;
+        }
+
+        log.info("queryTeams positionMapper.listPositionByPositionId start: positionName: {}，teamName: {}", positionName, teamName);
+        List<PositionPO> positionPOList = positionMapper.listPositionByPositionId(positionIdList);
+        log.info("queryTeams positionMapper.listPositionByPositionId over: positionName: {}，teamName: {}", positionName, teamName);
         if(positionPOList == null || positionPOList.isEmpty()) {
             return null;
         }
-        log.info("queryTeams positionMapper.listSubordinateByPositionId(positionId) over: positionName: {}，teamName: {}", positionName, teamName);
 
         List<PositionEntity> positionEntityList = new ArrayList<>();
         for (PositionPO positionPO : positionPOList) {

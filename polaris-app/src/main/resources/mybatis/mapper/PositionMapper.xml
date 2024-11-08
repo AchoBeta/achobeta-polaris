@@ -13,11 +13,21 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <select id="listSubordinateByPositionId" resultMap="PositionResultMap">
-        select id,position_id,position_name,level,subordinate,team_name
-               create_by,create_time,update_by,update_time
+    <select id="listSubordinateIdByPositionNameAndTeamName" resultType="java.lang.String">
+        select position_id
         from position
-        where position_name = #{positionName} and team_name = #{teamName} and is_deleted = 0
+        where position_name = #{positionName} and team_name = #{teamName}
+                and position_name!=#{teamName} and is_deleted = 0
+    </select>
+
+    <select id="listPositionByPositionId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_name,
+                create_by,create_time,update_by,update_time
+        from position
+        where is_deleted = 0 and position_id in
+        <foreach collection="positionIds" item="positionId" open="(" separator="," close=")">
+            #{positionId}
+        </foreach>
     </select>
 
 </mapper>
