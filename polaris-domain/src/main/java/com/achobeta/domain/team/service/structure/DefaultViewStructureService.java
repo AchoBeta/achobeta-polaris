@@ -34,6 +34,7 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
         return PositionEntity.builder()
                 .positionId(postContext.getBizData().getPositionEntity().getPositionId())
                 .positionName(postContext.getBizData().getPositionEntity().getPositionName())
+                .teamName(postContext.getBizData().getPositionEntity().getTeamName())
                 .level(postContext.getBizData().getPositionEntity().getLevel())
                 .subordinates(postContext.getBizData().getPositionEntity().getSubordinates())
                 .build();
@@ -44,11 +45,12 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
         PositionBO positionBO = postContext.getBizData();
         PositionEntity positionEntity = positionBO.getPositionEntity();
 
+        positionEntity.setPositionName(positionEntity.getTeamName());
         Queue<PositionEntity> queue = new LinkedList<>();
         queue.add(positionEntity);
         while(!queue.isEmpty()) {
             PositionEntity tempPosition = queue.poll();
-            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionName());
+            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionName(), tempPosition.getTeamName());
             tempPosition.setSubordinates(subordinates);
             if(subordinates!= null && !subordinates.isEmpty()) {
                 queue.addAll(subordinates);

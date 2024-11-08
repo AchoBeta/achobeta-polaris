@@ -52,6 +52,7 @@ public class PositionRepository implements IPositionRepository {
             positionEntityList.add(PositionEntity.builder()
                     .positionId(positionPO.getPositionId())
                     .positionName(positionPO.getPositionName())
+                    .teamName(positionPO.getTeamName())
                     .level(positionPO.getLevel())
                     .build());
         }

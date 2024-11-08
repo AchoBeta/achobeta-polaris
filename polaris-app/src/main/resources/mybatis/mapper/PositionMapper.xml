@@ -14,10 +14,10 @@
     </resultMap>
 
     <select id="listSubordinateIdByPositionNameAndTeamName" resultType="java.lang.String">
-        select position_id
+        select subordinate
         from position
         where position_name = #{positionName} and team_name = #{teamName}
-                and position_name!=#{teamName} and is_deleted = 0
+                and subordinate != '' and is_deleted = 0
     </select>
 
     <select id="listPositionByPositionId" resultMap="PositionResultMap">
