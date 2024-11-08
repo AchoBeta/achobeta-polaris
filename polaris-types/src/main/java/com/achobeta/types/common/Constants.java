@@ -33,7 +33,7 @@ public class Constants {
     @NoArgsConstructor
     public enum BizModule {
         RENDER("文本渲染模块", "demo 工程，请忽略"),
-
+        LOGIN("登录模块", "用户登陆模块"),
         ;
 
         private String name;
