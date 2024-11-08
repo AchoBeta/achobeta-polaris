@@ -1,6 +1,6 @@
 package com.achobeta.api.dto;
 
-import com.achobeta.types.common.BaseRequestParam;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RenderRequestDTO extends BaseRequestParam {
+public class RenderRequestDTO implements Serializable {
 
     private String userId;
     private String bookId;

@@ -38,12 +38,6 @@ public class PostContext<T> {
     private String bizName;
 
     /**
-     * 请求体 Request 可以在定义之初就继承 BaseRequestParam 以便做出统一标识
-     * <p>如 {@link com.achobeta.api.dto.RenderRequestDTO } 所示</p>
-     */
-    private BaseRequestParam requestParam;
-
-    /**
      * 业务数据
      */
     private T bizData;
