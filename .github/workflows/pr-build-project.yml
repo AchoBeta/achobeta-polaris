@@ -7,7 +7,7 @@ on:
     branches: [ master, test, prod]
 
 env:
-  IMAGE_TAG: ${{ github.ref/refs\/tags\/v }}
+  IMAGE_TAG: ${{ github.ref }}
   IMAGE_ENV: ghcr.io
   IMAGE_REGISTRY: bantanger/achobeta
 
