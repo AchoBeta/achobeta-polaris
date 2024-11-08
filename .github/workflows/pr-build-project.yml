@@ -2,13 +2,18 @@ name: CI-CD Pipeline
 
 on:
   push:
-    branches: [ master, test, prod]
-  pull_request:
-    branches: [ master, test, prod]
+#    branches: [ master, test, prod]
+    tags:
+      - v*
+#  pull_request:
+#    branches: [ master, test, prod]
+#  release:
+#    types: [ created ] # 表示在创建新的 Release 时触发
 
 env:
-  IMAGE_TAG: ${{ github.sha }}
+  IMAGE_TAG: ${{ github.ref_name }}
   IMAGE_ENV: ghcr.io
+  IMAGE_REGISTRY: bantanger/achobeta
 
 jobs:
   build-image:
@@ -36,16 +41,24 @@ jobs:
       - name: login ghcr.io
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.IMAGE_ENV }}
           username: BanTanger # 使用仓库的拥有者名作为用户名
           password: ${{ secrets.GHCR_IO_TOKEN }} # 使用存储在 GitHub Secrets 中的 ghcr.io 的访问令牌
 
       - name: docker compose build and push
-        run: |
-          cd polaris-app
-          sudo sh build.sh
-          # docker build -t ghcr.io/bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f ./Dockerfile .
-
-      - name: Push Image
-        run: |
-          docker push ghcr.io/bantanger/achobeta/polaris-app:1.0
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          # 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
+          platforms: linux/amd64,linux/arm64/v8
+          # 镜像推送时间
+          push: ${{ github.event_name != 'pull_request' }}
+          # 给清单打上多个标签
+          tags: |
+            ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:latest
+#        run:
+#          # cd polaris-app
+#          # sudo sh build.sh
+#          docker build -t ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }} -f ./Dockerfile .

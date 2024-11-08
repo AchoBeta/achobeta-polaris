@@ -42,14 +42,12 @@ template: |
   Version tags:
   - `https://github.com/$OWNER/$REPOSITORY/releases/tag/v$RESOLVED_VERSION`
   
-  **📒 Documentation**: Achobeta-Recruitment
+  **📒 Documentation**: Achobeta-Polaris
   
   **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
   
   Thanks to $CONTRIBUTORS for making this release possible.
 
-on:
-jobs:
 autolabeler:
   - label: '📒 Documentation'
     files:
