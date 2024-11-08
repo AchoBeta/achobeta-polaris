@@ -46,12 +46,12 @@ services(){
 
 # 关闭服务模块
 stop(){
-  $COMPOSE_COMMAND stop ${CONTAINER_NAME}
+  $COMPOSE_COMMAND -f docker-compose-app.yml stop ${CONTAINER_NAME}
 }
 
 # 删除服务模块
 rm(){
-  $COMPOSE_COMMAND rm ${CONTAINER_NAME}
+  $COMPOSE_COMMAND -f docker-compose-app.yml rm ${CONTAINER_NAME}
 }
 
 # 删除所有未使用的镜像

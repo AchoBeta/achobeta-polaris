@@ -1,4 +1,4 @@
-# /usr/local/bin/docker-compose -f /docs/dev-ops/environment/environment-docker-compose-2.4.yml up -d
+# /usr/local/bin/docker-compose -f /docs/dev-ops/docker-compose-app.yml up -d
 version: '3.8'
 # docker-compose -f docker-compose-app.yml up -d
 # 你需要修改system为你自身系统的仓库名
@@ -12,8 +12,9 @@ services:
     environment:
       - TZ=PRC
       - SERVER_PORT=8091
+      - APP_CONFIG_CROSS_ORIGIN=*
       - REDIS_SDK_CONFIG_HOST=redis
-      - REDIS_SDK_CONFIG_PORT=16379
+      - REDIS_SDK_CONFIG_PORT=6379
     volumes:
       - ./log:/data/log
     logging:
