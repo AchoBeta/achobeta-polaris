@@ -60,7 +60,7 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
 
     private static PostContext<UserBO> buildPostContext(String userId) {
         return PostContext.<UserBO>builder()
-                .bizName(Constants.BizModule.VIEW_USER.getName())
+                .bizName(Constants.BizModule.USER.getName())
                 .bizData(UserBO.builder()
                         .userEntity(UserEntity.builder().userId(userId).build())
                         .build())
