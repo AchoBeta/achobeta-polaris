@@ -17,7 +17,7 @@
     </resultMap>
 
     <select id="getUserByUserId" resultMap="UserResultMap">
-        SELECT id,user_name,id_card,student_id,current_status,
+        SELECT id,user_id,user_name,id_card,student_id,current_status,
                entry_time,like_count,create_by,create_time,update_by,
                update_time ,phone,gender,email,grade,major,experience
         FROM user
