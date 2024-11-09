@@ -13,4 +13,10 @@ public interface IUserRepository {
 
     void updateUserInfo(UserEntity userEntity);
 
+    UserEntity getUserInfoInCache(String userId);
+
+    void setUserInfoInCache(String userId, UserEntity userEntity);
+
+    void removeUserInfoInCache(String userId);
+
 }
