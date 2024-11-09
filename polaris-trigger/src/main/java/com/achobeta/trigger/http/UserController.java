@@ -63,8 +63,8 @@ public class UserController implements IUserService {
                             .build())
                     .build();
         } catch (Exception e) {
-            log.error("用户访问个人中心信息页面系统失败！userId:{}",
-                    userInfoRequestDTO.getUserId(), e);
+            log.error("用户访问个人中心信息页面系统失败！userId:{}，error:{}",
+                    userInfoRequestDTO.getUserId(),e.toString());
             return Response.<UserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
