@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +60,7 @@ public class DeviceController implements IDeviceService {
                     .data(dtoList)
                     .build();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("用户访问文本渲染系统失败！userId:{} deviceId:{} limit:{}",
                     getDevicesRequestDTO.getUserId(), getDevicesRequestDTO.getDeviceId(), getDevicesRequestDTO.getLimit(), e);
             return Response.<List<GetDevicesResponseDTO>>builder()
