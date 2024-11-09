@@ -3,7 +3,6 @@ package com.achobeta.domain.user.service.info;
 import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.bo.UserBO;
 import com.achobeta.domain.user.model.entity.UserEntity;
-import com.achobeta.domain.user.model.valobj.UserInfoVO;
 import com.achobeta.domain.user.service.IUserInfoService;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implements IUserInfoService {
 
     private final IUserRepository repository;
-
 
     @Override
     public UserEntity getUserInfo(String userId) {
@@ -55,6 +53,14 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
         // TODO:待添加获取用户点赞状态，以及用户所属团队职位分组
 
         log.info("查询用户信息成功，userId:{}",userBO.getUserEntity().getUserId());
+        postContext.setBizData(UserBO.builder().userEntity(userEntity).build());
+        return postContext;
+    }
+
+    @Override
+    public PostContext<UserBO> doInterruptMainProcessor(PostContext<UserBO> postContext) {
+        UserBO userBO = postContext.getBizData();
+        UserEntity userEntity = repository.getUserInfoInCache(userBO.getUserEntity().getUserId());
         postContext.setBizData(UserBO.builder().userEntity(userEntity).build());
         return postContext;
     }

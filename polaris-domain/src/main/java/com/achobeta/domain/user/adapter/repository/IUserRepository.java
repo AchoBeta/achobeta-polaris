@@ -11,4 +11,10 @@ public interface IUserRepository {
 
     UserEntity queryUserInfo(String userId);
 
+    UserEntity getUserInfoInCache(String userId);
+
+    void setUserInfoInCache(String userId, UserEntity userEntity);
+
+    void removeUserInfoInCache(String userId);
+
 }
