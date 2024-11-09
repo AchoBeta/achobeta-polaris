@@ -11,4 +11,6 @@ public interface IUserRepository {
 
     UserEntity queryUserInfo(String userId);
 
+    void updateUserInfo(UserEntity userEntity);
+
 }

@@ -16,4 +16,7 @@ public interface UserMapper {
      * @return 用户实体
      */
     UserPO getUserByUserId(String userId);
+
+    void updateUserInfo(UserPO userPO);
+
 }

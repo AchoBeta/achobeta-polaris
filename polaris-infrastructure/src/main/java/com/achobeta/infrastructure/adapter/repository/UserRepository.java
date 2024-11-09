@@ -46,4 +46,29 @@ public class UserRepository implements IUserRepository {
                     .likeCount(userPO.getLikeCount())
                 .build();
     }
+
+    @Override
+    public void updateUserInfo(UserEntity userEntity) {
+        if (userMapper.getUserByUserId(userEntity.getUserId()) == null) {
+            log.error("用户不存在！userId：{}",userEntity.getUserId());
+            throw new AppException("A0201", "用户不存在");
+        }
+         userMapper.updateUserInfo(UserPO.builder()
+                 .userId(userEntity.getUserId())
+                 .userName(userEntity.getUserName())
+                 .phone(userEntity.getPhone())
+                 .gender(userEntity.getGender())
+                 .idCard(userEntity.getIdCard())
+                 .email(userEntity.getEmail())
+                 .grade(userEntity.getGrade())
+                 .major(userEntity.getMajor())
+                 .studentId(userEntity.getStudentId())
+                 .experience(userEntity.getExperience())
+                 .currentStatus(userEntity.getCurrentStatus())
+                 .entryTime(userEntity.getEntryTime())
+                 .likeCount(userEntity.getLikeCount())
+                 .updateBy(userEntity.getUserId())
+                 .build());
+    }
+
 }
