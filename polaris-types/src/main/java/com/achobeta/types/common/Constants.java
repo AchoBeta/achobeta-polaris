@@ -37,8 +37,8 @@ public class Constants {
         USER("用户模块", "用户相关业务"),
         ;
 
+        private String code;
         private String name;
-        private String desc;
     }
 
 }
