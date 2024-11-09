@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 /**
  * @author yangzhiyao
  * @description 用户修改个人信息服务默认实现
@@ -27,14 +25,12 @@ public class DefaultModifyUserInfoService extends AbstractPostProcessor<UserBO> 
     private final IUserRepository repository;
 
     @Override
-    public void modifyUserInfo(String userId, String userName, String phone,
-                               Byte gender, String idCard, String email, Integer grade,
-                               String major, String studentId, String experience,
-                               String currentStatus, LocalDateTime entryTime) {
+    public void modifyUserInfo(String userId, String userName, Byte gender, String idCard,
+                               String email, Integer grade, String major, String studentId,
+                               String experience, String currentStatus) {
         UserEntity userEntity = UserEntity.builder()
                                 .userId(userId)
                                 .userName(userName)
-                                .phone(phone)
                                 .gender(gender)
                                 .idCard(idCard)
                                 .email(email)
@@ -43,7 +39,6 @@ public class DefaultModifyUserInfoService extends AbstractPostProcessor<UserBO> 
                                 .studentId(studentId)
                                 .experience(experience)
                                 .currentStatus(currentStatus)
-                                .entryTime(entryTime)
                                 .build();
         PostContext<UserBO> postContext = buildPostContext(userEntity);
         postContext = super.doPostProcessor(postContext, UserInfoPostProcessor.class);

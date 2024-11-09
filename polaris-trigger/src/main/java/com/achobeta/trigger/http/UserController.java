@@ -92,7 +92,6 @@ public class UserController implements IUserService {
             log.info("用户访问修改个人信息系统开始，userId:{}", modifyUserInfoRequestDTO.getUserId());
             modifyUserInfoService.modifyUserInfo(modifyUserInfoRequestDTO.getUserId(),
                     modifyUserInfoRequestDTO.getUserName(),
-                    modifyUserInfoRequestDTO.getPhone(),
                     modifyUserInfoRequestDTO.getGender(),
                     modifyUserInfoRequestDTO.getIdCard(),
                     modifyUserInfoRequestDTO.getEmail(),
@@ -100,15 +99,23 @@ public class UserController implements IUserService {
                     modifyUserInfoRequestDTO.getMajor(),
                     modifyUserInfoRequestDTO.getStudentId(),
                     modifyUserInfoRequestDTO.getExperience(),
-                    modifyUserInfoRequestDTO.getCurrentStatus(),
-                    modifyUserInfoRequestDTO.getEntryTime());
+                    modifyUserInfoRequestDTO.getCurrentStatus());
             log.info("用户访问修改个人信息系统结束，userId:{}", modifyUserInfoRequestDTO.getUserId());
-
             return Response.<ModifyUserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())
                     .data(ModifyUserInfoResponseDTO.builder()
+                            .userId(modifyUserInfoRequestDTO.getUserId())
+                            .userName(modifyUserInfoRequestDTO.getUserName())
+                            .gender(modifyUserInfoRequestDTO.getGender())
+                            .idCard(modifyUserInfoRequestDTO.getIdCard())
+                            .email(modifyUserInfoRequestDTO.getEmail())
+                            .grade(modifyUserInfoRequestDTO.getGrade())
+                            .major(modifyUserInfoRequestDTO.getMajor())
+                            .studentId(modifyUserInfoRequestDTO.getStudentId())
+                            .experience(modifyUserInfoRequestDTO.getExperience())
+                            .currentStatus(modifyUserInfoRequestDTO.getCurrentStatus())
                             .build())
                     .build();
         } catch (AppException e) {

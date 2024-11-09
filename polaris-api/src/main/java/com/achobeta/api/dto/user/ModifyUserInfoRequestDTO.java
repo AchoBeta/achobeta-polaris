@@ -2,8 +2,6 @@ package com.achobeta.api.dto.user;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 /**
  * @author yangzhiyao
  * @description 用户修改后的个人信息请求DTO
@@ -23,10 +21,6 @@ public class ModifyUserInfoRequestDTO {
      * 用户名
      */
     private String userName;
-    /**
-     * 用户手机号
-     */
-    private String phone;
     /**
      * 用户性别
      */
@@ -59,8 +53,4 @@ public class ModifyUserInfoRequestDTO {
      * 用户现状
      */
     private String currentStatus;
-    /**
-     * 用户加入时间
-     */
-    private LocalDateTime entryTime;
 }
