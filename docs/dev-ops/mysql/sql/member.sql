@@ -8,7 +8,7 @@ use achobeta_polaris;
 -- 成员表
 DROP TABLE IF EXISTS `member`;
 CREATE TABLE IF NOT EXISTS `member` (
-  -- 主键
+    -- 主键
     `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
     -- 团队成员id
     `user_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '团队成员id',

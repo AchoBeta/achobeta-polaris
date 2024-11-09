@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
     -- 软删除标识 0-未删除 1-已删除
     `is_deleted` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '0-未删除;1-已删除'
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '用户-角色';
-
+create index idx_user_role_user_id_role_id on user_role(user_id, role_id);
 
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE IF NOT EXISTS `permission` (
@@ -46,10 +46,10 @@ CREATE TABLE IF NOT EXISTS `permission` (
     `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '主键id',
     -- 权限id
     `permission_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '权限id',
-		-- 团队id
-		`position_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '团队id',
-		-- 权限名称
-		`permission_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '权限名称',
+	-- 团队名称
+	`team_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '团队名称',
+	-- 权限名称
+	`permission_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '权限名称',
     -- 创建时间
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     -- 更新时间
@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
     -- 软删除标识 0-未删除 1-已删除
     `is_deleted` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '0-未删除;1-已删除'
 )  ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '权限';
+create index idx_permission_permission_id_team_name on permission(permission_id, team_name);
 
 -- 角色-用户-关联表
 DROP TABLE IF EXISTS `role_permission`;

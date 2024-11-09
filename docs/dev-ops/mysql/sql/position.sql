@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS `position` (
     `position_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '职位/分组id',
     -- 职位/分组名称
     `position_name` VARCHAR(25) NOT NULL DEFAULT '' COMMENT '职位/分组名称',
-		-- 团队名称
-		`team_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '团队名称',
+	-- 团队名称
+	`team_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '团队名称',
     -- 团队架构中的等级 0-根节点/团队 1 2 3 4
     `level` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '团队架构中的等级 0-根节点/团队 1 2 3 4',
     -- 子节点/下级id
@@ -37,11 +37,11 @@ DROP TABLE IF EXISTS `user_position`;
 CREATE TABLE IF NOT EXISTS `user_position` (
     -- 主键
     `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
-		-- 用户id
-		`user_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '用户id',
-		-- 职位/分组id
-		`position_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '职位/分组id',
-		-- 创建时间
+	-- 用户id
+	`user_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '用户id',
+	-- 职位/分组id
+	`position_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '职位/分组id',
+	-- 创建时间
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     -- 更新时间
     `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
