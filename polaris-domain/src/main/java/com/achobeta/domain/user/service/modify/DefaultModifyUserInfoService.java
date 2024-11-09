@@ -1,4 +1,4 @@
-package com.achobeta.domain.user.service.modifyInfo;
+package com.achobeta.domain.user.service.modify;
 
 import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.bo.UserBO;

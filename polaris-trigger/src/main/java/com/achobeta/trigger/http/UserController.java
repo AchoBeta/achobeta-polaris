@@ -119,8 +119,8 @@ public class UserController implements IUserService {
                             .build())
                     .build();
         } catch (AppException e) {
-            log.error("用户访问修改个人信息系统失败！userId:{}",
-                    modifyUserInfoRequestDTO.getUserId(), e);
+            log.error("用户访问个人中心信息页面系统失败！userId:{}，error:{}",
+                    modifyUserInfoRequestDTO.getUserId(),e.toString());
             return Response.<ModifyUserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
