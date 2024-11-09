@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +37,9 @@ public class DefaultGetDeviceService extends AbstractPostProcessor<DeviceBO> imp
 
         List<DeviceEntity> devices = repository.getDevices(device.getUserId(),page.getLimit(), page.getLastDeviceId());
         //与前端传来的设备id比较，确认是否为登陆设备
-        for (DeviceEntity deviceEntity : devices) {
-            if (device.getDeviceId().equals(deviceEntity.getDeviceId())){
-                deviceEntity.setMe(true);
-            }
-
-        }
+        devices.stream()
+                .filter(deviceEntity -> device.getDeviceId().equals(deviceEntity.getDeviceId()))
+                .forEach(deviceEntity -> deviceEntity.setMe(true));
 
         postContext.setBizData(DeviceBO.builder()
                 .deviceEntities(devices)
