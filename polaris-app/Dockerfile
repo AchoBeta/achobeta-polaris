@@ -1,8 +1,8 @@
 # 基础镜像
-FROM openjdk:8-jre-slim
+FROM openjdk:8
 
 # 作者
-MAINTAINER xiaofuge
+MAINTAINER bantanger
 
 # 配置
 ENV PARAMS=""
