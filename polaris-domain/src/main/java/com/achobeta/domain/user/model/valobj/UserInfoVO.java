@@ -1,4 +1,4 @@
-package com.achobeta.api.dto.user;
+package com.achobeta.domain.user.model.valobj;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author yangzhiyao
- * @description 用户个人信息相应DTO
+ * @description 用户个人中心信息展示对象
  * @date 2024/11/6
  */
 @Getter
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoResponseDTO {
+public class UserInfoVO {
     /**
      * 用户业务id
      */
@@ -69,7 +69,7 @@ public class UserInfoResponseDTO {
      */
     private Integer likeCount;
     /**
-     * 点赞状态
+     * 用户点赞状态
      */
     private Boolean liked;
     /**
