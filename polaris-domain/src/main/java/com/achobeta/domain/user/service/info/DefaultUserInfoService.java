@@ -3,7 +3,6 @@ package com.achobeta.domain.user.service.info;
 import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.bo.UserBO;
 import com.achobeta.domain.user.model.entity.UserEntity;
-import com.achobeta.domain.user.model.valobj.UserInfoVO;
 import com.achobeta.domain.user.service.IUserInfoService;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
@@ -61,7 +60,7 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
 
     private static PostContext<UserBO> buildPostContext(String userId) {
         return PostContext.<UserBO>builder()
-                .bizName(Constants.BizModule.USER.getName())
+                .bizName(Constants.BizModule.VIEW_USER.getName())
                 .bizData(UserBO.builder()
                         .userEntity(UserEntity.builder().userId(userId).build())
                         .build())

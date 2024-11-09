@@ -64,7 +64,7 @@ public class DefaultModifyUserInfoService extends AbstractPostProcessor<UserBO> 
 
     private static PostContext<UserBO> buildPostContext(UserEntity userEntity) {
         return PostContext.<UserBO>builder()
-                .bizName(Constants.BizModule.USER.getName())
+                .bizName(Constants.BizModule.MODIFY_USER.getName())
                 .bizData(UserBO.builder()
                         .userEntity(userEntity)
                         .build())
