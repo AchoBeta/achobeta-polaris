@@ -2,7 +2,7 @@ package com.achobeta.domain.user.model.entity;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -63,7 +63,7 @@ public class UserEntity {
     /**
      * 用户加入时间
      */
-    private LocalDateTime entryTime;
+    private LocalTime entryTime;
     /**
      * 用户所获得赞数量
      */

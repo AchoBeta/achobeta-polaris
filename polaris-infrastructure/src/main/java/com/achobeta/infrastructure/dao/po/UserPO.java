@@ -3,6 +3,7 @@ package com.achobeta.infrastructure.dao.po;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * @author yangzhiyao
@@ -66,7 +67,7 @@ public class UserPO {
     /**
      * 用户加入时间
      */
-    private LocalDateTime entryTime;
+    private LocalTime entryTime;
     /**
      * 用户所获得赞数量
      */
