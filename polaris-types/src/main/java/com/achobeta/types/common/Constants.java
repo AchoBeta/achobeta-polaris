@@ -18,6 +18,7 @@ public class Constants {
         UN_ERROR("0001", "调用失败"),
         ILLEGAL_PARAMETER("0002", "非法参数"),
         NO_LOGIN("0003", "未登录"),
+        USER_NOT_EXIST("A0201", "用户不存在"),
 
         // 鉴权系统错误以 1xxx 开始
         NO_PERMISSIONS("1001", "无权限访问")

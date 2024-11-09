@@ -5,7 +5,6 @@ import com.achobeta.api.dto.user.UserInfoRequestDTO;
 import com.achobeta.api.dto.user.UserInfoResponseDTO;
 import com.achobeta.api.response.Response;
 import com.achobeta.domain.user.model.entity.UserEntity;
-import com.achobeta.domain.user.model.valobj.UserInfoVO;
 import com.achobeta.domain.user.service.IUserInfoService;
 import com.achobeta.types.common.Constants;
 import lombok.RequiredArgsConstructor;

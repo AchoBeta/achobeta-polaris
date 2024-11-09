@@ -4,6 +4,7 @@ import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.UserPO;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,8 @@ public class UserRepository implements IUserRepository {
         UserPO userPO = userMapper.getUserByUserId(userId);
         if(userPO == null) {
             log.error("用户不存在！userId：{}",userId);
-            throw new AppException("A0201", "用户不存在");
+            throw new AppException(Constants.ResponseCode.USER_NOT_EXIST.getCode(),
+                    Constants.ResponseCode.USER_NOT_EXIST.getInfo());
         }
 
         return UserEntity.builder()
