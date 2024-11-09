@@ -1,19 +1,23 @@
 name: CI-CD Pipeline
 
-on: [pull_request]
+on:
+  push:
+    tags: # 表示在创建新的 tag 时触发
+      - v*
 
 env:
-  IMAGE_TAG: ${{ github.sha }}
+  IMAGE_TAG: ${{ github.ref_name }}
   IMAGE_ENV: ghcr.io
+  IMAGE_REGISTRY: bantanger/achobeta
 
 jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
-      - name: 拉取最新提交的代码
+      - name: pull commit head^3
         uses: actions/checkout@v3
 
-      - name: 设置jdk
+      - name: setup java 8
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -23,68 +27,33 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
-      - name: try java project build
+      - name: start build java project
         run: mvn clean install package -Dmaven.test.skip=true
 
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v1
 
-      # - name: login docker hub
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: "ccr.ccs.tencentyun.com"
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: login ghcr.io
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }} # 使用仓库的拥有者名作为用户名
+          registry: ${{ env.IMAGE_ENV }}
+          username: BanTanger # 使用仓库的拥有者名作为用户名
           password: ${{ secrets.GHCR_IO_TOKEN }} # 使用存储在 GitHub Secrets 中的 ghcr.io 的访问令牌
 
       - name: docker compose build and push
-        run: |
-          docker build -t bantanger/achobeta/polaris-app:1.0-SNAPSHOT -f polaris/polaris-app/Dockerfile .
-
-      - name: Push Image
-        run: |
-          docker push bantanger/achobeta/polaris-app:1.0-SNAPSHOT
-
-  # Docker 自动部署
-  deploy-docker:
-    needs: [build-image]
-    name: Deploy Docker
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
+        uses: docker/build-push-action@v2
         with:
-          host: ${{ secrets.REMOTE_IP }} # 服务器ip
-          username: ${{ secrets.REMOTE_USER }} # 服务器登录用户名
-          password: ${{ secrets.REMOTE_PWD }} # 服务器登录密码
-          port: 22 # 服务器ssh端口
-          script: |
-            # 切换工作区
-            cd polaris
-            # 下载 docker-compose.yml
-            # wget -O docker-compose.yml https://raw.githubusercontent.com/yiyungent/SimCaptcha/master/docker-compose.yml
-            # 停止并删除旧 容器、网络、挂载点
-            # docker-compose down                          # TODO: docker-compose: command not found. 不知道为什么找不到 docker-compose，但直接连接服务器执行就可以
-            # /usr/local/python3/bin/docker-compose down
-            docker stop polaris
-            # 删除旧镜像
-            docker rmi bantanger/achobeta/polaris 
-            # 登录镜像服务器
-            docker login --username=${{ github.repository_owner }} --password ${{ secrets.GHCR_IO_TOKEN }} 
-            # 创建并启动容器
-            docker-compose up -d --build
-            #/usr/local/python3/bin/docker-compose up -d --build
-#      - name: 删除旧的jar包以及运行脚本
-#        run: sshpass -p ${{secrets.REMOTE_PWD}} ssh -o StrictHostKeyChecking=no root@${{secrets.REMOTE_IP}} "cd /root/GitHub_Action && rm -rf ./*"
-#
-#      - name: 上传jar包和启动脚本到服务器中
-#        run: sshpass -p ${{secrets.REMOTE_PWD}} scp -r -o StrictHostKeyChecking=no ./target/GitHub_Action-0.0.1-SNAPSHOT.jar ./run.sh root@${{secrets.REMOTE_IP}}:/root/GitHub_Action
-#
-#      - name: 启动项目
-#        run: sshpass -p ${{secrets.REMOTE_PWD}} ssh -o StrictHostKeyChecking=no root@${{secrets.REMOTE_IP}} "cd /root/GitHub_Action && chmod +x run.sh && ./run.sh"
+          context: ./polaris-app
+          file: ./polaris-app/Dockerfile
+          # 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
+          platforms: linux/amd64,linux/arm64/v8
+          # 镜像推送时间
+          push: ${{ github.event_name != 'pull_request' }}
+          # 给清单打上多个标签
+          tags: |
+            ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:latest
+#        run:
+#          # cd polaris-app
+#          # sudo sh build.sh
+#          docker build -t ${{ env.IMAGE_ENV }}/${{ env.IMAGE_REGISTRY }}/polaris:${{ env.IMAGE_TAG }} -f ./Dockerfile .

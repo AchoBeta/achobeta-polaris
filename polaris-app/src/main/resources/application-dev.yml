@@ -30,7 +30,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/achobeta?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
+    url: jdbc:mysql://127.0.0.1:3306/achobeta-polaris?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   hikari:
     pool-name: Retail_HikariCP
@@ -43,20 +43,19 @@ spring:
     connection-test-query: SELECT 1
   type: com.zaxxer.hikari.HikariDataSource
 
-# Redis【如需使用请打开】
-#redis:
-#  sdk:
-#    config:
-#      host: 127.0.0.1
-#      port: 6379
-#      pool-size: 10
-#      min-idle-size: 5
-#      idle-timeout: 30000
-#      connect-timeout: 5000
-#      retry-attempts: 3
-#      retry-interval: 1000
-#      ping-interval: 60000
-#      keep-alive: true
+redis:
+  sdk:
+    config:
+      host: 127.0.0.1
+      port: 6379
+      pool-size: 10
+      min-idle-size: 5
+      idle-timeout: 30000
+      connect-timeout: 5000
+      retry-attempts: 3
+      retry-interval: 1000
+      ping-interval: 60000
+      keep-alive: true
 
 # MyBatis 配置【如需使用记得打开】
 mybatis:

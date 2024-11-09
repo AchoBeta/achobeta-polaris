@@ -4,7 +4,7 @@ version: '3.8'
 # 你需要修改system为你自身系统的仓库名
 services:
   polaris:
-    image: bantanger/achobeta/polaris:1.0-SNAPSHOT
+    image: ghcr.io/bantanger/achobeta/polaris-app:latest
     container_name: polaris
     restart: on-failure
     ports:
