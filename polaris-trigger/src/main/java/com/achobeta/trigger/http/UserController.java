@@ -14,6 +14,7 @@ import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -87,7 +88,7 @@ public class UserController implements IUserService {
      */
     @PostMapping("/modify")
     @Override
-    public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
+    public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Validated @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
         try {
             log.info("用户访问修改个人信息系统开始，userId:{}", modifyUserInfoRequestDTO.getUserId());
              UserEntity userEntity = UserEntity.builder()
@@ -123,7 +124,7 @@ public class UserController implements IUserService {
                     .build();
         } catch (AppException e) {
             log.error("用户访问个人中心信息页面系统失败！userId:{}，error:{}",
-                    modifyUserInfoRequestDTO.getUserId(),e.toString());
+                    modifyUserInfoRequestDTO.getUserId(), e.toString(), e);
             return Response.<ModifyUserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
