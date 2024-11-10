@@ -30,6 +30,11 @@ public class Constants {
     }
 
     @Getter
+    public class RedisKeyPrefix {
+        public static final String USER_INFO = "ab:polaris:user:info:";
+    }
+
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public enum BizModule {
