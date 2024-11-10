@@ -3,8 +3,8 @@ package com.achobeta.trigger.http;
 import com.achobeta.api.IUserService;
 import com.achobeta.api.dto.user.ModifyUserInfoRequestDTO;
 import com.achobeta.api.dto.user.ModifyUserInfoResponseDTO;
-import com.achobeta.api.dto.user.UserInfoRequestDTO;
-import com.achobeta.api.dto.user.UserInfoResponseDTO;
+import com.achobeta.api.dto.user.QueryUserInfoRequestDTO;
+import com.achobeta.api.dto.user.QueryUserInfoResponseDTO;
 import com.achobeta.api.response.Response;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.user.service.IModifyUserInfoService;
@@ -33,24 +33,24 @@ public class UserController implements IUserService {
 
     /**
      * 个人中心信息页面接口
-     * @param userInfoRequestDTO
+     * @param queryUserInfoRequestDTO
      * @author yangzhiyao
      * @date 2024/11/6
      */
     @GetMapping("/center")
     @Override
-    public Response<UserInfoResponseDTO> center(@RequestBody UserInfoRequestDTO userInfoRequestDTO) {
+    public Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@RequestBody QueryUserInfoRequestDTO queryUserInfoRequestDTO) {
         try {
-            log.info("用户访问个人中心信息页面系统开始，userId:{}", userInfoRequestDTO.getUserId());
+            log.info("用户访问个人中心信息页面系统开始，userId:{}", queryUserInfoRequestDTO.getUserId());
 
-            UserEntity userEntity = userInfoService.getUserInfo(userInfoRequestDTO.getUserId());
-            log.info("用户访问个人中心信息页面系统结束，userId:{}", userInfoRequestDTO.getUserId());
+            UserEntity userEntity = userInfoService.getUserInfo(queryUserInfoRequestDTO.getUserId());
+            log.info("用户访问个人中心信息页面系统结束，userId:{}", queryUserInfoRequestDTO.getUserId());
 
-            return Response.<UserInfoResponseDTO>builder()
+            return Response.<QueryUserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .data(UserInfoResponseDTO.builder()
+                    .data(QueryUserInfoResponseDTO.builder()
                             .userId(userEntity.getUserId())
                             .userName(userEntity.getUserName())
                             .phone(userEntity.getPhone())
@@ -70,8 +70,8 @@ public class UserController implements IUserService {
                     .build();
         } catch (Exception e) {
             log.error("用户访问个人中心信息页面系统失败！userId:{}",
-                    userInfoRequestDTO.getUserId(), e);
-            return Response.<UserInfoResponseDTO>builder()
+                    queryUserInfoRequestDTO.getUserId(), e);
+            return Response.<QueryUserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
                     .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())
@@ -87,19 +87,22 @@ public class UserController implements IUserService {
      */
     @PostMapping("/modify")
     @Override
-    public Response<ModifyUserInfoResponseDTO> modify(@RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
+    public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
         try {
             log.info("用户访问修改个人信息系统开始，userId:{}", modifyUserInfoRequestDTO.getUserId());
-            modifyUserInfoService.modifyUserInfo(modifyUserInfoRequestDTO.getUserId(),
-                    modifyUserInfoRequestDTO.getUserName(),
-                    modifyUserInfoRequestDTO.getGender(),
-                    modifyUserInfoRequestDTO.getIdCard(),
-                    modifyUserInfoRequestDTO.getEmail(),
-                    modifyUserInfoRequestDTO.getGrade(),
-                    modifyUserInfoRequestDTO.getMajor(),
-                    modifyUserInfoRequestDTO.getStudentId(),
-                    modifyUserInfoRequestDTO.getExperience(),
-                    modifyUserInfoRequestDTO.getCurrentStatus());
+             UserEntity userEntity = UserEntity.builder()
+                          .userId(modifyUserInfoRequestDTO.getUserId())
+                          .userName(modifyUserInfoRequestDTO.getUserName())
+                          .gender(modifyUserInfoRequestDTO.getGender())
+                          .idCard(modifyUserInfoRequestDTO.getIdCard())
+                          .email(modifyUserInfoRequestDTO.getEmail())
+                          .grade(modifyUserInfoRequestDTO.getGrade())
+                          .major(modifyUserInfoRequestDTO.getMajor())
+                          .studentId(modifyUserInfoRequestDTO.getStudentId())
+                          .experience(modifyUserInfoRequestDTO.getExperience())
+                          .currentStatus(modifyUserInfoRequestDTO.getCurrentStatus())
+                          .build();
+            modifyUserInfoService.modifyUserInfo(userEntity);
             log.info("用户访问修改个人信息系统结束，userId:{}", modifyUserInfoRequestDTO.getUserId());
             return Response.<ModifyUserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))

@@ -25,21 +25,7 @@ public class DefaultModifyUserInfoService extends AbstractPostProcessor<UserBO> 
     private final IUserRepository repository;
 
     @Override
-    public void modifyUserInfo(String userId, String userName, Byte gender, String idCard,
-                               String email, Integer grade, String major, String studentId,
-                               String experience, String currentStatus) {
-        UserEntity userEntity = UserEntity.builder()
-                                .userId(userId)
-                                .userName(userName)
-                                .gender(gender)
-                                .idCard(idCard)
-                                .email(email)
-                                .grade(grade)
-                                .major(major)
-                                .studentId(studentId)
-                                .experience(experience)
-                                .currentStatus(currentStatus)
-                                .build();
+    public void modifyUserInfo(UserEntity userEntity) {
         PostContext<UserBO> postContext = buildPostContext(userEntity);
         postContext = super.doPostProcessor(postContext, UserInfoPostProcessor.class);
     }
