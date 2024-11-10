@@ -28,44 +28,39 @@ public class UserRepository implements IUserRepository {
     private IRedisService redisService;
 
     @Override
-    public UserEntity getUserInfoInCache(String userId) {
-        return redisService.getValue("user_info_" + userId);
-    }
-
-    @Override
-    public void setUserInfoInCache(String userId, UserEntity userEntity) {
-        redisService.setValue("user_info_" + userId, userEntity);
-    }
-
-    @Override
-    public void removeUserInfoInCache(String userId) {
-        redisService.remove("user_info_" + userId);
-    }
-
-    @Override
     public UserEntity queryUserInfo(String userId) {
+        // 从redis中获取用户信息
+        UserEntity userEntity = redisService.getValue(Constants.RedisKeyPrefix.USER_INFO + userId);
+        if(userEntity!= null) {
+            return userEntity;
+        }
+
+        // 从数据库中获取用户信息
         UserPO userPO = userMapper.getUserByUserId(userId);
         if(userPO == null) {
             log.error("用户不存在！userId：{}",userId);
             throw new AppException(Constants.ResponseCode.USER_NOT_EXIST.getCode(),
                     Constants.ResponseCode.USER_NOT_EXIST.getInfo());
         }
-
-        return UserEntity.builder()
-                    .userId(userPO.getUserId())
-                    .userName(userPO.getUserName())
-                    .phone(userPO.getPhone())
-                    .gender(userPO.getGender())
-                    .idCard(userPO.getIdCard())
-                    .email(userPO.getEmail())
-                    .grade(userPO.getGrade())
-                    .major(userPO.getMajor())
-                    .studentId(userPO.getStudentId())
-                    .experience(userPO.getExperience())
-                    .currentStatus(userPO.getCurrentStatus())
-                    .entryTime(userPO.getEntryTime())
-                    .likeCount(userPO.getLikeCount())
+        userEntity = UserEntity.builder()
+                .userId(userPO.getUserId())
+                .userName(userPO.getUserName())
+                .phone(userPO.getPhone())
+                .gender(userPO.getGender())
+                .idCard(userPO.getIdCard())
+                .email(userPO.getEmail())
+                .grade(userPO.getGrade())
+                .major(userPO.getMajor())
+                .studentId(userPO.getStudentId())
+                .experience(userPO.getExperience())
+                .currentStatus(userPO.getCurrentStatus())
+                .entryTime(userPO.getEntryTime())
+                .likeCount(userPO.getLikeCount())
                 .build();
+
+        // 缓存用户信息到redis
+        redisService.setValue(Constants.RedisKeyPrefix.USER_INFO + userId,userEntity);
+        return userEntity;
     }
 
     @Override
@@ -75,6 +70,7 @@ public class UserRepository implements IUserRepository {
             throw new AppException(Constants.ResponseCode.USER_NOT_EXIST.getCode(),
                     Constants.ResponseCode.USER_NOT_EXIST.getInfo());
         }
+        // 更新用户信息到数据库
          userMapper.updateUserInfo(UserPO.builder()
                  .userId(userEntity.getUserId())
                  .userName(userEntity.getUserName())
@@ -91,6 +87,8 @@ public class UserRepository implements IUserRepository {
                  .likeCount(userEntity.getLikeCount())
                  .updateBy(userEntity.getUserId())
                  .build());
+        // 更新用户信息到redis
+        redisService.setValue(Constants.RedisKeyPrefix.USER_INFO + userEntity.getUserId(),userEntity);
     }
 
 }
