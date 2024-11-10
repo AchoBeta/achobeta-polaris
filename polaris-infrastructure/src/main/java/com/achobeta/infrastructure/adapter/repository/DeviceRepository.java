@@ -29,9 +29,9 @@ public class DeviceRepository implements IDeviceRepository {
      * @return 设备Entity集合
      */
     @Override
-    public List<DeviceEntity> getDevices(String userId,int limit,String lastDeviceId) {
+    public List<DeviceEntity> queryCommonUseDevicesById(String userId,int limit,String lastDeviceId) {
 
-        List<DevicePO> devicesPO = deviceMapper.getDevices(userId,limit,lastDeviceId);
+        List<DevicePO> devicesPO = deviceMapper.queryCommonUseDevicesById(userId,limit,lastDeviceId);
         return devicesPO.stream()
                 .map(devicePO -> DeviceEntity.builder()
                         .deviceId(devicePO.getDeviceId())

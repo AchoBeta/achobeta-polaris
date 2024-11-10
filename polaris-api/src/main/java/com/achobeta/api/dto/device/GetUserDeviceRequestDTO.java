@@ -11,11 +11,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetDevicesRequestDTO {
+public class GetUserDeviceRequestDTO {
     /**用户id*/
     private String userId;
     /**设备id*/
-    private String DeviceId;
+    private String deviceId;
     /**单页长度*/
     private int limit;
     /**单页最后一个设备id*/

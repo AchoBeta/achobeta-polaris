@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeviceEntity {
-    /**用户id*/
-    private String userId;
     /**设备业务id*/
     private String deviceId;
     /**设备名*/

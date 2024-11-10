@@ -19,5 +19,5 @@ public interface DeviceMapper {
      * @param limit 表行数
      * @return 设备PO集合
      */
-    List<DevicePO> getDevices(String userId,int limit,String lastDeviceId);
+    List<DevicePO> queryCommonUseDevicesById(String userId,int limit,String lastDeviceId);
 }

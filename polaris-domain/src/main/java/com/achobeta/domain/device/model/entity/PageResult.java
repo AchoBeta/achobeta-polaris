@@ -3,7 +3,7 @@ package com.achobeta.domain.device.model.entity;
 import lombok.*;
 /**
  * @author huangwenxing
- * @description 单页长度实体
+ * @description 单页数据实体
  * @data 2024/11/7
  * */
 @Getter

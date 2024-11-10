@@ -17,5 +17,5 @@ public interface IDeviceRepository {
      * @param limit 表行数
      * @return 设备实体集合
      */
-    List<DeviceEntity> getDevices(String userId,int limit,String lastDeviceId);
+    List<DeviceEntity> queryCommonUseDevicesById(String userId,int limit,String lastDeviceId);
 }

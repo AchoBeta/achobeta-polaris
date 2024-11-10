@@ -1,9 +1,8 @@
 package com.achobeta.domain.device.model.bo;
 
-import com.achobeta.domain.device.model.entity.DeviceEntity;
+import com.achobeta.domain.device.model.entity.PageResult;
+import com.achobeta.domain.device.model.entity.UserCommonDevicesEntities;
 import lombok.*;
-
-import java.util.List;
 /**
  * @author huangwenxing
  * @description 数据传输
@@ -16,6 +15,8 @@ import java.util.List;
 @Builder
 @ToString
 public class DeviceBO {
-    /**设备实体集合*/
-    List<DeviceEntity> deviceEntities;
+    /**设备常用设备实体*/
+    private UserCommonDevicesEntities userCommonDevicesEntities;
+    /**单页数据实体*/
+    private PageResult pageResult;
 }

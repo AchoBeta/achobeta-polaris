@@ -1,11 +1,10 @@
 package com.achobeta.trigger.http;
 
-import com.achobeta.api.IDeviceService;
-import com.achobeta.api.dto.device.GetDevicesRequestDTO;
-import com.achobeta.api.dto.device.GetDevicesResponseDTO;
+import com.achobeta.api.dto.device.GetUserDeviceRequestDTO;
+import com.achobeta.api.dto.device.GetUserDeviceResponseDTO;
 import com.achobeta.api.response.Response;
-import com.achobeta.domain.device.model.valobj.DeviceVO;
-import com.achobeta.domain.device.service.IDeviceTextService;
+import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
+import com.achobeta.domain.device.service.IDeviceService;
 import com.achobeta.types.common.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author huangwenxing
@@ -27,43 +23,39 @@ import java.util.stream.Collectors;
 @CrossOrigin("${app.config.cross-origin}:*")
 @RequestMapping("/api/${app.config.api-version}/device/")
 @RequiredArgsConstructor
-public class DeviceController implements IDeviceService {
-    private final IDeviceTextService deviceTextService;
+public class DeviceController implements com.achobeta.api.IDeviceService {
+    private final IDeviceService deviceTextService;
     /**
      *
-     * @param getDevicesRequestDTO
+     * @param getUserDeviceRequestDTO
      * @return
      */
     @GetMapping("/getDevices")
     @Override
-    public Response<List<GetDevicesResponseDTO>> getDevices(GetDevicesRequestDTO getDevicesRequestDTO) {
+    public Response<GetUserDeviceResponseDTO> getDevices(GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
         try {
             log.info("用户访问文本渲染系统开始，userId:{} deviceId:{} limit:{} lastDeviceId:{}",
-                    getDevicesRequestDTO.getUserId(), getDevicesRequestDTO.getDeviceId(), getDevicesRequestDTO.getLimit(), getDevicesRequestDTO.getLastDeviceId());
+                    getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), getUserDeviceRequestDTO.getLastDeviceId());
 
-            List<DeviceVO> deviceVO = deviceTextService.
-                    getDeviceVO(getDevicesRequestDTO.getUserId(), getDevicesRequestDTO.getDeviceId(), getDevicesRequestDTO.getLimit(), getDevicesRequestDTO.getLastDeviceId());
+            UserCommonDevicesVO userCommonDevicesVO = deviceTextService.
+                    queryCommonUseDevicesById(getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), getUserDeviceRequestDTO.getLastDeviceId());
 
-            log.info("用户访问文本渲染系统结束，deviceVOS:{}",
-                    deviceVO);
-            List<GetDevicesResponseDTO> dtoList =   deviceVO.stream().map(deviceVO1 -> GetDevicesResponseDTO.builder()
-                    .deviceId(deviceVO1.getDeviceId())
-                    .deviceName(deviceVO1.getDeviceName())
-                    .lastLoginTime(deviceVO1.getLastLoginTime())
-                    .IP(deviceVO1.getIP())
-                    .me(deviceVO1.isMe())
-                    .build()).collect(Collectors.toList());
-            return Response.<List<GetDevicesResponseDTO>>builder()
+            log.info("用户访问文本渲染系统结束，deviceEntities:{} more:{}",userCommonDevicesVO.getDeviceEntities(),userCommonDevicesVO.isMore() );
+
+            return Response.<GetUserDeviceResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .data(dtoList)
+                    .data(GetUserDeviceResponseDTO.builder()
+                            .userCommonUseDevices(userCommonDevicesVO.getDeviceEntities())
+                            .more(userCommonDevicesVO.isMore())
+                            .build())
                     .build();
 
         } catch (Exception e) {
             log.error("用户访问文本渲染系统失败！userId:{} deviceId:{} limit:{}",
-                    getDevicesRequestDTO.getUserId(), getDevicesRequestDTO.getDeviceId(), getDevicesRequestDTO.getLimit(), e);
-            return Response.<List<GetDevicesResponseDTO>>builder()
+                    getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), e);
+            return Response.<GetUserDeviceResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
                     .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())

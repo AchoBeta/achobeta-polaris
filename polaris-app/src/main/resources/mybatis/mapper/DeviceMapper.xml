@@ -11,7 +11,7 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <select id="getDevices" resultMap="DevicesResultMap">
+    <select id="queryCommonUseDevicesById" resultMap="DevicesResultMap">
         select device_id,device_name,update_time,ip,create_time from device
         where user_id = #{userId} and is_deleted = 0 and device_id > #{lastDeviceId} and is_cancel = 1
             limit #{limit}

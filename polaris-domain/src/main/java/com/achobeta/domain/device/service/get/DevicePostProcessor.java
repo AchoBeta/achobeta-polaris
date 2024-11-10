@@ -8,6 +8,6 @@ import com.achobeta.types.support.postprocessor.BasePostProcessor;
  * @description 设备渲染拓展统一接口
  * @date 2024/11/8
  */
-public interface GetDevicePostProcessor extends BasePostProcessor<DeviceBO> {
+public interface DevicePostProcessor extends BasePostProcessor<DeviceBO> {
 
 }
