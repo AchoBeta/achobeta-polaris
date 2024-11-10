@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `position` (
     -- 软删除标识 0-未删除 1-已删除
     `is_deleted` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '0-未删除;1-已删除'
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '职位/分组';
-create unique index uk_position_position_id_team_name on position(position_id, team_name);
+alter table position add unique index position_id_team_name(position_id,team_name);
 
 DROP TABLE IF EXISTS `user_position`;
 CREATE TABLE IF NOT EXISTS `user_position` (
