@@ -46,11 +46,11 @@ CREATE TABLE IF NOT EXISTS `permission` (
     `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '主键id',
     -- 权限id
     `permission_id` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '权限id',
-	-- 团队名称
-	`team_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '团队名称',
-	-- 权限名称
-	`permission_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '权限名称',
-	-- 创建时间
+    -- 团队名称
+    `team_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '团队名称',
+    -- 权限名称
+    `permission_name` VARCHAR(36) NOT NULL DEFAULT '' COMMENT '权限名称',
+    -- 创建时间
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     -- 更新时间
     `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
