@@ -33,9 +33,8 @@ public class Constants {
     @NoArgsConstructor
     public enum BizModule {
         RENDER("biz_001", "文本渲染模块"),
-
+        DEVICE("biz_002","设备渲染模块")
         ;
-
         private String code;
         private String name;
     }
