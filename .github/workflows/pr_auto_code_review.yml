@@ -40,6 +40,9 @@ jobs:
         id: commit-message
         run: echo "COMMIT_MESSAGE=$(git log HEAD^2 --pretty=format:'%s')" >> $GITHUB_ENV
 
+      - name: Get PR Details
+        run: echo "PR_URL=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/${GITHUB_REF#refs/pull/}" >> $GITHUB_ENV
+
       - name: Print repository, branch name, commit author, and commit message
         run: |
           echo "Repository name is ${{ env.REPO_NAME }}"
@@ -60,6 +63,8 @@ jobs:
           COMMIT_BRANCH: ${{ env.BRANCH_NAME }}
           COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}
           COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
+          PR_URL: ${{ env.PR_URL }}
+          SDK_SECRET: ${{ secrets.SDK_SECRET }}
           # 飞书机器人配置
           FEISHU_TOKEN: ${{ secrets.FEISHU_TOKEN }}
           # OpenAi - ChatGLM 配置「https://open.bigmodel.cn/api/paas/v4/chat/completions」、「https://open.bigmodel.cn/usercenter/apikeys」
