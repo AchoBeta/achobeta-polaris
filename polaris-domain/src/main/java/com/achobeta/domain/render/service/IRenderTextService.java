@@ -9,6 +9,15 @@ import com.achobeta.domain.render.model.valobj.RenderBookVO;
  */
 public interface IRenderTextService {
 
+    /**
+     * 文本渲染(ceshui)
+     * 121231
+     * 15161嗡嗡嗡嗡嗡嗡
+     * 469465
+     * @param userId
+     * @param bookId
+     * @return
+     */
     RenderBookVO renderBook(String userId, String bookId);
 
 }
