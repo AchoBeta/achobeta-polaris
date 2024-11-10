@@ -31,7 +31,7 @@ if [ "$2" != "app" ]; then
   exit 1
 fi
 
-prefix="v_"$ENVIRONMENT"_"$2"_"
+prefix="v-"$ENVIRONMENT"-"$2"-"
 echo $prefix
 
 function storage-tag() {
@@ -39,8 +39,8 @@ function storage-tag() {
     git pull --tags
     local branch_name=$(echo $(git status | head -1  | awk '{print $NF}'))
     ## 这是为了在测试环境下多人共同使用测试分支时tag进行区分，不过需要注意tag不能过长，避免资源包截断导致发布失败
-    local split_branch_name=${branch_name:0:15}
-    local new_tag=$(echo ${prefix}${split_branch_name}_$(date +'%Y%m%d')_$(git tag -l "${prefix}${split_branch_name}_$(date +'%Y%m%d')_*" | wc -l | xargs printf '%02d'))
+    local split_branch_name=${branch_name:5:15}
+    local new_tag=$(echo ${prefix}${split_branch_name}-$(date +'%Y%m%d')-$(git tag -l "${prefix}${split_branch_name}-$(date +'%Y%m%d')-*" | wc -l | xargs printf '%02d'))
     git tag ${new_tag}
     git push origin $new_tag
 }
