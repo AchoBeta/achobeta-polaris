@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+
 /**
  * @author huangwenxing
  * @description 默认设备渲染服务实现类
@@ -38,6 +40,12 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
                 .filter(deviceEntity -> userEntities.getDeviceId().equals(deviceEntity.getDeviceId()))
                 .forEach(deviceEntity -> deviceEntity.setMe(true));
 
+        //判断还有没有更多数据
+        boolean flag = devices.size() == pageResult.getLimit();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("more",flag);
+        postContext.setExtra(map);
+
         userEntities.setDeviceEntities(devices);
         return postContext;
     }
@@ -48,12 +56,11 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
         postContext = super.doPostProcessor(postContext, DevicePostProcessor.class);
         DeviceBO bizData = postContext.getBizData();
         List<DeviceEntity> deviceEntities = bizData.getUserCommonDevicesEntities().getDeviceEntities();
-        //判断还有没有更多数据(原则上来讲好像应该放到doMainProcessor，感觉学长不纠结于这些我就放这了 )
-        boolean flag = deviceEntities.size() == bizData.getPageResult().getLimit();
+
 
         return UserCommonDevicesVO.builder()
                 .deviceEntities(deviceEntities)
-                .more(flag)
+                .more((boolean)postContext.getExtra().get("more"))
                 .build();
     }
 
