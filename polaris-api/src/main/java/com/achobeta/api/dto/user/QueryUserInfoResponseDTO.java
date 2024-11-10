@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoResponseDTO {
+public class QueryUserInfoResponseDTO {
     /**
      * 用户业务id
      */

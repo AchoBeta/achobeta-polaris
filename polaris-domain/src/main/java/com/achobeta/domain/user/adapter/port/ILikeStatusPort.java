@@ -7,6 +7,11 @@ package com.achobeta.domain.user.adapter.port;
  */
 public interface ILikeStatusPort {
 
+    /**
+     * 获取用户对于自己的点赞状态
+     * @param userId 用户id
+     * @return true表示已点赞，false表示未点赞
+     */
     Boolean isLiked(String userId);
 
 }

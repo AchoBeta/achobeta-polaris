@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoRequestDTO {
+public class QueryUserInfoRequestDTO {
 
     private String userId;
 
