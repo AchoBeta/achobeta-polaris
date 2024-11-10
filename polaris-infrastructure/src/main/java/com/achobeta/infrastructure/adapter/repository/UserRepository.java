@@ -68,7 +68,8 @@ public class UserRepository implements IUserRepository {
     @Override
     public void updateUserInfo(UserEntity userEntity) {
         log.info("查询用户是否存在，userId: {}",userEntity.getUserId());
-        if (userMapper.getUserByUserId(userEntity.getUserId()) == null) {
+        UserPO userPO = userMapper.getUserByUserId(userEntity.getUserId());
+        if (userPO == null) {
             log.error("用户不存在！userId：{}",userEntity.getUserId());
             throw new AppException(Constants.ResponseCode.USER_NOT_EXIST.getCode(),
                     Constants.ResponseCode.USER_NOT_EXIST.getInfo());
@@ -93,7 +94,25 @@ public class UserRepository implements IUserRepository {
         log.info("更新用户信息成功，userId: {}",userEntity.getUserId());
 
         log.info("更新用户信息缓存，userId: {}",userEntity.getUserId());
-        redisService.setValue(Constants.RedisKeyPrefix.USER_INFO + userEntity.getUserId(),userEntity);
+        redisService.remove(Constants.RedisKeyPrefix.USER_INFO + userEntity.getUserId());
+        // 注意这里修改了的是userEntity的，无法改的取userPO的
+        redisService.setValue(
+                Constants.RedisKeyPrefix.USER_INFO + userEntity.getUserId(),
+                UserEntity.builder()
+                        .userId(userPO.getUserId())
+                        .userName(userEntity.getUserName())
+                        .phone(userPO.getPhone())
+                        .gender(userEntity.getGender())
+                        .idCard(userEntity.getIdCard())
+                        .email(userEntity.getEmail())
+                        .grade(userEntity.getGrade())
+                        .major(userEntity.getMajor())
+                        .studentId(userEntity.getStudentId())
+                        .experience(userEntity.getExperience())
+                        .currentStatus(userEntity.getCurrentStatus())
+                        .entryTime(userPO.getEntryTime())
+                        .likeCount(userPO.getLikeCount())
+                        .build());
         log.info("更新用户信息缓存成功，userId: {}",userEntity.getUserId());
     }
 

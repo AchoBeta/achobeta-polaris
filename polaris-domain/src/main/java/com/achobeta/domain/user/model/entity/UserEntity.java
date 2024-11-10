@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * @author yangzhiyao
- * @description 用户实体对象
+ * @description 用户实体对象,，时间类不加那几个注解存不了Redis
  * @date 2024/11/5
  */
 @Setter
