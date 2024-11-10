@@ -32,8 +32,8 @@ public class Constants {
     @AllArgsConstructor
     @NoArgsConstructor
     public enum BizModule {
-        RENDER("文本渲染模块", "demo 工程，请忽略"),
-        TEAM("团队模块", "团队管理模块")
+        RENDER("biz_001", "文本渲染模块"),
+        TEAM("biz_003", "团队管理模块")
 
         ;
 

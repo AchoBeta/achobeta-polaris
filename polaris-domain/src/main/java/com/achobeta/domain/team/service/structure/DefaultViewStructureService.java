@@ -31,13 +31,7 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
     public PositionEntity queryStructure(String teamName) {
         PostContext<PositionBO> postContext = buildPostContext(teamName);
         postContext = super.doPostProcessor(postContext, ViewStructurePostProcessor.class);
-        return PositionEntity.builder()
-                .positionId(postContext.getBizData().getPositionEntity().getPositionId())
-                .positionName(postContext.getBizData().getPositionEntity().getPositionName())
-                .teamName(postContext.getBizData().getPositionEntity().getTeamName())
-                .level(postContext.getBizData().getPositionEntity().getLevel())
-                .subordinates(postContext.getBizData().getPositionEntity().getSubordinates())
-                .build();
+        return postContext.getBizData().getPositionEntity();
     }
 
     @Override

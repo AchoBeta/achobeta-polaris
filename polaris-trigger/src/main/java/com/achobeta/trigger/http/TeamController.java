@@ -26,7 +26,13 @@ import java.util.Collections;
 public class TeamController implements ITeamService {
     
     private final IViewStructureService viewStructureService;
-    
+
+    /**
+     * 查询团队组织架构
+     * @param structureRequestDTO
+     * @return Response<StructureResponseDTO>
+     * @date 2024/11/10
+     */
     @GetMapping("structure")
     @Override
     public Response<StructureResponseDTO> structure(@RequestBody StructureRequestDTO structureRequestDTO) {
