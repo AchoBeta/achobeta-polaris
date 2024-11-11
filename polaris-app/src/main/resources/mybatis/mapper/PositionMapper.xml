@@ -25,6 +25,7 @@
                 and team_id = #{teamId}
                 and subordinate = '' and is_deleted = 0
     </select>
+
     <select id="getPositionByPositionId" resultMap="PositionResultMap">
         select id,position_id,position_name,level,subordinate,team_id,
                 create_by,create_time,update_by,update_time
@@ -32,6 +33,24 @@
         where position_id = #{positionId}
                 and subordinate = ''
                 and is_deleted = 0
+    </select>
+
+    <select id="getParentPositionByPositionId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position
+        where subordinate = #{positionId}
+                and is_deleted = 0
+    </select>
+
+    <select id="listPositionByUserId" resultMap="PositionResultMap">
+        select id,t1.position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position as t1, user_position as t2
+        where t1.position_id = t2.position_id
+                and t2.user_id = #{userId}
+                and t1.is_deleted = 0
+                and t2.is_deleted = 0
     </select>
 
 </mapper>
