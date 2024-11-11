@@ -37,14 +37,14 @@ public class TeamController implements ITeamService {
     @Override
     public Response<StructureResponseDTO> structure(@RequestBody StructureRequestDTO structureRequestDTO) {
         try {
-            log.info("用户访问团队管理系统开始，userId:{} teamName:{}",
-                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamName());
+            log.info("用户访问团队管理系统开始，userId:{} teamId:{}",
+                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId());
 
             PositionEntity positionEntity = viewStructureService
-                    .queryStructure(structureRequestDTO.getTeamName());
+                    .queryStructure(structureRequestDTO.getTeamId());
 
-            log.info("用户访问团队管理系统结束，userId:{} teamName:{}",
-                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamName());
+            log.info("用户访问团队管理系统结束，userId:{} teamId:{}",
+                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId());
 
             return Response.<StructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
@@ -53,14 +53,14 @@ public class TeamController implements ITeamService {
                     .data(StructureResponseDTO.builder()
                             .positionId(positionEntity.getPositionId())
                             .positionName(positionEntity.getPositionName())
-                            .teamName(positionEntity.getTeamName())
+                            .teamId(positionEntity.getTeamId())
                             .level(positionEntity.getLevel())
                             .subordinates(Collections.singletonList(positionEntity.getSubordinates()))
                             .build())
                     .build();
         } catch (Exception e) {
-            log.error("用户访问团队管理系统失败！userId:{} teamName:{}",
-                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamName(), e);
+            log.error("用户访问团队管理系统失败！userId:{} teamId:{}",
+                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId(), e);
             return Response.<StructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())

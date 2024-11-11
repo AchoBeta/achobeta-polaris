@@ -9,6 +9,6 @@ import com.achobeta.domain.team.model.entity.PositionEntity;
  */
 public interface IViewStructureService {
 
-    PositionEntity queryStructure(String teamName);
+    PositionEntity queryStructure(String teamId);
 
 }

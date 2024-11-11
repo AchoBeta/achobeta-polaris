@@ -25,39 +25,22 @@ public class PositionRepository implements IPositionRepository {
 
     /**
      * 查询某职位/分组下一级的所有职位/分组
-     * @param positionName
+     * @param positionId 需要查询子职位/分组的ID
+     * @param teamId 需要查询子职位/分组的所属团队ID
      * @return 下级职位/分组列表
      * @date 2024/11/7
      */
     @Override
-    public List<PositionEntity> querySubordinatePosition(String positionName, String teamName) {
-        log.info("repository querySubordinatePosition start，positionName: {}，teamName: {}", positionName, teamName);
-
-        log.info("queryTeams positionMapper.listSubordinateIdByPositionNameAndTeamName start: positionName: {}，teamName: {}", positionName, teamName);
-        List<String> positionIdList = positionMapper.listSubordinateIdByPositionNameAndTeamName(positionName, teamName);
-        log.info("queryTeams positionMapper.listSubordinateIdByPositionNameAndTeamName over: positionName: {}，teamName: {}", positionName, teamName);
-        if(positionIdList == null || positionIdList.isEmpty()) {
-            return null;
-        }
-
-        log.info("queryTeams positionMapper.listPositionByPositionId start: positionName: {}，teamName: {}", positionName, teamName);
-        List<PositionPO> positionPOList = positionMapper.listPositionByPositionId(positionIdList);
-        log.info("queryTeams positionMapper.listPositionByPositionId over: positionName: {}，teamName: {}", positionName, teamName);
-        if(positionPOList == null || positionPOList.isEmpty()) {
-            return null;
-        }
-
+    public List<PositionEntity> querySubordinatePosition(String positionId, String teamId) {
+        List<PositionPO> positionPOList = positionMapper.listSubordinateByPositionIdAndTeamId(positionId, teamId);
         List<PositionEntity> positionEntityList = new ArrayList<>();
         for (PositionPO positionPO : positionPOList) {
             positionEntityList.add(PositionEntity.builder()
                     .positionId(positionPO.getPositionId())
                     .positionName(positionPO.getPositionName())
-                    .teamName(positionPO.getTeamName())
-                    .level(positionPO.getLevel())
+                    .teamId(positionPO.getTeamId())
                     .build());
         }
-
-        log.info("repository querySubordinatePosition over，positionName: {}，teamName: {}", positionName, teamName);
         return positionEntityList;
     }
 

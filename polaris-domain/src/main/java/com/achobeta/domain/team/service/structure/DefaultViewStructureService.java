@@ -28,8 +28,8 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
     private final IPositionRepository repository;
 
     @Override
-    public PositionEntity queryStructure(String teamName) {
-        PostContext<PositionBO> postContext = buildPostContext(teamName);
+    public PositionEntity queryStructure(String teamId) {
+        PostContext<PositionBO> postContext = buildPostContext(teamId);
         postContext = super.doPostProcessor(postContext, ViewStructurePostProcessor.class);
         return postContext.getBizData().getPositionEntity();
     }
@@ -39,12 +39,12 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
         PositionBO positionBO = postContext.getBizData();
         PositionEntity positionEntity = positionBO.getPositionEntity();
 
-        positionEntity.setPositionName(positionEntity.getTeamName());
+        positionEntity.setPositionName(positionEntity.getTeamId());
         Queue<PositionEntity> queue = new LinkedList<>();
         queue.add(positionEntity);
         while(!queue.isEmpty()) {
             PositionEntity tempPosition = queue.poll();
-            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionName(), tempPosition.getTeamName());
+            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionName(), tempPosition.getTeamId());
             tempPosition.setSubordinates(subordinates);
             if(subordinates!= null && !subordinates.isEmpty()) {
                 queue.addAll(subordinates);
@@ -55,11 +55,11 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
         return postContext;
     }
 
-    private static PostContext<PositionBO> buildPostContext(String teamName) {
+    private static PostContext<PositionBO> buildPostContext(String teamId) {
         return PostContext.<PositionBO>builder()
                 .bizName(Constants.BizModule.TEAM.getName())
                 .bizData(PositionBO.builder()
-                        .positionEntity(PositionEntity.builder().teamName(teamName).build())
+                        .positionEntity(PositionEntity.builder().teamId(teamId).build())
                         .build())
                 .build();
     }

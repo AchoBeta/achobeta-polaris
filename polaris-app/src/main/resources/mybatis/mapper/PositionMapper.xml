@@ -4,7 +4,7 @@
 
     <resultMap id="PositionResultMap" type="com.achobeta.infrastructure.dao.po.PositionPO">
         <id property="id" column="id"/>
-        <result property="teamName" column="team_name"/>
+        <result property="teamId" column="team_id"/>
         <result property="positionName" column="position_name"/>
         <result property="positionId" column="position_id"/>
         <result property="createBy" column="create_by"/>
@@ -13,21 +13,17 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <select id="listSubordinateIdByPositionNameAndTeamName" resultType="java.lang.String">
-        select subordinate
-        from position
-        where position_name = #{positionName} and team_name = #{teamName}
-                and subordinate != '' and is_deleted = 0
-    </select>
-
-    <select id="listPositionByPositionId" resultMap="PositionResultMap">
-        select id,position_id,position_name,level,subordinate,team_name,
+    <select id="listSubordinateByPositionIdAndTeamId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
                 create_by,create_time,update_by,update_time
         from position
-        where is_deleted = 0 and position_id in
-        <foreach collection="positionIds" item="positionId" open="(" separator="," close=")">
-            #{positionId}
-        </foreach>
+        where position_id in (select subordinate
+                                from position
+                                where position_id = #{positionId}
+                                        and team_id = #{teamId}
+                                        and is_deleted = 0)
+                and team_id = #{teamId}
+                and subordinate != '' and is_deleted = 0
     </select>
 
 </mapper>

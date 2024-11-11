@@ -14,5 +14,5 @@ import lombok.*;
 @NoArgsConstructor
 public class StructureRequestDTO {
     private String userId;
-    private String teamName;
+    private String teamId;
 }
