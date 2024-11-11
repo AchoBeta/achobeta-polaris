@@ -30,6 +30,13 @@ public class Constants {
     }
 
     @Getter
+    public class RedisKeyPrefix {
+
+        public static final String TEAM_STRUCTURE_SUBORDINATE = "ab:polaris:team:structure:subordinate";
+
+    }
+
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public enum BizModule {
