@@ -17,5 +17,5 @@ public class UserAnnounceEntity {
     /**用户id*/
     private String userId;
     /**用户公告*/
-    private List<UserAnnounceEntity> userAnnounceEntities;
+    private List<AnnounceEntity> userAnnounceEntities;
 }
