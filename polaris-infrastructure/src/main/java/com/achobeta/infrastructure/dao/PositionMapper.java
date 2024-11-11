@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface PositionMapper {
 
-    List<PositionPO> listSubordinateByPositionIdAndTeamId(String positionId, String teamId);
+    List<PositionPO> listSubordinateByPositionId(String positionId);
 
     PositionPO getPositionByPositionId(String positionId);
 
