@@ -17,4 +17,8 @@ public interface PositionMapper {
 
     PositionPO getPositionByPositionId(String positionId);
 
+    PositionPO getParentPositionByPositionId(String positionId);
+
+    List<PositionPO> listPositionByUserId(String userId);
+
 }
