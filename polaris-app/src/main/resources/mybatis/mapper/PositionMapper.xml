@@ -23,7 +23,7 @@
                                         and team_id = #{teamId}
                                         and is_deleted = 0)
                 and team_id = #{teamId}
-                and subordinate != '' and is_deleted = 0
+                and subordinate = '' and is_deleted = 0
     </select>
     <select id="getPositionByPositionId" resultMap="PositionResultMap">
         select id,position_id,position_name,level,subordinate,team_id,
