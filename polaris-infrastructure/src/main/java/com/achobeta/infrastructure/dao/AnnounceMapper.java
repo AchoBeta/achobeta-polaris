@@ -3,6 +3,7 @@ package com.achobeta.infrastructure.dao;
 import com.achobeta.infrastructure.dao.po.AnnouncePO;
 import com.achobeta.infrastructure.dao.po.AnnounceReciverPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface AnnounceMapper {
      * @param
      * @return 公告持久化对象
      */
-    List<AnnouncePO> queryAnnouncesByAnnounceId(List<String> announceId);
+    List<AnnouncePO> queryAnnouncesByAnnounceId(@Param("announceIds")List<String> announceId);
 
     /**
      *

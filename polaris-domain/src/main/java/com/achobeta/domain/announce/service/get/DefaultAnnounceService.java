@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 /**
  * @author huangwenxing
@@ -60,9 +61,11 @@ public class DefaultAnnounceService extends AbstractPostProcessor<AnnounceBO> im
         List<AnnounceEntity> announceEntities = repository.queryAnnouncesByUserId(userAnnounceEntity.getUserId(), pageResult.getLimit(), pageResult.getLastDeviceId());
         //判断还有没有更多数据
         boolean flag = announceEntities.size() == pageResult.getLimit();
-        postContext.getExtra().put("more",flag);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("more",flag);
+        postContext.setExtra(map);
 
-        userAnnounceEntity.setUserAnnounceEntities(userAnnounceEntity.getUserAnnounceEntities());
+        userAnnounceEntity.setUserAnnounceEntities(announceEntities);
 
         return postContext;
     }

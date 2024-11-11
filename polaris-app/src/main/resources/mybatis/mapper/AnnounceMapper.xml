@@ -4,7 +4,7 @@
 
     <resultMap id="AnnounceResultMap" type="com.achobeta.infrastructure.dao.po.AnnouncePO">
         <id column="id" property="id"/>
-        <result column="announce_id" property="AnnounceId" />
+        <result column="announce_id" property="announceId" />
         <result column="title" property="title" />
         <result column="body" property="body"/>
         <result column="target_id" property="targetId"/>
@@ -14,7 +14,7 @@
     </resultMap>
     <resultMap id="AnnounceRevicer" type="com.achobeta.infrastructure.dao.po.AnnounceReciverPO">
         <id column="id" property="id"/>
-        <result column="announce_id" property="AnnounceId" />
+        <result column="announce_id" property="announceId" />
         <result column="user_id" property="userId" />
         <result column="read" property="read"/>
         <result column="create_time" property="createTime"/>
