@@ -59,8 +59,8 @@ public class TeamController implements ITeamService {
                             .build())
                     .build();
         } catch (Exception e) {
-            log.error("用户访问团队管理系统失败！userId:{} teamId:{}",
-                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId(), e);
+            log.error("用户访问团队管理系统失败！userId:{}, teamId:{}, error:{}",
+                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId(), e.toString(), e);
             return Response.<StructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
