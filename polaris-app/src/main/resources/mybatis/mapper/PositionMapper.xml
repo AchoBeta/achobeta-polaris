@@ -25,5 +25,13 @@
                 and team_id = #{teamId}
                 and subordinate != '' and is_deleted = 0
     </select>
+    <select id="getPositionByPositionId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position
+        where position_id = #{positionId}
+                and subordinate = ''
+                and is_deleted = 0
+    </select>
 
 </mapper>

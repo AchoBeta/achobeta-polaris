@@ -15,4 +15,6 @@ public interface PositionMapper {
 
     List<PositionPO> listSubordinateByPositionIdAndTeamId(String positionId, String teamId);
 
+    PositionPO getPositionByPositionId(String positionId);
+
 }

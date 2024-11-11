@@ -4,6 +4,8 @@ import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
+import com.achobeta.types.common.Constants;
+import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +34,13 @@ public class PositionRepository implements IPositionRepository {
      */
     @Override
     public List<PositionEntity> querySubordinatePosition(String positionId, String teamId) {
+        PositionPO team = positionMapper.getPositionByPositionId(teamId);
+        if (team == null) {
+            log.error("查询团队组织架构失败，找不到团队信息，positionId:{}, teamId:{}", positionId, teamId);
+            throw new AppException(Constants.ResponseCode.TEAM_NOT_EXIST.getCode(),
+                    Constants.ResponseCode.TEAM_NOT_EXIST.getInfo());
+        }
+
         List<PositionPO> positionPOList = positionMapper.listSubordinateByPositionIdAndTeamId(positionId, teamId);
         List<PositionEntity> positionEntityList = new ArrayList<>();
         for (PositionPO positionPO : positionPOList) {
