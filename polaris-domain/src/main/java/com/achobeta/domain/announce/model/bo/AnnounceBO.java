@@ -2,7 +2,19 @@ package com.achobeta.domain.announce.model.bo;
 
 import com.achobeta.domain.announce.model.entity.UserAnnounceEntity;
 import com.achobeta.domain.device.model.entity.PageResult;
+import lombok.*;
 
+/**
+ * @author huangwenxing
+ * @description 数据传输
+ * @date 2024/11/11
+ */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class AnnounceBO {
     /**单页数据实体*/
     private PageResult pageResult;
