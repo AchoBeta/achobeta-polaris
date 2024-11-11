@@ -10,7 +10,11 @@ import com.achobeta.api.response.Response;
  * @date 2024/11/7
  */
 public interface ITeamService {
-
+    /**
+     * 查看团队组织架构接口
+     * @param structureRequestDTO 入参包括用户id和团队id
+     * @return 团队组织架构接口
+     */
     Response<StructureResponseDTO> structure(StructureRequestDTO structureRequestDTO);
 
 }
