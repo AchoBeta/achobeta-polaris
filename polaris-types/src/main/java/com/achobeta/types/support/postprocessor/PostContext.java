@@ -1,9 +1,15 @@
 package com.achobeta.types.support.postprocessor;
 
+import com.achobeta.types.common.BaseRequestParam;
 import com.achobeta.types.common.Constants;
-import lombok.*;
-
+import java.util.HashMap;
 import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author chensongmin
@@ -18,6 +24,12 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString
 public class PostContext<T> {
+
+    /**
+     * 业务ID，全局唯一
+     * <p>新开一个业务模块，就需要在 {@link Constants.BizModule} 多开一个枚举映射上</p>
+     */
+    private String bizId;
 
     /**
      * 业务名称
@@ -40,5 +52,19 @@ public class PostContext<T> {
      * Value：变量值</pre>
      */
     private Map<String, Object> extra;
+
+    public void addExtraData(String key, Object value) {
+        if (null == extra) {
+            extra = new HashMap<>();
+        }
+        extra.put(key, value);
+    }
+
+    public Object getExtraData(String key) {
+        if (null == extra) {
+            return null;
+        }
+        return extra.get(key);
+    }
 
 }

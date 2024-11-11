@@ -1,5 +1,6 @@
 package com.achobeta.api.dto;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ReadRequestDTO {
+public class ReadRequestDTO implements Serializable {
 
     private String name;
     /**

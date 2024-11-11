@@ -1,5 +1,6 @@
 package com.achobeta.api.dto;
 
+import java.io.Serializable;
 import lombok.*;
 
 /**
@@ -12,7 +13,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RenderResponseDTO {
+public class RenderResponseDTO implements Serializable {
 
     private String userName;
     private String bookName;
