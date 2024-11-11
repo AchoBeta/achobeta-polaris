@@ -6,8 +6,7 @@ import com.achobeta.domain.render.model.entity.BookEntity;
 import com.achobeta.domain.render.model.entity.UserEntity;
 import com.achobeta.domain.render.model.valobj.RenderBookVO;
 import com.achobeta.domain.render.service.IRenderTextService;
-import com.achobeta.types.common.Constants;
-import com.achobeta.types.common.Constants.BizModule;
+import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +59,7 @@ public class DefaultRenderTextService extends AbstractPostProcessor<RenderBO> im
     private static PostContext<RenderBO> buildPostContext(String userId, String bookId) {
         return PostContext.<RenderBO>builder()
             .bizId(BizModule.RENDER.getCode())
-            .bizName(Constants.BizModule.RENDER.getName())
+            .bizName(BizModule.RENDER.getName())
             .bizData(RenderBO.builder()
                 .bookEntity(BookEntity.builder().bookId(bookId).build())
                 .userEntity(UserEntity.builder().userId(userId).build())
