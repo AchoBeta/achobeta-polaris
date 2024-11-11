@@ -30,11 +30,6 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
 
     @Override
     public PositionEntity queryStructure(String teamId) {
-        if (!repository.isTeamExists(teamId)) {
-            log.error("团队不存在！teamId：{}", teamId);
-            throw new AppException(Constants.ResponseCode.TEAM_NOT_EXIST.getCode(),
-                    Constants.ResponseCode.TEAM_NOT_EXIST.getInfo());
-        }
         PostContext<PositionBO> postContext = buildPostContext(teamId);
         postContext = super.doPostProcessor(postContext, ViewStructurePostProcessor.class);
         return postContext.getBizData().getPositionEntity();
@@ -45,6 +40,14 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
         PositionBO positionBO = postContext.getBizData();
         PositionEntity positionEntity = positionBO.getPositionEntity();
 
+        // 判断团队是否存在
+        if (!repository.isTeamExists(positionEntity.getTeamId())) {
+            log.error("团队不存在！teamId：{}", positionEntity.getTeamId());
+            throw new AppException(Constants.ResponseCode.TEAM_NOT_EXIST.getCode(),
+                    Constants.ResponseCode.TEAM_NOT_EXIST.getInfo());
+        }
+
+        // 查询团队组织架构
         positionEntity.setPositionId(positionEntity.getTeamId());
         Queue<PositionEntity> queue = new LinkedList<>();
         queue.add(positionEntity);
