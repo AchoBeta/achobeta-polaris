@@ -7,14 +7,13 @@ import com.achobeta.domain.announce.model.entity.UserAnnounceEntity;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 import com.achobeta.domain.announce.service.IAnnounceService;
 import com.achobeta.domain.device.model.entity.PageResult;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 /**
  * @author huangwenxing
@@ -40,7 +39,7 @@ public class DefaultAnnounceService extends AbstractPostProcessor<AnnounceBO> im
 
     private static PostContext<AnnounceBO> buildPostContext(String userId, Integer limit, String lastAnnounceId) {
         return PostContext.<AnnounceBO>builder()
-                .bizName(Constants.BizModule.ANNOUNCE.getName())
+                .bizName(BizModule.ANNOUNCE.getName())
                 .bizData(AnnounceBO.builder()
                         .userAnnounceEntity(UserAnnounceEntity.builder()
                                 .userId(userId)
@@ -61,9 +60,7 @@ public class DefaultAnnounceService extends AbstractPostProcessor<AnnounceBO> im
         List<AnnounceEntity> announceEntities = repository.queryAnnouncesByUserId(userAnnounceEntity.getUserId(), pageResult.getLimit(), pageResult.getLastDeviceId());
         //判断还有没有更多数据
         boolean flag = announceEntities.size() == pageResult.getLimit();
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("more",flag);
-        postContext.setExtra(map);
+        postContext.addExtraData("more",flag);
 
         userAnnounceEntity.setUserAnnounceEntities(announceEntities);
 

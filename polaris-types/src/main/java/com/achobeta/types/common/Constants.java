@@ -28,16 +28,4 @@ public class Constants {
 
     }
 
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public enum BizModule {
-        RENDER("biz_001", "文本渲染模块"),
-        DEVICE("biz_002","设备渲染模块"),
-        ANNOUNCE("biz_003","公告渲染模块")
-        ;
-        private String code;
-        private String name;
-    }
-
 }

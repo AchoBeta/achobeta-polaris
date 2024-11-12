@@ -2,7 +2,7 @@ package com.achobeta.api;
 
 import com.achobeta.api.dto.announce.GetUserAnnounceRequestDTO;
 import com.achobeta.api.dto.announce.GetUserAnnounceResponseDTO;
-import com.achobeta.api.response.Response;
+import com.achobeta.types.Response;
 
 /**
  * @author huangwenxing
