@@ -40,7 +40,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
                 .forEach(deviceEntity -> deviceEntity.setMe(true));
 
         //判断还有没有更多数据
-        boolean flag = devices.size() == pageResult.getLimit();
+        boolean flag = pageResult.getLimit() <= devices.size();
         postContext.addExtraData("more",flag);
 
         userEntities.setDeviceEntities(devices);
