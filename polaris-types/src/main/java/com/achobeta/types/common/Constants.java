@@ -1,9 +1,5 @@
 package com.achobeta.types.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 public class Constants {
 
     public final static String SPLIT = ",";
@@ -27,5 +23,6 @@ public class Constants {
         private String info;
 
     }
+
 
 }
