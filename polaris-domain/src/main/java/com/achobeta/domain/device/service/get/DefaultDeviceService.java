@@ -7,7 +7,7 @@ import com.achobeta.domain.device.model.entity.PageResult;
 import com.achobeta.domain.device.model.entity.UserCommonDevicesEntities;
 import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +66,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
 
     private static PostContext<DeviceBO> buildPostContext(String userId,String deviceid,int limit,String lastDeviceId) {
         return PostContext.<DeviceBO>builder()
-                .bizName(Constants.BizModule.DEVICE.getName())
+                .bizName(BizModule.DEVICE.getName())
                 .bizData(DeviceBO.builder()
                         .userCommonDevicesEntities(UserCommonDevicesEntities.builder()
                                 .userId(userId)

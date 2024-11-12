@@ -2,13 +2,11 @@ package com.achobeta.trigger.http;
 
 import com.achobeta.api.dto.device.GetUserDeviceRequestDTO;
 import com.achobeta.api.dto.device.GetUserDeviceResponseDTO;
-import com.achobeta.api.response.Response;
 import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,24 +40,14 @@ public class DeviceController implements com.achobeta.api.IDeviceService {
 
             log.info("用户访问文本渲染系统结束，deviceEntities:{} more:{}",userCommonDevicesVO.getDeviceEntities(),userCommonDevicesVO.isMore() );
 
-            return Response.<GetUserDeviceResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.SUCCESS.getCode())
-                    .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .data(GetUserDeviceResponseDTO.builder()
-                            .userCommonUseDevices(userCommonDevicesVO.getDeviceEntities())
-                            .more(userCommonDevicesVO.isMore())
-                            .build())
-                    .build();
-
+            return  Response.SYSTEM_SUCCESS(GetUserDeviceResponseDTO.builder()
+                    .userCommonUseDevices(userCommonDevicesVO.getDeviceEntities())
+                    .more(userCommonDevicesVO.isMore())
+                    .build());
         } catch (Exception e) {
             log.error("用户访问文本渲染系统失败！userId:{} deviceId:{} limit:{}",
                     getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), e);
-            return Response.<GetUserDeviceResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
-                    .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())
-                    .build();
+            return  Response.SERVICE_ERROR(e.getMessage());
         }
     }
 }
