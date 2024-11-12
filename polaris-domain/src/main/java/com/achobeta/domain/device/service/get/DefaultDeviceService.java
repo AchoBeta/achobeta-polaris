@@ -33,16 +33,21 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
 
         UserCommonDevicesEntities userEntities = postContext.getBizData().getUserCommonDevicesEntities();
         PageResult pageResult = postContext.getBizData().getPageResult();
-
-        List<DeviceEntity> devices = repository.queryCommonUseDevicesById(userEntities.getUserId(),pageResult.getLimit(),pageResult.getLastDeviceId());
+        //查数据库时加将长度加一，确认是否有剩余数据
+        List<DeviceEntity> devices = repository.queryCommonUseDevicesById(userEntities.getUserId(),pageResult.getLimit()+1,pageResult.getLastDeviceId());
+        //判断还有没有更多数据
+        boolean flag = devices.size() > pageResult.getLimit();
+        if(flag){
+            //有就移除最后一个并返回给前端
+            devices.remove(devices.size()-1);
+        }
         //与前端传来的设备id比较，确认是否为登陆设备
+        postContext.addExtraData(Constants.NEXT_PAGE,flag);
         devices.stream()
                 .filter(deviceEntity -> userEntities.getDeviceId().equals(deviceEntity.getDeviceId()))
                 .forEach(deviceEntity -> deviceEntity.setMe(true));
 
-        //判断还有没有更多数据
-        boolean flag = pageResult.getLimit() <= devices.size();
-        postContext.addExtraData(Constants.NEXT_PAGE,flag);
+
 
         userEntities.setDeviceEntities(devices);
         return postContext;
