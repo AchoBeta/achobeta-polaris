@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -42,9 +41,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
 
         //判断还有没有更多数据
         boolean flag = devices.size() == pageResult.getLimit();
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("more",flag);
-        postContext.setExtra(map);
+        postContext.addExtraData("more",flag);
 
         userEntities.setDeviceEntities(devices);
         return postContext;
