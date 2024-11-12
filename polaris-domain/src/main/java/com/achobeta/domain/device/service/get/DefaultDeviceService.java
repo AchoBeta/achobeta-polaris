@@ -7,6 +7,7 @@ import com.achobeta.domain.device.model.entity.PageResult;
 import com.achobeta.domain.device.model.entity.UserCommonDevicesEntities;
 import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
@@ -41,7 +42,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
 
         //判断还有没有更多数据
         boolean flag = pageResult.getLimit() <= devices.size();
-        postContext.addExtraData("more",flag);
+        postContext.addExtraData(Constants.NEXT_PAGE,flag);
 
         userEntities.setDeviceEntities(devices);
         return postContext;
@@ -57,7 +58,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
 
         return UserCommonDevicesVO.builder()
                 .deviceEntities(deviceEntities)
-                .more((boolean)postContext.getExtra().get("more"))
+                .more((boolean)postContext.getExtra().get(Constants.NEXT_PAGE))
                 .build();
     }
 
