@@ -1,9 +1,16 @@
 package com.achobeta.test;
 
+import com.achobeta.types.constraint.PrefixConstraint;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Set;
+import javax.annotation.Resource;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +21,24 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ApiTest {
+
+    @Resource
+    private Validator validator;
+
+    @AllArgsConstructor
+    class Dog {
+        @PrefixConstraint(value = "zhangsan")
+        private String name;
+    }
+
+    @Test
+    public void testA() {
+//        Set<ConstraintViolation<Dog>> violations = validator.validate(new Dog("zhangsan111"));
+        Set<ConstraintViolation<Dog>> violations = validator.validate(new Dog("111"));
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
 
     @Test
     public void test() {
