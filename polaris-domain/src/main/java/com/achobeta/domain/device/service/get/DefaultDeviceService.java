@@ -9,6 +9,8 @@ import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.BizModule;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
+import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,12 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
         PageResult pageResult = postContext.getBizData().getPageResult();
         //查数据库时加将长度加一，确认是否有剩余数据
         List<DeviceEntity> devices = repository.queryCommonUseDevicesById(userEntities.getUserId(),pageResult.getLimit()+1,pageResult.getLastDeviceId());
+
+        if(devices.isEmpty()){
+            log.error("设备不存在！userId：{},limit:{},lastDeviceId:{}",userEntities.getUserId(),pageResult.getLimit(),pageResult.getLastDeviceId());
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
+        }
+
         //判断还有没有更多数据
         boolean flag = devices.size() > pageResult.getLimit();
         if(flag){
@@ -46,8 +54,6 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
         devices.stream()
                 .filter(deviceEntity -> userEntities.getDeviceId().equals(deviceEntity.getDeviceId()))
                 .forEach(deviceEntity -> deviceEntity.setMe(true));
-
-
 
         userEntities.setDeviceEntities(devices);
         return postContext;
