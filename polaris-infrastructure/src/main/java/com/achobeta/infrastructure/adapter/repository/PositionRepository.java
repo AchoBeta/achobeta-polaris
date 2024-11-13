@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -91,20 +92,10 @@ public class PositionRepository implements IPositionRepository {
     }
 
     @Override
-    public void deletePosition(List<PositionEntity> positionsToDelete, String teamId) {
-        // 封装到PositionPO对象中
-        List<PositionPO> positionPOList = new ArrayList<>();
-        for (PositionEntity positionEntity : positionsToDelete) {
-            PositionPO positionPO = PositionPO.builder()
-                            .positionId(positionEntity.getPositionId())
-                            .level(positionEntity.getLevel())
-                            .build();
-            positionPOList.add(positionPO);
-        }
-
+    public void deletePosition(Collection<String> positionsToDelete, String teamId) {
         // 数据库逻辑删除
-        positionMapper.deletePositionInPosition(positionPOList);
-        positionMapper.deletePositionInUserPosition(positionPOList);
+        positionMapper.deletePositionInPosition(positionsToDelete);
+        positionMapper.deletePositionInUserPosition(positionsToDelete);
 
         // TODO: 清除缓存，批量操作待实现
         redissonService.remove(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":*");
@@ -125,7 +116,7 @@ public class PositionRepository implements IPositionRepository {
     }
 
     @Override
-    public List<String> queryUserIdsByPositionIds(List<String> positionIds) {
+    public List<String> queryUserIdsByPositionIds(Collection<String> positionIds) {
         return positionMapper.listUserIdsByPositionIds(positionIds);
     }
 

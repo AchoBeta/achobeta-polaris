@@ -3,6 +3,7 @@ package com.achobeta.infrastructure.dao;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,22 +43,22 @@ public interface PositionMapper {
 
     /**
      * 在position表中删除职位/分组
-     * @param positionPOList
+     * @param positionsToDelete
      */
-    void deletePositionInPosition(List<PositionPO> positionPOList);
+    void deletePositionInPosition(Collection<String> positionsToDelete);
 
     /**
      * 在user_position关联表中删除职位/分组
-     * @param positionPOList
+     * @param positionsToDelete
      */
-    void deletePositionInUserPosition(List<PositionPO>positionPOList);
+    void deletePositionInUserPosition(Collection<String> positionsToDelete);
 
     /**
      * 用于在删除节点时查询要被删除的节点关联的所有用户
      * @param positionIds
      * @return 对应的所有用户id
      */
-    List<String> listUserIdsByPositionIds(List<String> positionIds);
+    List<String> listUserIdsByPositionIds(Collection<String> positionIds);
 
     void addUsersToPosition(String positionId, List<String> userIds);
 }

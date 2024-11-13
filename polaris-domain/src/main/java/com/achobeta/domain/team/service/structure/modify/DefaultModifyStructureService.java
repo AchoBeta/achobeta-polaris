@@ -14,10 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author yangzhiyao
@@ -86,7 +85,42 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
 
         // 删除职位/分组
         if (!CollectionUtil.isEmpty(positionsToDelete)) {
-            repository.deletePosition(positionsToDelete, teamId);
+            /* 按照职位等级从一级到四级排序，避免重复的遍历节点
+             * 这样也省去了维护某用户要归并到的position的额外工作
+             */
+            List<PositionEntity> rootPositionsToDelete = positionsToDelete.stream()
+                    .sorted(Comparator.comparingInt(PositionEntity::getLevel))
+                    .collect(Collectors.toList());
+            // 记录遍历到的所有节点
+            HashSet<String> positionsToDeleteSet = new HashSet<>();
+            for (PositionEntity positionEntity : rootPositionsToDelete) {
+                if (!positionsToDeleteSet.contains(positionEntity.getPositionId())) {
+                    // 这里的newPositionToBind是因为职位/分组被删除后，需要重新绑定到的父节点
+                    String newPositionToBind = repository
+                            .queryParentPosition(positionEntity.getPositionId())
+                            .getPositionId();
+                    Queue<PositionEntity> queue = new LinkedList<>();
+                    queue.add(positionEntity);
+                    while(!queue.isEmpty()) {
+                        PositionEntity tempPosition = queue.poll();
+                        positionsToDeleteSet.add(tempPosition.getPositionId());
+                        List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId(), teamId);
+                        tempPosition.setSubordinates(subordinates);
+                        if(!CollectionUtil.isEmpty(subordinates)) {
+                            queue.addAll(subordinates);
+                        }
+                    }
+                    if (!CollectionUtil.isEmpty(positionsToDeleteSet)) {
+                        // 查找因为职位/分组被删除需要重新绑定父节点的用户
+                        List<String> userIdsToRebind = repository.
+                                queryUserIdsByPositionIds(positionsToDeleteSet);
+                        if (!CollectionUtil.isEmpty(userIdsToRebind)) {
+                            repository.bindUsersToPosition(newPositionToBind, userIdsToRebind);
+                        }
+                    }
+                }
+            }
+            repository.deletePosition(positionsToDeleteSet, teamId);
         }
 
         postContext.setBizData(TeamBO.builder().positionEntityList(positionsToAdd).build());

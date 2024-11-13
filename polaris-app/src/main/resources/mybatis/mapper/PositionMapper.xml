@@ -30,7 +30,7 @@
     <update id="deletePositionInPosition">
         update position set is_deleted = 1
         where team_id = #{teamId} and position_id in
-        <foreach collection="positionIds" item="positionId" separator="," open="(" close=")" >
+        <foreach collection="positionsToDelete" item="positionId" separator="," open="(" close=")" >
                 #{positionId}
         </foreach>
     </update>
@@ -38,7 +38,7 @@
     <update id="deletePositionInUserPosition">
         update user_position set is_deleted = 1
         where position_id in
-        <foreach collection="positionIds" item="positionId" separator="," open="(" close=")" >
+        <foreach collection="positionsToDelete" item="positionId" separator="," open="(" close=")" >
             #{positionId}
         </foreach>
     </update>

@@ -2,6 +2,7 @@ package com.achobeta.domain.team.adapter.repository;
 
 import com.achobeta.domain.team.model.entity.PositionEntity;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public interface IPositionRepository {
      * @date 2024/11/11
      * @param positionsToDelete
      */
-    void deletePosition(List<PositionEntity> positionsToDelete, String teamId);
+    void deletePosition(Collection<String> positionsToDelete, String teamId);
 
     /**
      * 查询某职位/分组的父节点
@@ -59,7 +60,7 @@ public interface IPositionRepository {
      * 用于删除position
      * @author yangzhiyao
      */
-    List<String> queryUserIdsByPositionIds(List<String> positionIds);
+    List<String> queryUserIdsByPositionIds(Collection<String> positionIds);
 
     /**
      * 给予成员多个职位/分组,绑定多个user到一个position
