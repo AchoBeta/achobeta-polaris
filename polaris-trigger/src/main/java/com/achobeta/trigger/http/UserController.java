@@ -6,6 +6,7 @@ import com.achobeta.api.dto.user.QueryUserInfoResponseDTO;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.user.service.IUserInfoService;
 import com.achobeta.types.Response;
+import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 @RestController()
 @Validated
 @CrossOrigin("${app.config.cross-origin}:*")
-@RequestMapping("/api/${app.config.api-version}/read/")
+@RequestMapping("/api/${app.config.api-version}/user/")
 @RequiredArgsConstructor
 public class UserController implements IUserService {
 
@@ -59,6 +60,10 @@ public class UserController implements IUserService {
                     .liked(userEntity.getLiked())
                     .positions(userEntity.getPositions())
                     .build());
+        } catch (AppException e) {
+            log.error("用户访问个人中心信息页面系统失败！userId:{}",
+                    queryUserInfoRequestDTO.getUserId(), e);
+            return Response.SERVICE_ERROR(e.getInfo());
         } catch (Exception e) {
             log.error("用户访问个人中心信息页面系统失败！userId:{}",
                     queryUserInfoRequestDTO.getUserId(), e);
