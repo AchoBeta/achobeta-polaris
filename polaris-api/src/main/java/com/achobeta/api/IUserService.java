@@ -3,6 +3,9 @@ package com.achobeta.api;
 import com.achobeta.api.dto.user.ModifyUserInfoRequestDTO;
 import com.achobeta.api.dto.user.ModifyUserInfoResponseDTO;
 import com.achobeta.types.Response;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -16,6 +19,6 @@ public interface IUserService {
      * @param modifyUserInfoRequestDTO
      * @return Response<ModifyUserInfoResponseDTO>
      */
-    Response<ModifyUserInfoResponseDTO> modifyUserInfo(ModifyUserInfoRequestDTO modifyUserInfoRequestDTO);
+    Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Valid @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO);
 
 }

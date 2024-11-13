@@ -5,7 +5,8 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  * @author yangzhiyao
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModifyUserInfoRequestDTO {
+public class ModifyUserInfoRequestDTO implements Serializable {
     /**
      * 用户业务id
      */
@@ -43,7 +44,7 @@ public class ModifyUserInfoRequestDTO {
     @FieldDesc(name = "专业")
     private String major;
 
-    @Size(min=13, max=13, message="学号长度必须为13位")
+    @Pattern(regexp = "^$|\\d{13}", message = "学号必须为空或为13位数字")
     @FieldDesc(name = "学号")
     private String studentId;
 

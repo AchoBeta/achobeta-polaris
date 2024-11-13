@@ -2,6 +2,8 @@ package com.achobeta.api.dto.user;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * @author yangzhiyao
  * @description 用户修改个人信息响应DTO
@@ -12,7 +14,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModifyUserInfoResponseDTO {
+public class ModifyUserInfoResponseDTO implements Serializable {
     /**
      * 用户业务id
      */
