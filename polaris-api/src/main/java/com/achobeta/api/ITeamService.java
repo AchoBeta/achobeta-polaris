@@ -3,6 +3,9 @@ package com.achobeta.api;
 import com.achobeta.api.dto.QueryStructureRequestDTO;
 import com.achobeta.api.dto.QueryStructureResponseDTO;
 import com.achobeta.types.Response;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -18,6 +21,6 @@ public interface ITeamService {
      * @author yangzhiyao
      * @date 2024/11/10
      */
-    Response<QueryStructureResponseDTO> queryStructure(QueryStructureRequestDTO structureRequestDTO);
+    Response<QueryStructureResponseDTO> queryStructure(@Valid @RequestBody QueryStructureRequestDTO structureRequestDTO);
 
 }
