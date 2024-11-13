@@ -14,9 +14,16 @@
     </resultMap>
 
     <insert id="addPosition" parameterType="com.achobeta.infrastructure.dao.po.PositionPO">
-            insert into `position` (position_id,position_name,level,subordinate,team_id) values
+        insert into `position` (position_id,position_name,level,subordinate,team_id) values
         <foreach collection="positionPOList" item="position" separator=",">
              (#{position.positionId},#{position.positionName},#{position.level},#{position.subordinate},#{position.teamId})
+        </foreach>
+    </insert>
+
+    <insert id="addUsersToPosition">
+        insert into user_position (user_id, position_id) values
+        <foreach collection="userIds" item="userId" separator=",">
+            (#{userId},#{positionId})
         </foreach>
     </insert>
 

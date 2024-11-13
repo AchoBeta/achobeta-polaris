@@ -47,9 +47,20 @@ public interface IPositionRepository {
 
     /**
      * 查询某职位/分组的父节点
+     * 删除position要用，查询用户position要用
      * @author yangzhiyao
      * @date 2024/11/14
      * @param positionId
      */
     PositionEntity queryParentPosition(String positionId);
+
+    /**
+     * 给予成员多个职位/分组,绑定多个user到一个position
+     * 删除position要用
+     * @author yangzhiyao
+     * @date 2024/11/14
+     */
+    Integer bindUsersToPosition(String positionId, List<String> userIds);
+
+
 }

@@ -51,4 +51,6 @@ public interface PositionMapper {
      * @param positionPOList
      */
     void deletePositionInUserPosition(List<PositionPO>positionPOList);
+
+    Integer addUsersToPosition(String positionId, List<String> userIds);
 }

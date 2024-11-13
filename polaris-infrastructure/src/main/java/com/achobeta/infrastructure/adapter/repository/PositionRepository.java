@@ -124,4 +124,9 @@ public class PositionRepository implements IPositionRepository {
                .build();
     }
 
+    @Override
+    public Integer bindUsersToPosition(String positionId, List<String> userIds) {
+        return positionMapper.addUsersToPosition(positionId, userIds);
+    }
+
 }
