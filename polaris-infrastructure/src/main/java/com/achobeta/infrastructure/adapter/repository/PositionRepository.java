@@ -1,5 +1,6 @@
 package com.achobeta.infrastructure.adapter.repository;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
@@ -39,7 +40,7 @@ public class PositionRepository implements IPositionRepository {
         // 从缓存中获取数据
         List<PositionEntity> positionEntityList = redissonService.
                 getValue(Constants.RedisKeyPrefix.TEAM_STRUCTURE_SUBORDINATE + positionId);
-        if (positionEntityList!= null && !positionEntityList.isEmpty()) {
+        if (CollectionUtil.isEmpty(positionEntityList)) {
             return positionEntityList;
         }
 

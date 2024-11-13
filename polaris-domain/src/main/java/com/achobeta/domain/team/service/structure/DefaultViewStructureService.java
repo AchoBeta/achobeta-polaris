@@ -1,5 +1,6 @@
 package com.achobeta.domain.team.service.structure;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
@@ -55,7 +56,7 @@ public class DefaultViewStructureService extends AbstractPostProcessor<TeamBO> i
             PositionEntity tempPosition = queue.poll();
             List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId());
             tempPosition.setSubordinates(subordinates);
-            if(subordinates!= null && !subordinates.isEmpty()) {
+            if(CollectionUtil.isEmpty(subordinates)) {
                 queue.addAll(subordinates);
             }
         }
