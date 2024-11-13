@@ -58,6 +58,21 @@ public class PositionRepository implements IPositionRepository {
 
     @Override
     public void deletePosition(List<PositionEntity> positionsToDelete, String teamId) {
+        // 封装到PositionPO对象中
+        List<PositionPO> positionPOList = new ArrayList<>();
+        for (PositionEntity positionEntity : positionsToDelete) {
+            PositionPO positionPO = PositionPO.builder()
+                            .positionId(positionEntity.getPositionId())
+                            .level(positionEntity.getLevel())
+                            .build();
+            positionPOList.add(positionPO);
+        }
 
+        // 数据库逻辑删除
+        positionMapper.deletePositionInPosition(positionPOList);
+        positionMapper.deletePositionInUserPosition(positionPOList);
+
+        // TODO: 清除缓存，批量操作待实现
+        redissonService.remove(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":*");
     }
 }
