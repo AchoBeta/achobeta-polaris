@@ -1,10 +1,7 @@
 package com.achobeta.domain.login.model.bo;
 
-import com.achobeta.domain.login.model.entity.PhoneEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.achobeta.domain.login.model.valobj.CodeVO;
+import lombok.*;
 
 /**
  * @Author: 严豪哲
@@ -13,11 +10,17 @@ import lombok.NoArgsConstructor;
  * @Version: 1.0
  */
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class SendCodeBO {
-    private PhoneEntity phoneEntity;
-    private String code;
+
+    /*
+     * 验证码值对象
+     */
+    CodeVO codeVO;
+
 }

@@ -8,5 +8,12 @@ package com.achobeta.domain.login.adapter.port;
  */
 
 public interface IShortMessageService {
+
+    /*
+     * 发送短信
+     * @param phone 手机号
+     * @return 短信验证码
+     */
     String sms(String phone);
+
 }

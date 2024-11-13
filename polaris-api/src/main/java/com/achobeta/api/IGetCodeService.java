@@ -3,7 +3,7 @@ package com.achobeta.api;
 
 import com.achobeta.api.dto.GetCodeRequestDTO;
 import com.achobeta.api.dto.GetCodeResponseDTO;
-import com.achobeta.api.response.Response;
+import com.achobeta.types.Response;
 
 /**
  * @Author: 严豪哲

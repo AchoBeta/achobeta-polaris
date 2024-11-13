@@ -3,13 +3,14 @@ package com.achobeta.trigger.http;
 import com.achobeta.api.IReadService;
 import com.achobeta.api.dto.RenderRequestDTO;
 import com.achobeta.api.dto.RenderResponseDTO;
-import com.achobeta.api.response.Response;
 import com.achobeta.domain.render.model.valobj.RenderBookVO;
 import com.achobeta.domain.render.service.IRenderTextService;
+import com.achobeta.types.Response;
 import com.achobeta.types.common.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -45,7 +46,7 @@ public class ReadController implements IReadService {
 
             return Response.<RenderResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.SUCCESS.getCode())
+                    .code(Integer.valueOf(Constants.ResponseCode.SUCCESS.getCode()))
                     .info(Constants.ResponseCode.SUCCESS.getInfo())
                     .data(RenderResponseDTO.builder()
                             .userName(renderBookVO.getUserName())
@@ -58,10 +59,15 @@ public class ReadController implements IReadService {
                     renderRequestDTO.getUserId(), renderRequestDTO.getBookId(), e);
             return Response.<RenderResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
+                    .code(Integer.valueOf(Constants.ResponseCode.NO_PERMISSIONS.getCode()))
                     .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())
                     .build();
         }
+    }
+
+    @Override
+    public ResponseEntity<String> body(Integer input) {
+        return null;
     }
 
 //    /**

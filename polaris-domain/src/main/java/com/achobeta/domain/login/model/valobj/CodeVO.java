@@ -16,6 +16,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SendCodeVO {
-    private String result;
+public class CodeVO {
+
+    /*
+     * 用户手机号
+     */
+    private String phone;
+
+    /*
+     * 验证码
+     */
+    private String code;
+
 }
