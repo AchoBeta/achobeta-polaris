@@ -1,9 +1,11 @@
 package com.achobeta.api.dto.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.achobeta.types.annotation.FieldDesc;
 import lombok.*;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * @author yangzhiyao
@@ -21,42 +23,33 @@ public class ModifyUserInfoRequestDTO {
      */
     @NotBlank(message = "用户业务id不能为空")
     private String userId;
-    /**
-     * 用户名
-     */
+
+    @FieldDesc(name = "用户名")
     private String userName;
-    /**
-     * 用户性别
-     */
+
+    @FieldDesc(name = "性别")
     private Byte gender;
-    /**
-     * 用户身份证号
-     */
+
+    @FieldDesc(name = "身份证号")
     private String idCard;
-    /**
-     * 用户邮箱
-     */
+
     @Email(message = "邮箱格式不正确")
+    @FieldDesc(name = "邮箱")
     private String email;
-    /**
-     * 用户年级
-     */
+
+    @FieldDesc(name = "年级")
     private Integer grade;
-    /**
-     * 用户专业
-     */
+
+    @FieldDesc(name = "专业")
     private String major;
-    /**
-     * 用户学号
-     */
+
     @Size(min=13, max=13, message="学号长度必须为13位")
+    @FieldDesc(name = "学号")
     private String studentId;
-    /**
-     * 用户实习/就职经历
-     */
+
+    @FieldDesc(name = "实习/就职经历")
     private String experience;
-    /**
-     * 用户现状
-     */
+
+    @FieldDesc(name = "现状")
     private String currentStatus;
 }

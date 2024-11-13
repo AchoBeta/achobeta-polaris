@@ -14,12 +14,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author yangzhiyao
  * @create 2024/11/6
  */
 @Slf4j
 @RestController()
+@Validated
 @CrossOrigin("*")
 @RequestMapping("/api/v1/user/")
 @RequiredArgsConstructor
@@ -37,7 +40,7 @@ public class UserController implements IUserService {
      */
     @GetMapping("/center")
     @Override
-    public Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@RequestBody QueryUserInfoRequestDTO queryUserInfoRequestDTO) {
+    public Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid @RequestBody QueryUserInfoRequestDTO queryUserInfoRequestDTO) {
         try {
             log.info("用户访问个人中心信息页面系统开始，userId:{}", queryUserInfoRequestDTO.getUserId());
 
@@ -76,7 +79,7 @@ public class UserController implements IUserService {
      */
     @PostMapping("/modify")
     @Override
-    public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Validated @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
+    public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Valid @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
         try {
             log.info("用户访问修改个人信息系统开始，userId:{}", modifyUserInfoRequestDTO.getUserId());
              UserEntity userEntity = UserEntity.builder()
