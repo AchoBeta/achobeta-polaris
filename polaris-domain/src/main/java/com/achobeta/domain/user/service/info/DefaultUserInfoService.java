@@ -4,7 +4,7 @@ import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.bo.UserBO;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.user.service.IUserInfoService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
 
     private static PostContext<UserBO> buildPostContext(String userId) {
         return PostContext.<UserBO>builder()
-                .bizName(Constants.BizModule.USER.getName())
+                .bizName(BizModule.USER.getName())
                 .bizData(UserBO.builder()
                         .userEntity(UserEntity.builder().userId(userId).build())
                         .build())

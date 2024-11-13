@@ -4,7 +4,7 @@ import com.achobeta.api.dto.user.ModifyUserInfoRequestDTO;
 import com.achobeta.api.dto.user.ModifyUserInfoResponseDTO;
 import com.achobeta.api.dto.user.QueryUserInfoRequestDTO;
 import com.achobeta.api.dto.user.QueryUserInfoResponseDTO;
-import com.achobeta.api.response.Response;
+import com.achobeta.types.Response;
 
 /**
  * @author yangzhiyao

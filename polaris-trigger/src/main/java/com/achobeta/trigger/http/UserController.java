@@ -5,15 +5,12 @@ import com.achobeta.api.dto.user.ModifyUserInfoRequestDTO;
 import com.achobeta.api.dto.user.ModifyUserInfoResponseDTO;
 import com.achobeta.api.dto.user.QueryUserInfoRequestDTO;
 import com.achobeta.api.dto.user.QueryUserInfoResponseDTO;
-import com.achobeta.api.response.Response;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.user.service.IModifyUserInfoService;
 import com.achobeta.domain.user.service.IUserInfoService;
-import com.achobeta.types.common.Constants;
-import com.achobeta.types.exception.AppException;
+import com.achobeta.types.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,36 +44,27 @@ public class UserController implements IUserService {
             UserEntity userEntity = userInfoService.getUserInfo(queryUserInfoRequestDTO.getUserId());
             log.info("用户访问个人中心信息页面系统结束，userId:{}", queryUserInfoRequestDTO.getUserId());
 
-            return Response.<QueryUserInfoResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.SUCCESS.getCode())
-                    .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .data(QueryUserInfoResponseDTO.builder()
-                            .userId(userEntity.getUserId())
-                            .userName(userEntity.getUserName())
-                            .phone(userEntity.getPhone())
-                            .gender(userEntity.getGender())
-                            .idCard(userEntity.getIdCard())
-                            .email(userEntity.getEmail())
-                            .grade(userEntity.getGrade())
-                            .major(userEntity.getMajor())
-                            .studentId(userEntity.getStudentId())
-                            .experience(userEntity.getExperience())
-                            .currentStatus(userEntity.getCurrentStatus())
-                            .entryTime(userEntity.getEntryTime())
-                            .likeCount(userEntity.getLikeCount())
-                            .liked(userEntity.getLiked())
-                            .positions(userEntity.getPositions())
-                            .build())
-                    .build();
+            return Response.SYSTEM_SUCCESS(QueryUserInfoResponseDTO.builder()
+                    .userId(userEntity.getUserId())
+                    .userName(userEntity.getUserName())
+                    .phone(userEntity.getPhone())
+                    .gender(userEntity.getGender())
+                    .idCard(userEntity.getIdCard())
+                    .email(userEntity.getEmail())
+                    .grade(userEntity.getGrade())
+                    .major(userEntity.getMajor())
+                    .studentId(userEntity.getStudentId())
+                    .experience(userEntity.getExperience())
+                    .currentStatus(userEntity.getCurrentStatus())
+                    .entryTime(userEntity.getEntryTime())
+                    .likeCount(userEntity.getLikeCount())
+                    .liked(userEntity.getLiked())
+                    .positions(userEntity.getPositions())
+                    .build());
         } catch (Exception e) {
             log.error("用户访问个人中心信息页面系统失败！userId:{}",
                     queryUserInfoRequestDTO.getUserId(), e);
-            return Response.<QueryUserInfoResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
-                    .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())
-                    .build();
+            return Response.SERVICE_ERROR();
         }
     }
 
@@ -105,31 +93,22 @@ public class UserController implements IUserService {
                           .build();
             modifyUserInfoService.modifyUserInfo(userEntity);
             log.info("用户访问修改个人信息系统结束，userId:{}", modifyUserInfoRequestDTO.getUserId());
-            return Response.<ModifyUserInfoResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.SUCCESS.getCode())
-                    .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .data(ModifyUserInfoResponseDTO.builder()
-                            .userId(modifyUserInfoRequestDTO.getUserId())
-                            .userName(modifyUserInfoRequestDTO.getUserName())
-                            .gender(modifyUserInfoRequestDTO.getGender())
-                            .idCard(modifyUserInfoRequestDTO.getIdCard())
-                            .email(modifyUserInfoRequestDTO.getEmail())
-                            .grade(modifyUserInfoRequestDTO.getGrade())
-                            .major(modifyUserInfoRequestDTO.getMajor())
-                            .studentId(modifyUserInfoRequestDTO.getStudentId())
-                            .experience(modifyUserInfoRequestDTO.getExperience())
-                            .currentStatus(modifyUserInfoRequestDTO.getCurrentStatus())
-                            .build())
-                    .build();
-        } catch (AppException e) {
-            log.error("用户访问个人中心信息页面系统失败！userId:{}，error:{}",
-                    modifyUserInfoRequestDTO.getUserId(), e.toString(), e);
-            return Response.<ModifyUserInfoResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
-                    .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())
-                    .build();
+            return Response.SYSTEM_SUCCESS(ModifyUserInfoResponseDTO.builder()
+                    .userId(modifyUserInfoRequestDTO.getUserId())
+                    .userName(modifyUserInfoRequestDTO.getUserName())
+                    .gender(modifyUserInfoRequestDTO.getGender())
+                    .idCard(modifyUserInfoRequestDTO.getIdCard())
+                    .email(modifyUserInfoRequestDTO.getEmail())
+                    .grade(modifyUserInfoRequestDTO.getGrade())
+                    .major(modifyUserInfoRequestDTO.getMajor())
+                    .studentId(modifyUserInfoRequestDTO.getStudentId())
+                    .experience(modifyUserInfoRequestDTO.getExperience())
+                    .currentStatus(modifyUserInfoRequestDTO.getCurrentStatus())
+                    .build());
+        }  catch (Exception e) {
+            log.error("用户访问修改个人信息系统失败！userId:{}",
+                    modifyUserInfoRequestDTO.getUserId(), e);
+            return Response.SERVICE_ERROR();
         }
     }
 }
