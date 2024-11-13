@@ -12,6 +12,12 @@ import java.util.List;
  */
 @Mapper
 public interface PositionMapper {
+    /**
+     * 获取某个职位的所有下属职位
+     * @param positionId
+     * @return
+     */
+    List<PositionPO> listSubordinateByPositionId(String positionId);
 
     /**
      * 获取某个职位的信息

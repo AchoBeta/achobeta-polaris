@@ -1,5 +1,6 @@
 package com.achobeta.infrastructure.adapter.repository;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
@@ -27,6 +28,39 @@ public class PositionRepository implements IPositionRepository {
 
     @Resource
     private RedissonService redissonService;
+
+    /**
+     * 查询某职位/分组下一级的所有职位/分组
+     * @param positionId 需要查询子职位/分组的ID
+     * @return 下级职位/分组列表
+     * @date 2024/11/7
+     */
+    @Override
+    public List<PositionEntity> querySubordinatePosition(String positionId, String teamId) {
+        // 从缓存中获取数据
+        List<PositionEntity> positionEntityList = redissonService.
+                getValue(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":" + positionId);
+        if (!CollectionUtil.isEmpty(positionEntityList)) {
+            return positionEntityList;
+        }
+
+        // 从数据库中查询下级职位/分组
+        List<PositionPO> positionPOList = positionMapper.
+                listSubordinateByPositionId(positionId);
+        positionEntityList = new ArrayList<>();
+        for (PositionPO positionPO : positionPOList) {
+            positionEntityList.add(PositionEntity.builder()
+                    .positionId(positionPO.getPositionId())
+                    .positionName(positionPO.getPositionName())
+                    .level(positionPO.getLevel())
+                    .teamId(positionPO.getTeamId())
+                    .build());
+        }
+
+        // 缓存数据
+        redissonService.setValue(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":" + positionId, positionEntityList);
+        return positionEntityList;
+    }
 
     @Override
     public Boolean isTeamExists(String teamId) {

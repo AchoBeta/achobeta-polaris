@@ -12,6 +12,15 @@ import java.util.List;
 public interface IPositionRepository {
 
     /**
+     * 查询某职位/分组的子职位/分组
+     * @author yangzhiyao
+     * @date 2024/11/11
+     * @param positionId
+     * @return
+     */
+    List<PositionEntity> querySubordinatePosition(String positionId, String teamId);
+
+    /**
      * 查询团队是否存在
      * @author yangzhiyao
      * @date 2024/11/11
