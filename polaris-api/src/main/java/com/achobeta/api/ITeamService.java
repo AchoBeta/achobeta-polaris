@@ -2,7 +2,7 @@ package com.achobeta.api;
 
 import com.achobeta.api.dto.QueryStructureRequestDTO;
 import com.achobeta.api.dto.QueryStructureResponseDTO;
-import com.achobeta.api.response.Response;
+import com.achobeta.types.Response;
 
 /**
  * @author yangzhiyao

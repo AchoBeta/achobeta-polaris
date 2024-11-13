@@ -3,10 +3,11 @@ package com.achobeta.trigger.http;
 import com.achobeta.api.ITeamService;
 import com.achobeta.api.dto.QueryStructureRequestDTO;
 import com.achobeta.api.dto.QueryStructureResponseDTO;
-import com.achobeta.api.response.Response;
+import com.achobeta.types.Response;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.service.IViewStructureService;
 import com.achobeta.types.common.Constants;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,8 +48,8 @@ public class TeamController implements ITeamService {
 
             return Response.<QueryStructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.SUCCESS.getCode())
-                    .info(Constants.ResponseCode.SUCCESS.getInfo())
+                    .code(GlobalServiceStatusCode.SYSTEM_SUCCESS.getCode())
+                    .info(GlobalServiceStatusCode.SYSTEM_SUCCESS.getMessage())
                     .data(QueryStructureResponseDTO.builder()
                             .positionId(positionEntity.getPositionId())
                             .positionName(positionEntity.getPositionName())
@@ -62,7 +63,7 @@ public class TeamController implements ITeamService {
                     queryStructureRequestDTO.getUserId(), queryStructureRequestDTO.getTeamId(), e.toString(), e);
             return Response.<QueryStructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(e.getCode())
+                    .code(Integer.valueOf(e.getCode()))
                     .info(e.getInfo())
                     .build();
         } catch (Exception e) {
@@ -70,8 +71,8 @@ public class TeamController implements ITeamService {
                     queryStructureRequestDTO.getUserId(), queryStructureRequestDTO.getTeamId(), e.toString(), e);
             return Response.<QueryStructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
-                    .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())
+                    .code(GlobalServiceStatusCode.SYSTEM_SERVICE_FAIL.getCode())
+                    .info(GlobalServiceStatusCode.SYSTEM_SERVICE_FAIL.getMessage())
                     .build();
         }
     }
