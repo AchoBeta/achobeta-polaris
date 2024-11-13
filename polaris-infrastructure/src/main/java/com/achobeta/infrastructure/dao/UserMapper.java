@@ -1,5 +1,6 @@
 package com.achobeta.infrastructure.dao;
 
+import com.achobeta.infrastructure.dao.po.UserPO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,6 +10,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserMapper {
+    /**
+     * 根据userId获取用户信息
+     * @param userId 用户业务id
+     * @return 用户实体
+     */
+    UserPO getUserByUserId(String userId);
 
 
 }
