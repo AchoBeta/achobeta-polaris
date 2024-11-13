@@ -45,4 +45,11 @@ public interface IPositionRepository {
      */
     void deletePosition(List<PositionEntity> positionsToDelete, String teamId);
 
+    /**
+     * 查询某职位/分组的父节点
+     * @author yangzhiyao
+     * @date 2024/11/14
+     * @param positionId
+     */
+    PositionEntity queryParentPosition(String positionId);
 }

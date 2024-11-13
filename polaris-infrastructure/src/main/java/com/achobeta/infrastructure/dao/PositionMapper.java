@@ -27,6 +27,14 @@ public interface PositionMapper {
     PositionPO getPositionByPositionId(String positionId);
 
     /**
+     * 获取某个职位的上级职位
+     * 用以查询用户的个人职位
+     * @param positionId
+     * @return
+     */
+    PositionPO getParentPositionByPositionId(String positionId);
+
+    /**
      * 添加职位/分组
      * @param positionPOList
      */

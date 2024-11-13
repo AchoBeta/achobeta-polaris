@@ -109,4 +109,19 @@ public class PositionRepository implements IPositionRepository {
         // TODO: 清除缓存，批量操作待实现
         redissonService.remove(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":*");
     }
+
+    @Override
+    public PositionEntity queryParentPosition(String positionId) {
+        PositionPO positionPO = positionMapper.getPositionByPositionId(positionId);
+        if (positionPO == null) {
+            return null;
+        }
+        return PositionEntity.builder()
+               .positionId(positionPO.getPositionId())
+               .positionName(positionPO.getPositionName())
+               .level(positionPO.getLevel())
+               .teamId(positionPO.getTeamId())
+               .build();
+    }
+
 }

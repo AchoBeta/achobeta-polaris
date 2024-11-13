@@ -56,4 +56,12 @@
                 and is_deleted = 0
     </select>
 
+    <select id="getParentPositionByPositionId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position
+        where subordinate = #{positionId}
+                and is_deleted = 0
+    </select>
+
 </mapper>
