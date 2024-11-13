@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StructureRequestDTO {
+public class QueryStructureRequestDTO {
     private String userId;
     private String teamId;
 }

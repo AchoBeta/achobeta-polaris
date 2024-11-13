@@ -1,7 +1,7 @@
 package com.achobeta.domain.team.service.structure;
 
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
-import com.achobeta.domain.team.model.bo.PositionBO;
+import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.service.IViewStructureService;
 import com.achobeta.types.common.Constants;
@@ -24,21 +24,21 @@ import java.util.Queue;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DefaultViewStructureService extends AbstractPostProcessor<PositionBO> implements IViewStructureService {
+public class DefaultViewStructureService extends AbstractPostProcessor<TeamBO> implements IViewStructureService {
 
     private final IPositionRepository repository;
 
     @Override
     public PositionEntity queryStructure(String teamId) {
-        PostContext<PositionBO> postContext = buildPostContext(teamId);
+        PostContext<TeamBO> postContext = buildPostContext(teamId);
         postContext = super.doPostProcessor(postContext, ViewStructurePostProcessor.class);
         return postContext.getBizData().getPositionEntity();
     }
 
     @Override
-    public PostContext<PositionBO> doMainProcessor(PostContext<PositionBO> postContext) {
-        PositionBO positionBO = postContext.getBizData();
-        PositionEntity positionEntity = positionBO.getPositionEntity();
+    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
+        TeamBO teamBO = postContext.getBizData();
+        PositionEntity positionEntity = teamBO.getPositionEntity();
 
         // 判断团队是否存在
         if (!repository.isTeamExists(positionEntity.getTeamId())) {
@@ -60,14 +60,14 @@ public class DefaultViewStructureService extends AbstractPostProcessor<PositionB
             }
         }
 
-        postContext.setBizData(PositionBO.builder().positionEntity(positionEntity).build());
+        postContext.setBizData(TeamBO.builder().positionEntity(positionEntity).build());
         return postContext;
     }
 
-    private static PostContext<PositionBO> buildPostContext(String teamId) {
-        return PostContext.<PositionBO>builder()
+    private static PostContext<TeamBO> buildPostContext(String teamId) {
+        return PostContext.<TeamBO>builder()
                 .bizName(Constants.BizModule.TEAM.getName())
-                .bizData(PositionBO.builder()
+                .bizData(TeamBO.builder()
                         .positionEntity(PositionEntity.builder().teamId(teamId).build())
                         .build())
                 .build();

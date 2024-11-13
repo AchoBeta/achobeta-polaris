@@ -2,8 +2,6 @@ package com.achobeta.api.dto;
 
 import lombok.*;
 
-import java.util.List;
-
 /**
  * @author yangzhiyao
  * @description 团队架构请求响应DTO
@@ -14,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StructureResponseDTO {
+public class QueryStructureResponseDTO {
 
     /**
      * 职位/分组业务id
@@ -35,6 +33,6 @@ public class StructureResponseDTO {
     /**
      * 层级关系的子节点/下级分组
      */
-    private List<Object> subordinates;
+    private Object subordinates;
 
 }

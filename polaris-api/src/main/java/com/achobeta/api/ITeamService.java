@@ -1,7 +1,7 @@
 package com.achobeta.api;
 
-import com.achobeta.api.dto.StructureRequestDTO;
-import com.achobeta.api.dto.StructureResponseDTO;
+import com.achobeta.api.dto.QueryStructureRequestDTO;
+import com.achobeta.api.dto.QueryStructureResponseDTO;
 import com.achobeta.api.response.Response;
 
 /**
@@ -15,6 +15,6 @@ public interface ITeamService {
      * @param structureRequestDTO 入参包括用户id和团队id
      * @return 团队组织架构接口
      */
-    Response<StructureResponseDTO> structure(StructureRequestDTO structureRequestDTO);
+    Response<QueryStructureResponseDTO> queryStructure(QueryStructureRequestDTO structureRequestDTO);
 
 }

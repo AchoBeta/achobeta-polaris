@@ -1,18 +1,17 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.ITeamService;
-import com.achobeta.api.dto.StructureRequestDTO;
-import com.achobeta.api.dto.StructureResponseDTO;
+import com.achobeta.api.dto.QueryStructureRequestDTO;
+import com.achobeta.api.dto.QueryStructureResponseDTO;
 import com.achobeta.api.response.Response;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.service.IViewStructureService;
 import com.achobeta.types.common.Constants;
+import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
 
 /**
  * @author yangzhiyao
@@ -29,39 +28,47 @@ public class TeamController implements ITeamService {
 
     /**
      * 查询团队组织架构
-     * @param structureRequestDTO
-     * @return Response<StructureResponseDTO>
+     * @param queryStructureRequestDTO
+     * @return Response<QueryStructureResponseDTO>
      * @date 2024/11/10
      */
     @GetMapping("structure")
     @Override
-    public Response<StructureResponseDTO> structure(@RequestBody StructureRequestDTO structureRequestDTO) {
+    public Response<QueryStructureResponseDTO> queryStructure(@RequestBody QueryStructureRequestDTO queryStructureRequestDTO) {
         try {
             log.info("用户访问团队管理系统开始，userId:{} teamId:{}",
-                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId());
+                    queryStructureRequestDTO.getUserId(), queryStructureRequestDTO.getTeamId());
 
             PositionEntity positionEntity = viewStructureService
-                    .queryStructure(structureRequestDTO.getTeamId());
+                    .queryStructure(queryStructureRequestDTO.getTeamId());
 
             log.info("用户访问团队管理系统结束，userId:{} teamId:{}",
-                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId());
+                    queryStructureRequestDTO.getUserId(), queryStructureRequestDTO.getTeamId());
 
-            return Response.<StructureResponseDTO>builder()
+            return Response.<QueryStructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .data(StructureResponseDTO.builder()
+                    .data(QueryStructureResponseDTO.builder()
                             .positionId(positionEntity.getPositionId())
                             .positionName(positionEntity.getPositionName())
                             .teamId(positionEntity.getTeamId())
                             .level(positionEntity.getLevel())
-                            .subordinates(Collections.singletonList(positionEntity.getSubordinates()))
+                            .subordinates(positionEntity.getSubordinates())
                             .build())
                     .build();
+        } catch (AppException e) {
+            log.error("用户访问团队管理系统失败！userId:{}, teamId:{}, 已知异常error:{}",
+                    queryStructureRequestDTO.getUserId(), queryStructureRequestDTO.getTeamId(), e.toString(), e);
+            return Response.<QueryStructureResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(e.getCode())
+                    .info(e.getInfo())
+                    .build();
         } catch (Exception e) {
-            log.error("用户访问团队管理系统失败！userId:{}, teamId:{}, error:{}",
-                    structureRequestDTO.getUserId(), structureRequestDTO.getTeamId(), e.toString(), e);
-            return Response.<StructureResponseDTO>builder()
+            log.error("用户访问团队管理系统失败！userId:{}, teamId:{}, 未知异常error:{}",
+                    queryStructureRequestDTO.getUserId(), queryStructureRequestDTO.getTeamId(), e.toString(), e);
+            return Response.<QueryStructureResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Constants.ResponseCode.NO_PERMISSIONS.getCode())
                     .info(Constants.ResponseCode.NO_PERMISSIONS.getInfo())

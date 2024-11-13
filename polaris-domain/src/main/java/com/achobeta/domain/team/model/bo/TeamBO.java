@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class PositionBO {
+public class TeamBO {
 
     private PositionEntity positionEntity;
 
