@@ -4,17 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author chensongmin
+ * @description 业务模块枚举定义
+ * @date 2024/11/11
+ */
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-public enum ResponseCode {
+public enum BizModule {
+    RENDER("biz_001", "文本渲染模块"),
 
-    SUCCESS("0000", "成功"),
-    UN_ERROR("0001", "未知失败"),
-    ILLEGAL_PARAMETER("0002", "非法参数"),
     ;
 
     private String code;
-    private String info;
-
+    private String name;
 }
