@@ -35,12 +35,4 @@ public class PositionEntity {
      * 层级关系的子节点/下级分组
      */
     private List<PositionEntity> subordinates;
-    /**
-     * 添加新节点时用到，子节点ID
-     */
-    private String subordinateId;
-    /**
-     * 添加新节点时用到，子节点名称，用来找新生成的它的ID
-     */
-    private String subordinateName;
 }

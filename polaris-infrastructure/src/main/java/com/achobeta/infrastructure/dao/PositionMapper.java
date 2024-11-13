@@ -41,21 +41,4 @@ public interface PositionMapper {
      */
     List<PositionPO> listPositionByUserId(String userId);
 
-    /**
-     * 添加职位/分组
-     * @param positionPOList
-     */
-    void addPosition(List<PositionPO> positionPOList);
-
-    /**
-     * 在position表中删除职位/分组
-     * @param positionPOList
-     */
-    void deletePositionInPosition(List<PositionPO> positionPOList);
-
-    /**
-     * 在user_position关联表中删除职位/分组
-     * @param positionPOList
-     */
-    void deletePositionInUserPosition(List<PositionPO>positionPOList);
 }

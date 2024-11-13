@@ -13,29 +13,6 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <insert id="addPosition" parameterType="com.achobeta.infrastructure.dao.po.PositionPO">
-            insert into `position` (position_id,position_name,level,subordinate,team_id) values
-        <foreach collection="positionPOList" item="position" separator=",">
-             (#{position.positionId},#{position.positionName},#{position.level},#{position.subordinate},#{position.teamId})
-        </foreach>
-    </insert>
-
-    <update id="deletePositionInPosition">
-        update position set is_deleted = 1
-        where team_id = #{teamId} and position_id in
-        <foreach collection="positionIds" item="positionId" separator="," open="(" close=")" >
-                #{positionId}
-        </foreach>
-    </update>
-
-    <update id="deletePositionInUserPosition">
-        update user_position set is_deleted = 1
-        where position_id in
-        <foreach collection="positionIds" item="positionId" separator="," open="(" close=")" >
-            #{positionId}
-        </foreach>
-    </update>
-
     <select id="listSubordinateByPositionId" resultMap="PositionResultMap">
         select id,position_id,position_name,level,subordinate,team_id,
                 create_by,create_time,update_by,update_time
