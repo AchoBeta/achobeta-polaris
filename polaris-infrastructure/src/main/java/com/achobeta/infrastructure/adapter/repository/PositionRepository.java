@@ -52,7 +52,7 @@ public class PositionRepository implements IPositionRepository {
         // 保存到数据库中
         positionMapper.addPosition(positionPOList);
 
-        // 清除缓存
+        // TODO: 清除缓存，批量操作待实现
         redissonService.remove(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":*");
     }
 
