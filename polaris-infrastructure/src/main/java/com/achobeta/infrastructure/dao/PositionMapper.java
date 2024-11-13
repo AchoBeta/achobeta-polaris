@@ -52,5 +52,12 @@ public interface PositionMapper {
      */
     void deletePositionInUserPosition(List<PositionPO>positionPOList);
 
-    Integer addUsersToPosition(String positionId, List<String> userIds);
+    /**
+     * 用于在删除节点时查询要被删除的节点关联的所有用户
+     * @param positionIds
+     * @return 对应的所有用户id
+     */
+    List<String> listUserIdsByPositionIds(List<String> positionIds);
+
+    void addUsersToPosition(String positionId, List<String> userIds);
 }

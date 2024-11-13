@@ -55,12 +55,22 @@ public interface IPositionRepository {
     PositionEntity queryParentPosition(String positionId);
 
     /**
-     * 给予成员多个职位/分组,绑定多个user到一个position
-     * 删除position要用
+     * 通过一系列positionId查询所有userId
+     * 用于删除position
      * @author yangzhiyao
-     * @date 2024/11/14
      */
-    Integer bindUsersToPosition(String positionId, List<String> userIds);
+    List<String> queryUserIdsByPositionIds(List<String> positionIds);
+
+    /**
+     * 给予成员多个职位/分组,绑定多个user到一个position
+     *      * 删除position要用
+     *      * @author yangzhiyao
+     *      * @date 2024/11/14
+     * @param positionId
+     * @param userIds
+     * @return
+     */
+    void bindUsersToPosition(String positionId, List<String> userIds);
 
 
 }

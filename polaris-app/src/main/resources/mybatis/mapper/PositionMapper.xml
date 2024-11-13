@@ -71,4 +71,13 @@
                 and is_deleted = 0
     </select>
 
+    <select id="listUserIdsByPositionIds" resultType="java.lang.String">
+        select user_id
+        from user_position
+        where position_id in
+        <foreach collection="positionIds" item="positionId" separator="," open="(" close=")" >
+            #{positionId}
+        </foreach>
+    </select>
+
 </mapper>

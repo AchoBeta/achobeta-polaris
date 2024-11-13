@@ -125,8 +125,13 @@ public class PositionRepository implements IPositionRepository {
     }
 
     @Override
-    public Integer bindUsersToPosition(String positionId, List<String> userIds) {
-        return positionMapper.addUsersToPosition(positionId, userIds);
+    public List<String> queryUserIdsByPositionIds(List<String> positionIds) {
+        return positionMapper.listUserIdsByPositionIds(positionIds);
+    }
+
+    @Override
+    public void bindUsersToPosition(String positionId, List<String> userIds) {
+        positionMapper.addUsersToPosition(positionId, userIds);
     }
 
 }
