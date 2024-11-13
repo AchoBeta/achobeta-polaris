@@ -39,7 +39,7 @@ public class PositionRepository implements IPositionRepository {
     public List<PositionEntity> querySubordinatePosition(String positionId) {
         // 从缓存中获取数据
         List<PositionEntity> positionEntityList = redissonService.
-                getValue(Constants.RedisKeyPrefix.TEAM_STRUCTURE_SUBORDINATE + positionId);
+                getValue(Constants.TEAM_STRUCTURE_SUBORDINATE + positionId);
         if (CollectionUtil.isEmpty(positionEntityList)) {
             return positionEntityList;
         }
@@ -57,7 +57,7 @@ public class PositionRepository implements IPositionRepository {
         }
 
         // 缓存数据
-        redissonService.setValue(Constants.RedisKeyPrefix.TEAM_STRUCTURE_SUBORDINATE + positionId, positionEntityList);
+        redissonService.setValue(Constants.TEAM_STRUCTURE_SUBORDINATE + positionId, positionEntityList);
         return positionEntityList;
     }
 

@@ -5,7 +5,8 @@ import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.service.IViewStructureService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.enums.BizModule;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
@@ -44,8 +45,8 @@ public class DefaultViewStructureService extends AbstractPostProcessor<TeamBO> i
         // 判断团队是否存在
         if (!repository.isTeamExists(positionEntity.getTeamId())) {
             log.error("团队不存在！teamId：{}", positionEntity.getTeamId());
-            throw new AppException(Constants.ResponseCode.TEAM_NOT_EXIST.getCode(),
-                    Constants.ResponseCode.TEAM_NOT_EXIST.getInfo());
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.TEAM_NOT_EXIST.getCode()),
+                    GlobalServiceStatusCode.TEAM_NOT_EXIST.getMessage());
         }
 
         // 查询团队组织架构
@@ -67,7 +68,7 @@ public class DefaultViewStructureService extends AbstractPostProcessor<TeamBO> i
 
     private static PostContext<TeamBO> buildPostContext(String teamId) {
         return PostContext.<TeamBO>builder()
-                .bizName(Constants.BizModule.TEAM.getName())
+                .bizName(BizModule.TEAM.getName())
                 .bizData(TeamBO.builder()
                         .positionEntity(PositionEntity.builder().teamId(teamId).build())
                         .build())
