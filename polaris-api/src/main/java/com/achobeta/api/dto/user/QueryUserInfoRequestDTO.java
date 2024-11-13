@@ -4,6 +4,7 @@ import com.achobeta.types.annotation.FieldDesc;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * @author yangzhiyao
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueryUserInfoRequestDTO {
+public class QueryUserInfoRequestDTO implements Serializable {
 
     @NotBlank(message = "用户ID不能为空")
     @FieldDesc(name = "用户ID")

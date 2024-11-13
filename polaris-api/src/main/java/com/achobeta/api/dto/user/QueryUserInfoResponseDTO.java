@@ -2,6 +2,7 @@ package com.achobeta.api.dto.user;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueryUserInfoResponseDTO {
+public class QueryUserInfoResponseDTO implements Serializable {
     /**
      * 用户业务id
      */

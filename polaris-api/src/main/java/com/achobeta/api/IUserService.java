@@ -3,6 +3,9 @@ package com.achobeta.api;
 import com.achobeta.api.dto.user.QueryUserInfoRequestDTO;
 import com.achobeta.api.dto.user.QueryUserInfoResponseDTO;
 import com.achobeta.types.Response;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -15,7 +18,7 @@ public interface IUserService {
      * @param queryUserInfoRequestDTO
      * @return Response<QueryUserInfoResponseDTO>
      */
-    Response<QueryUserInfoResponseDTO> queryUserCenterInfo(QueryUserInfoRequestDTO queryUserInfoRequestDTO);
+    Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid @RequestBody QueryUserInfoRequestDTO queryUserInfoRequestDTO);
 
 
 }
