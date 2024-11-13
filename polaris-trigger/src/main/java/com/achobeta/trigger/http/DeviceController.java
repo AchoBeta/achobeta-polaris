@@ -5,18 +5,24 @@ import com.achobeta.api.dto.device.GetUserDeviceResponseDTO;
 import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
 import com.achobeta.types.Response;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
+import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * @author huangwenxing
  * @date 2024/11/9
  */
 @Slf4j
+@Validated
 @RestController()
 @CrossOrigin("${app.config.cross-origin}:*")
 @RequestMapping("/api/${app.config.api-version}/device/")
@@ -30,23 +36,28 @@ public class DeviceController implements com.achobeta.api.IDeviceService {
      */
     @GetMapping("/getDevices")
     @Override
-    public Response<GetUserDeviceResponseDTO> getDevices(GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
+    public Response<GetUserDeviceResponseDTO> getDevices(@Valid GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
         try {
-            log.info("用户访问文本渲染系统开始，userId:{} deviceId:{} limit:{} lastDeviceId:{}",
+            log.info("用户访问设备渲染页面系统开始，userId:{} deviceId:{} limit:{} lastDeviceId:{}",
                     getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), getUserDeviceRequestDTO.getLastDeviceId());
 
             UserCommonDevicesVO userCommonDevicesVO = deviceTextService.
                     queryCommonUseDevicesById(getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), getUserDeviceRequestDTO.getLastDeviceId());
 
-            log.info("用户访问文本渲染系统结束，deviceEntities:{} more:{}",userCommonDevicesVO.getDeviceEntities(),userCommonDevicesVO.isMore() );
+            log.info("用户访问设备渲染页面系统结束，deviceEntities:{} more:{}",userCommonDevicesVO.getDeviceEntities(),userCommonDevicesVO.isMore() );
 
             return  Response.SYSTEM_SUCCESS(GetUserDeviceResponseDTO.builder()
                     .userCommonUseDevices(userCommonDevicesVO.getDeviceEntities())
                     .more(userCommonDevicesVO.isMore())
                     .build());
-        } catch (Exception e) {
-            log.error("用户访问文本渲染系统失败！userId:{} deviceId:{} limit:{}",
-                    getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), e);
+        }catch (AppException e){
+            log.error("用户访问设备渲染页面系统失败!userId:{} deviceId:{} limit:{} lastDeviceId:{}",
+                    getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(),getUserDeviceRequestDTO.getLastDeviceId(), e);
+            return Response.CUSTOMIZE_ERROR(GlobalServiceStatusCode.PARAM_NOT_VALID);
+        }
+        catch (Exception e) {
+            log.error("用户访问设备渲染页面系统失败！userId:{} deviceId:{} limit:{} lastDeviceId:{}",
+                    getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(),getUserDeviceRequestDTO.getLastDeviceId(), e);
             return  Response.SERVICE_ERROR(e.getMessage());
         }
     }
