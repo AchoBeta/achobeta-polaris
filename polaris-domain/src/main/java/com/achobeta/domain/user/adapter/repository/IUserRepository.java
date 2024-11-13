@@ -1,5 +1,7 @@
 package com.achobeta.domain.user.adapter.repository;
 
+import com.achobeta.domain.user.model.entity.UserEntity;
+
 /**
  * @author yangzhiyao
  * @description 用户仓储接口
@@ -8,5 +10,6 @@ package com.achobeta.domain.user.adapter.repository;
 public interface IUserRepository {
 
 
+    void updateUserInfo(UserEntity userEntity);
 
 }
