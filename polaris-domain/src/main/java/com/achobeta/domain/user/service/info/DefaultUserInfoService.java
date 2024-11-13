@@ -28,21 +28,7 @@ public class DefaultUserInfoService extends AbstractPostProcessor<UserBO> implem
     public UserEntity getUserInfo(String userId) {
         PostContext<UserBO> userContext = buildPostContext(userId);
         userContext = super.doPostProcessor(userContext, UserInfoPostProcessor.class);
-        return UserEntity.builder()
-                .userId(userContext.getBizData().getUserEntity().getUserId())
-                .userName(userContext.getBizData().getUserEntity().getUserName())
-                .email(userContext.getBizData().getUserEntity().getEmail())
-                .phone(userContext.getBizData().getUserEntity().getPhone())
-                .grade(userContext.getBizData().getUserEntity().getGrade())
-                .gender(userContext.getBizData().getUserEntity().getGender())
-                .major(userContext.getBizData().getUserEntity().getMajor())
-                .currentStatus(userContext.getBizData().getUserEntity().getCurrentStatus())
-                .entryTime(userContext.getBizData().getUserEntity().getEntryTime())
-                .experience(userContext.getBizData().getUserEntity().getExperience())
-                .idCard(userContext.getBizData().getUserEntity().getIdCard())
-                .likeCount(userContext.getBizData().getUserEntity().getLikeCount())
-                .studentId(userContext.getBizData().getUserEntity().getStudentId())
-                .build();
+        return userContext.getBizData().getUserEntity();
     }
 
     @Override
