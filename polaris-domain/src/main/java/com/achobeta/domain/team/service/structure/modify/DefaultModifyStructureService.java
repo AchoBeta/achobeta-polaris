@@ -59,7 +59,7 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
                         .positionName(positionEntity.getSubordinateName())
                         .teamId(teamId)
                         .subordinateId("")
-                        .level((byte) (positionEntity.getLevel() + 1))
+                        .level(positionEntity.getLevel() + 1)
                         .build();
                 positionMap.put(positionEntity.getSubordinateName(), newId);
                 // 看父节点，按照逻辑父节点要么是之前创建的有id，要么是新创建的

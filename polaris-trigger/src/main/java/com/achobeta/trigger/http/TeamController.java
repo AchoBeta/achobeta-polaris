@@ -51,7 +51,7 @@ public class TeamController implements ITeamService {
                 PositionEntity positionEntity = PositionEntity.builder()
                         .positionId(((LinkedHashMap<String, String>) obj).get("parentPositionId"))
                         .positionName(((LinkedHashMap<String, String>) obj).get("parentPositionName"))
-                        .level(Byte.valueOf(((LinkedHashMap<String, String>) obj).get("parentPositionLevel")))
+                        .level(((LinkedHashMap<String, Integer>) obj).get("parentPositionLevel"))
                         .subordinateName(((LinkedHashMap<String, String>) obj).get("newPositionName"))
                         .build();
                 addPositions.add(positionEntity);
@@ -59,7 +59,7 @@ public class TeamController implements ITeamService {
             for (Object obj: tempDeletePositions) {
                 PositionEntity positionEntity = PositionEntity.builder()
                         .positionId(((LinkedHashMap<String, String>) obj).get("positionId"))
-                        .level(((LinkedHashMap<String, Byte>) obj).get("level"))
+                        .level(((LinkedHashMap<String, Integer>) obj).get("level"))
                         .build();
                 deletePositions.add(positionEntity);
             }

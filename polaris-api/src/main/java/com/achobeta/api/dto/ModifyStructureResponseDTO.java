@@ -35,7 +35,7 @@ public class ModifyStructureResponseDTO implements Serializable {
     /**
      * 团队架构中的等级 0-根节点/团队 1-一级节点 2-二级节点 3-三级节点 4-四级节点
      */
-    private Byte level;
+    private Integer level;
     /**
      * 添加新节点时用到，子节点ID
      */

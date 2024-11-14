@@ -78,7 +78,8 @@
         <foreach collection="positionIds" item="positionId" separator="," open="(" close=")" >
             #{positionId}
         </foreach>
-        and is_deleted = 0
+            and is_deleted = 0
+        group by user_id
     </select>
 
 </mapper>
