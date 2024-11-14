@@ -29,10 +29,11 @@
 
     <update id="deletePositionInPosition">
         update position set is_deleted = 1
-        where team_id = #{teamId} and position_id in
+        where position_id in
         <foreach collection="positionsToDelete" item="positionId" separator="," open="(" close=")" >
-                #{positionId}
+            #{positionId}
         </foreach>
+                and is_deleted = 0
     </update>
 
     <update id="deletePositionInUserPosition">
@@ -41,6 +42,7 @@
         <foreach collection="positionsToDelete" item="positionId" separator="," open="(" close=")" >
             #{positionId}
         </foreach>
+                and is_deleted = 0
     </update>
 
     <select id="listSubordinateByPositionId" resultMap="PositionResultMap">
