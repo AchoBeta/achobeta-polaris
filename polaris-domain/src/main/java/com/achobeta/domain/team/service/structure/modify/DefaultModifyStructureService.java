@@ -89,6 +89,7 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
              * 这样也省去了维护某用户要归并到的position的额外工作
              */
             List<PositionEntity> rootPositionsToDelete = positionsToDelete.stream()
+                    .filter(Objects::nonNull)
                     .sorted(Comparator.comparingInt(PositionEntity::getLevel))
                     .collect(Collectors.toList());
             // 记录遍历到的所有节点
