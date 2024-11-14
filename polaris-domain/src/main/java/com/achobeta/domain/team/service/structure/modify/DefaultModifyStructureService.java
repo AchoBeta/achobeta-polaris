@@ -45,44 +45,6 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
         List<PositionEntity> positionsToDelete = (List<PositionEntity>) postContext.getExtraData("positionsToDelete");
         String teamId = (String) postContext.getExtraData("teamId");
 
-        // 需要新增的所有节点，包括固有节点
-        List<PositionEntity> positionsToAdd = new ArrayList<>();
-        // 有需要新增的职位/分组
-        if (!CollectionUtil.isEmpty(newPositionList)) {
-            // 哈希表，key-name，value-uuid
-            ConcurrentHashMap<String, String> positionMap = new ConcurrentHashMap<>(newPositionList.size());
-            for (PositionEntity positionEntity : newPositionList) {
-                String newId = UUID.randomUUID().toString();
-                // 为新职位创建固有节点
-                PositionEntity newPositionEntity = PositionEntity.builder()
-                        .positionId(newId)
-                        .positionName(positionEntity.getSubordinateName())
-                        .teamId(teamId)
-                        .subordinateId("")
-                        .level(positionEntity.getLevel() + 1)
-                        .build();
-                positionMap.put(positionEntity.getSubordinateName(), newId);
-                // 看父节点，按照逻辑父节点要么是之前创建的有id，要么是新创建的
-                // 如果新创建的，在遍历过程总会先生成UUID放入哈希表，所以这里如果没有那就是非法请求
-                String positionId = positionEntity.getPositionId();
-                if (positionId == null || positionId.isEmpty()) {
-                    positionId = positionMap.get(positionEntity.getPositionName());
-                    if (positionId == null) {
-                        throw new AppException(String.valueOf(GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID.getCode()),
-                                GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID.getMessage());
-                    } else {
-                        positionEntity.setPositionId(positionId);
-                    }
-                }
-                positionEntity.setSubordinateId(positionMap.get(positionEntity.getSubordinateName()));
-                positionEntity.setTeamId(teamId);
-
-                positionsToAdd.add(newPositionEntity);
-            }
-            positionsToAdd.addAll(newPositionList);
-            repository.savePosition(positionsToAdd, teamId);
-        }
-
         // 删除职位/分组
         if (!CollectionUtil.isEmpty(positionsToDelete)) {
             /* 按照职位等级从一级到四级排序，避免重复的遍历节点
@@ -143,6 +105,44 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
             }
             repository.deletePosition(positionsToDeleteSet, teamId);
 
+        }
+
+        // 需要新增的所有节点，包括固有节点
+        List<PositionEntity> positionsToAdd = new ArrayList<>();
+        // 有需要新增的职位/分组
+        if (!CollectionUtil.isEmpty(newPositionList)) {
+            // 哈希表，key-name，value-uuid
+            ConcurrentHashMap<String, String> positionMap = new ConcurrentHashMap<>(newPositionList.size());
+            for (PositionEntity positionEntity : newPositionList) {
+                String newId = UUID.randomUUID().toString();
+                // 为新职位创建固有节点
+                PositionEntity newPositionEntity = PositionEntity.builder()
+                        .positionId(newId)
+                        .positionName(positionEntity.getSubordinateName())
+                        .teamId(teamId)
+                        .subordinateId("")
+                        .level(positionEntity.getLevel() + 1)
+                        .build();
+                positionMap.put(positionEntity.getSubordinateName(), newId);
+                // 看父节点，按照逻辑父节点要么是之前创建的有id，要么是新创建的
+                // 如果新创建的，在遍历过程总会先生成UUID放入哈希表，所以这里如果没有那就是非法请求
+                String positionId = positionEntity.getPositionId();
+                if (positionId == null || positionId.isEmpty()) {
+                    positionId = positionMap.get(positionEntity.getPositionName());
+                    if (positionId == null) {
+                        throw new AppException(String.valueOf(GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID.getCode()),
+                                GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID.getMessage());
+                    } else {
+                        positionEntity.setPositionId(positionId);
+                    }
+                }
+                positionEntity.setSubordinateId(positionMap.get(positionEntity.getSubordinateName()));
+                positionEntity.setTeamId(teamId);
+
+                positionsToAdd.add(newPositionEntity);
+            }
+            positionsToAdd.addAll(newPositionList);
+            repository.savePosition(positionsToAdd, teamId);
         }
 
         postContext.setBizData(TeamBO.builder().positionEntityList(positionsToAdd).build());
