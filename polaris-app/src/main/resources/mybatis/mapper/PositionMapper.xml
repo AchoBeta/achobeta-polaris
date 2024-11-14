@@ -29,10 +29,14 @@
 
     <update id="deletePositionInPosition">
         update position set is_deleted = 1
-        where position_id in
+        where (position_id in
         <foreach collection="positionsToDelete" item="positionId" separator="," open="(" close=")" >
             #{positionId}
         </foreach>
+                or subordinate in
+        <foreach collection="positionsToDelete" item="positionId" separator="," open="(" close=")" >
+            #{positionId}
+        </foreach>)
                 and is_deleted = 0
     </update>
 
