@@ -78,6 +78,7 @@
         <foreach collection="positionIds" item="positionId" separator="," open="(" close=")" >
             #{positionId}
         </foreach>
+        and is_deleted = 0
     </select>
 
 </mapper>

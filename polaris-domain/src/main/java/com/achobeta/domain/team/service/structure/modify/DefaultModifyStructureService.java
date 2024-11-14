@@ -95,10 +95,12 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
             HashSet<String> positionsToDeleteSet = new HashSet<>();
             for (PositionEntity positionEntity : rootPositionsToDelete) {
                 if (!positionsToDeleteSet.contains(positionEntity.getPositionId())) {
-                    // 这里的newPositionToBind是因为职位/分组被删除后，需要重新绑定到的父节点
-                    String newPositionToBind = repository
-                            .queryParentPosition(positionEntity.getPositionId())
-                            .getPositionId();
+                    /* 这里的rootPositionToBind是因为职位/分组被删除后，需要重新绑定到的父节点
+                     * 如本来要删除的根节点就是一级节点了，就不需要再绑定了
+                     */
+                    PositionEntity rootParentPositionToBind = repository.queryParentPosition(positionEntity.getPositionId());
+                    String rootParentPositionId = rootParentPositionToBind.getLevel() == 0 ? "" : rootParentPositionToBind.getPositionId();
+
                     Queue<PositionEntity> queue = new LinkedList<>();
                     queue.add(positionEntity);
                     while(!queue.isEmpty()) {
@@ -110,12 +112,12 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
                             queue.addAll(subordinates);
                         }
                     }
-                    if (!CollectionUtil.isEmpty(positionsToDeleteSet)) {
+                    if (!rootParentPositionId.isEmpty() && !CollectionUtil.isEmpty(positionsToDeleteSet)) {
                         // 查找因为职位/分组被删除需要重新绑定父节点的用户
                         List<String> userIdsToRebind = repository.
                                 queryUserIdsByPositionIds(positionsToDeleteSet);
                         if (!CollectionUtil.isEmpty(userIdsToRebind)) {
-                            repository.bindUsersToPosition(newPositionToBind, userIdsToRebind);
+                            repository.bindUsersToPosition(rootParentPositionId, userIdsToRebind);
                         }
                     }
                 }
