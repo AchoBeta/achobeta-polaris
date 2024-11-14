@@ -93,8 +93,12 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
                     .collect(Collectors.toList());
             // 记录遍历到的所有节点
             HashSet<String> positionsToDeleteSet = new HashSet<>();
+            // 对于某颗子树，父节点为key，子树所有节点为value
+            HashMap<String, List<String>> bindPositionsMap = new HashMap<>();
             for (PositionEntity positionEntity : rootPositionsToDelete) {
                 if (!positionsToDeleteSet.contains(positionEntity.getPositionId())) {
+                    // 这颗子树下的所有节点
+                    List<String> thisTreeToDeletePositions = new ArrayList<>();
                     /* 这里的rootPositionToBind是因为职位/分组被删除后，需要重新绑定到的父节点
                      * 如本来要删除的根节点就是一级节点了，就不需要再绑定了
                      */
@@ -106,23 +110,38 @@ public class DefaultModifyStructureService extends AbstractPostProcessor<TeamBO>
                     while(!queue.isEmpty()) {
                         PositionEntity tempPosition = queue.poll();
                         positionsToDeleteSet.add(tempPosition.getPositionId());
+                        thisTreeToDeletePositions.add(tempPosition.getPositionId());
                         List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId(), teamId);
                         tempPosition.setSubordinates(subordinates);
                         if(!CollectionUtil.isEmpty(subordinates)) {
                             queue.addAll(subordinates);
                         }
                     }
-                    if (!rootParentPositionId.isEmpty() && !CollectionUtil.isEmpty(positionsToDeleteSet)) {
-                        // 查找因为职位/分组被删除需要重新绑定父节点的用户
-                        List<String> userIdsToRebind = repository.
-                                queryUserIdsByPositionIds(positionsToDeleteSet);
-                        if (!CollectionUtil.isEmpty(userIdsToRebind)) {
-                            repository.bindUsersToPosition(rootParentPositionId, userIdsToRebind);
+                    if (!rootParentPositionId.isEmpty() && !CollectionUtil.isEmpty(thisTreeToDeletePositions)) {
+                        if (bindPositionsMap.containsKey(rootParentPositionId)) {
+                            bindPositionsMap.get(rootParentPositionId).addAll(thisTreeToDeletePositions);
+                        } else {
+                            bindPositionsMap.put(rootParentPositionId, thisTreeToDeletePositions);
                         }
                     }
                 }
             }
+            /*
+             * 对于每颗子树，重新绑定父节点
+             * 放在循环外外面，为了先让遍历拿到一个rebind父节点的所有待rebind节点
+             * 然后去查询用户从而避免重复用户绑定
+             */
+            for (String rootParentPositionId : bindPositionsMap.keySet()) {
+                List<String> thisTreeToDeletePositions = bindPositionsMap.get(rootParentPositionId);
+                // 查找因为职位/分组被删除需要重新绑定父节点的用户
+                List<String> userIdsToRebind = repository.
+                        queryUserIdsByPositionIds(thisTreeToDeletePositions);
+                if (!CollectionUtil.isEmpty(userIdsToRebind)) {
+                    repository.bindUsersToPosition(rootParentPositionId, userIdsToRebind);
+                }
+            }
             repository.deletePosition(positionsToDeleteSet, teamId);
+
         }
 
         postContext.setBizData(TeamBO.builder().positionEntityList(positionsToAdd).build());

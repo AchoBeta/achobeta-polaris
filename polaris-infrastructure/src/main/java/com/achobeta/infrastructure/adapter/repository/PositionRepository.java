@@ -103,7 +103,7 @@ public class PositionRepository implements IPositionRepository {
 
     @Override
     public PositionEntity queryParentPosition(String positionId) {
-        PositionPO positionPO = positionMapper.getPositionByPositionId(positionId);
+        PositionPO positionPO = positionMapper.getParentPositionByPositionId(positionId);
         if (positionPO == null) {
             return null;
         }

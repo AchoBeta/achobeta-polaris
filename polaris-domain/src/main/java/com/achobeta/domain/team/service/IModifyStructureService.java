@@ -11,6 +11,15 @@ import java.util.List;
  */
 public interface IModifyStructureService {
 
+    /**
+     * 修改团队组织架构
+     * @author yangzhiyao
+     * @date 2024/11/13
+     * @param newPositionList
+     * @param positionsToDelete
+     * @param teamId
+     * @return
+     */
     List<PositionEntity> modifyStructure(List<PositionEntity> newPositionList, List<PositionEntity> positionsToDelete, String teamId);
 
 }
