@@ -10,10 +10,7 @@ import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,7 +33,7 @@ public class DeviceController implements com.achobeta.api.IDeviceService {
      */
     @GetMapping("/getDevices")
     @Override
-    public Response<GetUserDeviceResponseDTO> getDevices(@Valid GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
+    public Response<GetUserDeviceResponseDTO> getDevices(@Valid @RequestBody  GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
         try {
             log.info("用户访问设备渲染页面系统开始，userId:{} deviceId:{} limit:{} lastDeviceId:{}",
                     getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), getUserDeviceRequestDTO.getLastDeviceId());

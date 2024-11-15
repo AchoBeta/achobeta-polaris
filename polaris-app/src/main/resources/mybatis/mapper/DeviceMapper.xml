@@ -13,8 +13,12 @@
 
     <select id="queryCommonUseDevicesById" resultMap="DevicesResultMap">
         select device_id,device_name,update_time,ip,create_time from device
-        where user_id = #{userId} and is_deleted = 0 and device_id > #{lastDeviceId} and is_cancel = 1
-        order by create_time desc
+        where user_id = #{userId} and is_deleted = 1
+              <if test="lastDeviceId != null">
+                  and  device_id > #{lastDeviceId}
+              </if>
+               and is_cancel = 0
+        order by device_id
             limit #{limit}
     </select>
 

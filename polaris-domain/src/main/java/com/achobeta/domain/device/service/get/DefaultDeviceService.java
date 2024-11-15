@@ -16,6 +16,7 @@ import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
         //查数据库时加将长度加一，确认是否有剩余数据
         List<DeviceEntity> devices = repository.queryCommonUseDevicesById(userEntities.getUserId(),pageResult.getLimit()+1,pageResult.getLastDeviceId());
 
-        if(devices.isEmpty()){
+        if(CollectionUtils.isEmpty(devices)){
             log.error("设备不存在！userId：{},limit:{},lastDeviceId:{}",userEntities.getUserId(),pageResult.getLimit(),pageResult.getLastDeviceId());
             throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
         }
