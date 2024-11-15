@@ -3,6 +3,7 @@ package com.achobeta.api.dto.device;
 import com.achobeta.types.annotation.FieldDesc;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -16,16 +17,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetUserDeviceRequestDTO implements Serializable {
-    @NotNull
+    @NotBlank(message = "读取设备用户id不能为空")
     @FieldDesc(name = "用户id")
     private String userId;
-    @NotNull
+    @NotBlank(message = "读取设备id不能为空")
     @FieldDesc(name = "设备id")
     private String deviceId;
-    @NotNull
+    @NotNull(message = "读取单页长度不能为空")
     @FieldDesc(name = "单页长度")
-    private int limit;
-    @NotNull
+    private Integer limit;
     @FieldDesc(name = "单页最后一个设备id")
     private String lastDeviceId;
 }
