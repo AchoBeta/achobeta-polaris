@@ -54,7 +54,6 @@ public enum GlobalServiceStatusCode {
 
     TEAM_STRUCTURE_ADD_INVALID(3101, "无效的职位/分组添加"),
     TEAM_STRUCTURE_DELETE_INVALID(3102, "无效的职位/分组删除"),
-
     ;
 
     private Integer code;
