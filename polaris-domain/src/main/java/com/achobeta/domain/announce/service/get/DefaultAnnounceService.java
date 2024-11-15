@@ -7,6 +7,7 @@ import com.achobeta.domain.announce.model.entity.UserAnnounceEntity;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 import com.achobeta.domain.announce.service.IAnnounceService;
 import com.achobeta.domain.device.model.entity.PageResult;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
@@ -33,7 +34,7 @@ public class DefaultAnnounceService extends AbstractPostProcessor<AnnounceBO> im
         List<AnnounceEntity> userAnnounceEntities = bizData.getUserAnnounceEntity().getUserAnnounceEntities();
         return UserAnnounceVO.builder()
                 .announceEntities(userAnnounceEntities)
-                .more((boolean)postContext.getExtra().get("more"))
+                .more((boolean)postContext.getExtra().get(Constants.NEXT_PAGE))
                 .build();
     }
 
@@ -60,7 +61,7 @@ public class DefaultAnnounceService extends AbstractPostProcessor<AnnounceBO> im
         List<AnnounceEntity> announceEntities = repository.queryAnnouncesByUserId(userAnnounceEntity.getUserId(), pageResult.getLimit(), pageResult.getLastDeviceId());
         //判断还有没有更多数据
         boolean flag = announceEntities.size() == pageResult.getLimit();
-        postContext.addExtraData("more",flag);
+        postContext.addExtraData(Constants.NEXT_PAGE,flag);
 
         userAnnounceEntity.setUserAnnounceEntities(announceEntities);
 
