@@ -38,25 +38,13 @@ public class GetCodeController implements IGetCodeService {
             // 调用验证码服务发送验证码
             sendCodeService.sendCode(getCodeRequestDTO.getPhone());
             log.info("用户访问获取验证码系统结束，phone:{}", getCodeRequestDTO.getPhone());
-            return Response.<GetCodeResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Integer.valueOf(Constants.ResponseCode.SUCCESS.getCode()))
-                    .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .build();
+            return Response.SYSTEM_SUCCESS();
         } catch (AppException e) {
             log.error("用户访问获取验证码系统失败,phone:{}", getCodeRequestDTO.getPhone(), e);
-            return Response.<GetCodeResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Integer.valueOf(e.getCode()))
-                    .info(e.getInfo())
-                    .build();
+            return Response.SERVICE_ERROR(e.getInfo());
         }catch (Exception e) {
             log.error("用户访问获取验证码系统失败,phone:{}", getCodeRequestDTO.getPhone(), e);
-            return Response.<GetCodeResponseDTO>builder()
-                    .traceId(MDC.get(Constants.TRACE_ID))
-                    .code(Integer.valueOf(Constants.ResponseCode.UN_ERROR.getCode()))
-                    .info(e.getMessage())
-                    .build();
+            return Response.SERVICE_ERROR(e.getMessage());
         }
 
     }

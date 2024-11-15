@@ -4,8 +4,8 @@ import com.achobeta.domain.login.adapter.port.IShortMessageService;
 import com.achobeta.domain.login.model.bo.SendCodeBO;
 import com.achobeta.domain.login.model.valobj.CodeVO;
 import com.achobeta.domain.login.service.ISendCodeService;
-import com.achobeta.domain.render.model.bo.RenderBO;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.enums.BizModule;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
@@ -29,6 +29,7 @@ public class DefalutSendCodeService extends AbstractPostProcessor<SendCodeBO> im
 
     @Resource
     private IShortMessageService shortMessageService;
+
     @Override
     public void sendCode(String phone) {
         PostContext<SendCodeBO> postContext = buildPostContext(phone);
@@ -48,12 +49,12 @@ public class DefalutSendCodeService extends AbstractPostProcessor<SendCodeBO> im
     @Override
     public PostContext<SendCodeBO> doInterruptMainProcessor(PostContext<SendCodeBO> postContext) {
         log.info("手机号{}的验证码发送失败", postContext.getBizData().getCodeVO().getPhone());
-        throw new AppException(Constants.ResponseCode.SMS_SEND_FAIL.getCode(), Constants.ResponseCode.SMS_SEND_FAIL.getInfo());
+        throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_SMS_SEND_FAIL), GlobalServiceStatusCode.LOGIN_SMS_SEND_FAIL.getMessage());
     }
 
     private static PostContext<SendCodeBO> buildPostContext(String phone) {
         return PostContext.<SendCodeBO>builder()
-                .bizName(Constants.BizModule.LOGIN.getName())
+                .bizName(BizModule.LOGIN.getCode())
                 .bizData(SendCodeBO.builder()
                         .codeVO(CodeVO.builder()
                                 .phone(phone)

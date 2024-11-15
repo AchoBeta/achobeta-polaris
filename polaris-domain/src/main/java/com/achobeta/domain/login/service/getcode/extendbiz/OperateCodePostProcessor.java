@@ -4,7 +4,7 @@ import com.achobeta.domain.login.adapter.repository.IOperateCodeRepository;
 import com.achobeta.domain.login.model.bo.SendCodeBO;
 import com.achobeta.domain.login.model.valobj.CodeVO;
 import com.achobeta.domain.login.service.getcode.SendCodePostProcessor;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @Component
 public class OperateCodePostProcessor implements SendCodePostProcessor {
 
-    private final long expired = 10*1000;
+    private final long EXPIRED = 10*1000;
 
     @Resource
     private IOperateCodeRepository operateCodeRepository;
@@ -40,7 +40,7 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
         }
         else{
             log.error("手机号{}的验证码已经存在,发送验证码失败", codeVO.getPhone());
-            throw new AppException(Constants.ResponseCode.EXIT.getCode(), Constants.ResponseCode.EXIT.getInfo());
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_CODE_EXIT.getCode()), GlobalServiceStatusCode.LOGIN_CODE_EXIT.getMessage());
         }
     }
 
@@ -48,8 +48,8 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
     public void handleAfter(PostContext<SendCodeBO> postContext) {
         String code = postContext.getBizData().getCodeVO().getCode();
         String phone = postContext.getBizData().getCodeVO().getPhone();
-        log.info("正在存储手机号{}的验证码{}有效时长为{}毫秒",phone,code,expired);
-        operateCodeRepository.setCode(phone,code,expired);
+        log.info("正在存储手机号{}的验证码{}有效时长为{}毫秒",phone,code,EXPIRED);
+        operateCodeRepository.setCode(phone,code,EXPIRED);
     }
 
     @Override
