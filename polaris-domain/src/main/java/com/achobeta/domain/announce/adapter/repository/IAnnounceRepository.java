@@ -17,4 +17,5 @@ public interface IAnnounceRepository {
      * @return 设备实体
      */
     List<AnnounceEntity> queryAnnouncesByUserId(String userId,Integer limit,String lastAnnounceId);
+    Integer readAnnounce(String userId,String announceId);
 }
