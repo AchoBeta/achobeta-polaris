@@ -29,4 +29,12 @@ public interface AnnounceMapper {
      */
     List<AnnounceReciverPO> queryReadByUserIdAnnounceId(String userId,Integer limit,String announceId);
 
+    /**
+     *
+     * @param userId
+     * @param announceId
+     * @return 受影响行数
+     */
+    Integer readAnnounce(String userId,String announceId);
+
 }

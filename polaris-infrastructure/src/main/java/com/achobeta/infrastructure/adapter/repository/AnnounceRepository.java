@@ -55,4 +55,9 @@ public class AnnounceRepository implements IAnnounceRepository {
         }
         return new ArrayList<>(announceEntityMap.values());
     }
+
+    @Override
+    public Integer readAnnounce(String userId, String announceId) {
+        return announceMapper.readAnnounce(userId, announceId);
+    }
 }

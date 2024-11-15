@@ -36,4 +36,9 @@
             limit #{limit}
     </select>
 
+    <update id="readAnnounce" >
+        update  user_announce set is_read = 1
+        where user_id = #{userId} and announce_id = #{announceId}
+    </update>
+
 </mapper>
