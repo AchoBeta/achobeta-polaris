@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.achobeta.infrastructure.dao.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.achobeta.infrastructure.dao.po.UserPO">
+        <id column="user_id" property="userId"/>
+        <id column="phone" property="phone"/>
+    </resultMap>
+
+    <select id="getUserByPhone" resultMap="UserResultMap">
+        SELECT user_id FROM user WHERE phone = #{phone}
+    </select>
+
+</mapper>
