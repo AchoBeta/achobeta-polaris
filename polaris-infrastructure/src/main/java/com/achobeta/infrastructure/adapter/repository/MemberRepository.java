@@ -1,6 +1,7 @@
 package com.achobeta.infrastructure.adapter.repository;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @Repository
-public class MemberRepository {
+public class MemberRepository implements IMemberRepository {
 
     @Resource
     private UserMapper userMapper;
@@ -32,6 +33,7 @@ public class MemberRepository {
     @Resource
     private RedissonService redisService;
 
+    @Override
     public List<UserEntity> queryMemberList(String teamId,Long lastId, Integer limit) {
         List<UserPO> userPOList = userMapper.listMemberByTeamId(teamId, lastId, limit);
         List<UserEntity> members = new ArrayList<>();

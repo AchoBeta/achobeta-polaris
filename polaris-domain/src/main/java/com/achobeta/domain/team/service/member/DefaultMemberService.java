@@ -36,6 +36,7 @@ public class DefaultMemberService extends AbstractPostProcessor<TeamBO> implemen
     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
         String teamId = postContext.getBizData().getTeamId();
         Long lastId = (Long) postContext.getExtraData("lastId");
+        lastId = lastId == null? 0 : lastId;
         Integer limit = (Integer) postContext.getExtraData("limit");
         log.info("开始查询团队成员列表，teamId:{}", teamId);
 
