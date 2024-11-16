@@ -18,8 +18,8 @@ import java.util.List;
 @Builder
 @ToString
 public class TeamBO {
-
+    private String teamId;
     private PositionEntity positionEntity;
-    private UserEntity userEntity;
+    private List<UserEntity> members;
     private List<PositionEntity> positionEntityList;
 }
