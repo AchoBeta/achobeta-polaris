@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 @Repository
 public class OperateCodeRepository implements IOperateCodeRepository {
 
+    private final long EXPIRED = 55*1000;
+
     @Resource
     private RedissonService redissonService;
 
@@ -34,7 +36,7 @@ public class OperateCodeRepository implements IOperateCodeRepository {
     @Override
     public void setRateLimit(String phone) {
         String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
-        redissonService.setValue(key,1,55);
+        redissonService.setValue(key,1,EXPIRED);
     }
 
     @Override
