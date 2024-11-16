@@ -32,9 +32,9 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
     public boolean handleBefore(PostContext<SendCodeBO> postContext) {
 
         CodeVO codeVO = postContext.getBizData().getCodeVO();
-        log.info("正在手机号{}检查是否存在验证码",codeVO.getPhone());
+        log.info("正在对手机号{}进行频率限制验证",codeVO.getPhone());
 
-        if(!operateCodeRepository.checkRateLimit(codeVO.getPhone())){
+        if(operateCodeRepository.checkRateLimit(codeVO.getPhone())){
             log.info("手机号{}的频率限制验证通过,可以发送验证码", codeVO.getPhone());
             return true;
         }
