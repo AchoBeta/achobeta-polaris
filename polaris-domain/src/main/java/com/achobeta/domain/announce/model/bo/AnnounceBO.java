@@ -1,7 +1,7 @@
 package com.achobeta.domain.announce.model.bo;
 
+import com.achobeta.domain.announce.model.entity.PageResult;
 import com.achobeta.domain.announce.model.entity.UserAnnounceEntity;
-import com.achobeta.domain.device.model.entity.PageResult;
 import lombok.*;
 
 /**
