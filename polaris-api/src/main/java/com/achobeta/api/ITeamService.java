@@ -1,5 +1,12 @@
 package com.achobeta.api;
 
+import com.achobeta.api.dto.team.RequestMemberListDTO;
+import com.achobeta.api.dto.team.ResponseMemberListDTO;
+import com.achobeta.types.Response;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
+
 /**
  * @author yangzhiyao
  * @description 团队服务接口
@@ -7,5 +14,6 @@ package com.achobeta.api;
  */
 public interface ITeamService {
 
+    Response<ResponseMemberListDTO> queryMemberList(@Valid @RequestBody RequestMemberListDTO requestMemberListDTO);
 
 }
