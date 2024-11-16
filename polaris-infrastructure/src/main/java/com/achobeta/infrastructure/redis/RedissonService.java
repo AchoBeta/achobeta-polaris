@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.Duration;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -90,6 +91,16 @@ public class RedissonService implements IRedisService {
         set.add(value);
     }
 
+    public void removeFromSet(String key, String value) {
+        RSet<String> set = redissonClient.getSet(key);
+        set.remove(value);
+    }
+
+    public Set<String> getSetMembers(String key) {
+        RSet<String> set = redissonClient.getSet(key);
+        return set.readAll();
+    }
+
     public boolean isSetMember(String key, String value) {
         RSet<String> set = redissonClient.getSet(key);
         return set.contains(value);
@@ -113,6 +124,11 @@ public class RedissonService implements IRedisService {
     public void addToMap(String key, String field, String value) {
         RMap<String, String> map = redissonClient.getMap(key);
         map.put(field, value);
+    }
+
+    public void setMapExpired(String key, long expired) {
+        RMap<String, String> map = redissonClient.getMap(key);
+        map.expire(Duration.ofMillis(expired));
     }
 
     public String getFromMap(String key, String field) {
