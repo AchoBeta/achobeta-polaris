@@ -10,4 +10,6 @@ import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 public interface IAnnounceService {
     /**获取单页公告*/
     UserAnnounceVO queryAnnouncesByUserId(String userId,Integer limit,String lastAnnounceId);
+    /**读单条公告*/
+    void readAnnounce(String userId,String announceId);
 }

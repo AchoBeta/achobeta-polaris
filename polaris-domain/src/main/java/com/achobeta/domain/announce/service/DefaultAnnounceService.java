@@ -1,12 +1,14 @@
-package com.achobeta.domain.announce.service.get;
+package com.achobeta.domain.announce.service;
 
 import com.achobeta.domain.announce.adapter.repository.IAnnounceRepository;
 import com.achobeta.domain.announce.model.bo.AnnounceBO;
 import com.achobeta.domain.announce.model.entity.AnnounceEntity;
 import com.achobeta.domain.announce.model.entity.PageResult;
+import com.achobeta.domain.announce.model.entity.ReadAnnounceEntity;
 import com.achobeta.domain.announce.model.entity.UserAnnounceEntity;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
-import com.achobeta.domain.announce.service.IAnnounceService;
+import com.achobeta.domain.announce.service.get.AnnouncePostProcessor;
+import com.achobeta.domain.announce.service.read.ReadAnnouncePostProcessor;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
@@ -68,6 +70,23 @@ public class DefaultAnnounceService extends AbstractFunctionPostProcessor implem
                 .build();
     }
 
+    @Override
+    public void readAnnounce(String userId, String announceId) {
+        PostContext postContext = buildPostContext(userId, announceId);
+        postContext = super.doPostProcessor(postContext, ReadAnnouncePostProcessor.class, new AbstractPostProcessorOperation<ReadAnnounceEntity>() {
+            @Override
+            public PostContext<ReadAnnounceEntity> doMainProcessor(PostContext<ReadAnnounceEntity> postContext) {
+                Integer i = repository.readAnnounce(postContext.getBizData().getUserId(), postContext.getBizData().getAnnounceId());
+                postContext.addExtraData(Constants.AFFECT_LENGTH,i);
+                return postContext;
+            }
+        });
+        Integer i = (Integer)postContext.getExtra().get(Constants.AFFECT_LENGTH);
+        if(i==0){
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
+        }
+    }
+
     private static PostContext<AnnounceBO> buildPostContext(String userId, Integer limit, String lastAnnounceId) {
         return PostContext.<AnnounceBO>builder()
                 .bizId(BizModule.ANNOUNCE.getCode())
@@ -80,6 +99,16 @@ public class DefaultAnnounceService extends AbstractFunctionPostProcessor implem
                                 .limit(limit)
                                 .lastAnnounceId(lastAnnounceId)
                                 .build())
+                        .build())
+                .build();
+    }
+    private static PostContext<Object> buildPostContext(String userId, String announceId) {
+        return PostContext.builder()
+                .bizId(BizModule.READANNOUNCE.getCode())
+                .bizName(BizModule.READANNOUNCE.getName())
+                .bizData(ReadAnnounceEntity.builder()
+                        .AnnounceId(announceId)
+                        .userId(userId)
                         .build())
                 .build();
     }

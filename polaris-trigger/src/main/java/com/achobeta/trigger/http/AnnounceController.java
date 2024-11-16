@@ -5,7 +5,6 @@ import com.achobeta.api.dto.announce.GetUserAnnounceResponseDTO;
 import com.achobeta.api.dto.announce.ReadAnnounceRequestDTO;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 import com.achobeta.domain.announce.service.IAnnounceService;
-import com.achobeta.domain.announce.service.IReadAnnounceService;
 import com.achobeta.types.Response;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
@@ -28,7 +27,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AnnounceController implements com.achobeta.api.IAnnounceService {
     private final IAnnounceService service;
-    private final IReadAnnounceService readAnnounceService;
 
     /**
      *
@@ -64,7 +62,7 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
         try {
             log.info("用户访问读公告开始，userId:{} announceId:{}",
                    readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId());
-            readAnnounceService.readAnnounce(readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId());
+            service.readAnnounce(readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId());
             log.info("用户访问读公告结束");
             return Response.SYSTEM_SUCCESS();
         }catch (AppException e){
