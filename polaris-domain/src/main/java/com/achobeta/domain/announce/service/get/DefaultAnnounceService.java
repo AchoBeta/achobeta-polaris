@@ -11,7 +11,7 @@ import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
-import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
+import com.achobeta.types.support.postprocessor.AbstractFunctionPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,22 +27,50 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DefaultAnnounceService extends AbstractPostProcessor<AnnounceBO> implements IAnnounceService {
+public class DefaultAnnounceService extends AbstractFunctionPostProcessor implements IAnnounceService {
     private final IAnnounceRepository repository;
     @Override
     public UserAnnounceVO queryAnnouncesByUserId(String userId, Integer limit, String lastAnnounceId) {
-        PostContext<AnnounceBO> postContext = buildPostContext(userId, limit, lastAnnounceId);
-        postContext = super.doPostProcessor(postContext,AnnouncePostProcessor.class);
-        AnnounceBO bizData = postContext.getBizData();
+        PostContext<AnnounceBO> queryAnnouncesContext = buildPostContext(userId, limit, lastAnnounceId);
+        queryAnnouncesContext = super.doPostProcessor(queryAnnouncesContext, AnnouncePostProcessor.class,
+                new AbstractPostProcessorOperation<AnnounceBO>() {
+                    @Override
+                    public PostContext<AnnounceBO> doMainProcessor(PostContext<AnnounceBO> postContext) {
+                        AnnounceBO announceBO = postContext.getBizData();
+                        UserAnnounceEntity userAnnounceEntity = announceBO.getUserAnnounceEntity();
+                        PageResult pageResult = announceBO.getPageResult();
+                        //将前端传来的长度加一
+                        List<AnnounceEntity> announceEntities = repository.queryAnnouncesByUserId(userAnnounceEntity.getUserId(), pageResult.getLimit()+1, pageResult.getLastAnnounceId());
+
+                        if (CollectionUtils.isEmpty(announceEntities)){
+                            log.error("公告不存在！userId：{},limit:{},lastAnnounceId:{}",userAnnounceEntity.getUserId(),pageResult.getLimit(),pageResult.getLastAnnounceId());
+                            throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
+                        }
+                        //判断还有没有更多数据
+                        boolean flag = announceEntities.size() > pageResult.getLimit();
+                        if (flag){
+                            //有就移除最后一个并返回给前端
+                            announceEntities.remove(announceEntities.size()-1);
+                        }
+
+                        postContext.addExtraData(Constants.NEXT_PAGE,flag);
+
+                        userAnnounceEntity.setUserAnnounceEntities(announceEntities);
+
+                        return postContext;
+                    }
+                });
+        AnnounceBO bizData = queryAnnouncesContext.getBizData();
         List<AnnounceEntity> userAnnounceEntities = bizData.getUserAnnounceEntity().getUserAnnounceEntities();
         return UserAnnounceVO.builder()
                 .announceEntities(userAnnounceEntities)
-                .more((boolean)postContext.getExtra().get(Constants.NEXT_PAGE))
+                .more((boolean)queryAnnouncesContext.getExtra().get(Constants.NEXT_PAGE))
                 .build();
     }
 
     private static PostContext<AnnounceBO> buildPostContext(String userId, Integer limit, String lastAnnounceId) {
         return PostContext.<AnnounceBO>builder()
+                .bizId(BizModule.ANNOUNCE.getCode())
                 .bizName(BizModule.ANNOUNCE.getName())
                 .bizData(AnnounceBO.builder()
                         .userAnnounceEntity(UserAnnounceEntity.builder()
@@ -54,30 +82,5 @@ public class DefaultAnnounceService extends AbstractPostProcessor<AnnounceBO> im
                                 .build())
                         .build())
                 .build();
-    }
-
-    @Override
-    public PostContext<AnnounceBO> doMainProcessor(PostContext<AnnounceBO> postContext) {
-        UserAnnounceEntity userAnnounceEntity = postContext.getBizData().getUserAnnounceEntity();
-        PageResult pageResult = postContext.getBizData().getPageResult();
-        //将前端传来的长度加一
-        List<AnnounceEntity> announceEntities = repository.queryAnnouncesByUserId(userAnnounceEntity.getUserId(), pageResult.getLimit()+1, pageResult.getLastAnnounceId());
-
-        if (CollectionUtils.isEmpty(announceEntities)){
-            log.error("公告不存在！userId：{},limit:{},lastAnnounceId:{}",userAnnounceEntity.getUserId(),pageResult.getLimit(),pageResult.getLastAnnounceId());
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
-        }
-        //判断还有没有更多数据
-        boolean flag = announceEntities.size() > pageResult.getLimit();
-        if (flag){
-            //有就移除最后一个并返回给前端
-            announceEntities.remove(announceEntities.size()-1);
-        }
-
-        postContext.addExtraData(Constants.NEXT_PAGE,flag);
-
-        userAnnounceEntity.setUserAnnounceEntities(announceEntities);
-
-        return postContext;
     }
 }
