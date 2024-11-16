@@ -1,15 +1,12 @@
 package com.achobeta.infrastructure.adapter.repository;
 
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
-import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author yangzhiyao
@@ -27,11 +24,5 @@ public class PositionRepository implements IPositionRepository {
     private UserMapper userMapper;
 
 
-    @Override
-    public List<UserEntity> queryMemberList(String teamId) {
 
-
-
-        return Collections.emptyList();
-    }
 }

@@ -16,11 +16,17 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <select id="getUserByUserId" resultMap="UserResultMap">
-        SELECT id,user_id,user_name,id_card,student_id,current_status,
-               entry_time,like_count,create_by,create_time,update_by,
-               update_time ,phone,gender,email,grade,major,experience
-        FROM user
-        WHERE user_id = #{userId} and is_deleted = 0
+    <select id="listMemberByTeamId" resultMap="UserResultMap">
+        select id,user_id,user_name,id_card,student_id,current_status,
+                entry_time,like_count,create_by,create_time,update_by,
+                update_time ,phone,gender,email,grade,major,experience
+        from user as t1, member as t2
+        where t1.user_id=t2.user_id
+                and t2.team_id = #{teamId}
+                and t1.id > #{lastId}
+                and t1.is_deleted = 0
+                and t2.is_deleted = 0
+        order by t1.id
+        limit #{limit}
     </select>
 </mapper>

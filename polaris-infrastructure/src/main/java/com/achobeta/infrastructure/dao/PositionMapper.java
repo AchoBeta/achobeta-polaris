@@ -1,6 +1,10 @@
 package com.achobeta.infrastructure.dao;
 
+import com.achobeta.infrastructure.dao.po.PositionPO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author yangzhiyao
@@ -24,4 +28,5 @@ public interface PositionMapper {
      * @return
      */
     List<PositionPO> listPositionByUserId(String userId);
+
 }
