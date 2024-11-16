@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.achobeta.infrastructure.dao.DeviceMapper">
+
+    <resultMap id="DeviceResultMap" type="com.achobeta.infrastructure.dao.po.DevicePO">
+        <result column="device_id" property="deviceId" />
+        <result column="device_name" property="deviceName" />
+        <result column="user_id" property="userId"/>
+        <result column="ip" property="ip"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_cancel" property="isCancel"/>
+    </resultMap>
+
+    <insert id="insertDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
+        INSERT INTO device (device_id, device_name, user_id, ip, create_time, update_time ,is_cancel ,is_deleted)
+        VALUES (#{deviceId} ,#{deviceName}, #{userId}, #{ip}, #{createTime}, #{updateTime} , #{isCancel}, 0)
+    </insert>
+
+    <update id="updateDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
+        UPDATE device
+        <set>
+            is_cancel = #{isCancel},
+            update_time = #{updateTime}
+        </set>
+        WHERE device_id = #{deviceId}
+          and is_deleted = 0
+    </update>
+
+    <update id="deleteDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
+        UPDATE device
+        <set>
+            is_deleted = 1,
+            update_time = #{updateTime}
+        </set>
+        WHERE device_id = #{deviceId}
+          and is_deleted = 0
+    </update>
+
+    <select id="getDeviceByIp" resultMap="DeviceResultMap">
+        SELECT * FROM device
+                 WHERE user_id = #{userId}
+                   and ip = #{ip}
+                   and is_deleted = 0
+    </select>
+
+</mapper>
