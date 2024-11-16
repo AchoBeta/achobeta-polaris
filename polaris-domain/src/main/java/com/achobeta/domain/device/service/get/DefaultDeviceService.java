@@ -76,6 +76,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
 
     private static PostContext<DeviceBO> buildPostContext(String userId,String deviceid,int limit,String lastDeviceId) {
         return PostContext.<DeviceBO>builder()
+                .bizId(BizModule.DEVICE.getCode())
                 .bizName(BizModule.DEVICE.getName())
                 .bizData(DeviceBO.builder()
                         .userCommonDevicesEntities(UserCommonDevicesEntities.builder()
