@@ -9,14 +9,14 @@ package com.achobeta.domain.login.adapter.repository;
 
 public interface IOperateCodeRepository {
 
-    /*
+    /**
      * 从redis中获取验证码
      * @param phone 手机号
      * @return 验证码
      */
     String getCodeByPhone(String phone);
 
-    /*
+    /**
      * 将验证码存入redis中
      * @param phone 手机号
      * @param code 验证码
@@ -24,4 +24,16 @@ public interface IOperateCodeRepository {
      */
     void setCode(String phone,String code,long expired);
 
+    /**
+     * 设置手机号的发送验证码频率限制
+     * @param phone
+     */
+    void setRateLimit(String phone);
+
+    /**
+     * 检查手机号是否达到发送验证码的频率限制
+     * @param phone 手机号
+     * @return 是否达到频率限制
+     */
+    Boolean checkRateLimit(String phone);
 }

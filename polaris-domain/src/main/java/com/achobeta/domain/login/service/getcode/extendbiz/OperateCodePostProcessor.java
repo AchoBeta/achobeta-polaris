@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @Component
 public class OperateCodePostProcessor implements SendCodePostProcessor {
 
-    private final long EXPIRED = 10*1000;
+    private final long EXPIRED = 60*1000;
 
     @Resource
     private IOperateCodeRepository operateCodeRepository;
@@ -33,13 +33,13 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
 
         CodeVO codeVO = postContext.getBizData().getCodeVO();
         log.info("正在手机号{}检查是否存在验证码",codeVO.getPhone());
-        String code = operateCodeRepository.getCodeByPhone(codeVO.getPhone());
-        if(code == null){
-            log.info("手机号{}的验证码不存在,可以发送验证码", codeVO.getPhone());
+
+        if(!operateCodeRepository.checkRateLimit(codeVO.getPhone())){
+            log.info("手机号{}的频率限制验证通过,可以发送验证码", codeVO.getPhone());
             return true;
         }
         else{
-            log.error("手机号{}的验证码已经存在,发送验证码失败", codeVO.getPhone());
+            log.error("手机号{}的频率限制验证不通过,发送验证码失败", codeVO.getPhone());
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_CODE_EXIT.getCode()), GlobalServiceStatusCode.LOGIN_CODE_EXIT.getMessage());
         }
     }
@@ -50,6 +50,9 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
         String phone = postContext.getBizData().getCodeVO().getPhone();
         log.info("正在存储手机号{}的验证码{}有效时长为{}毫秒",phone,code,EXPIRED);
         operateCodeRepository.setCode(phone,code,EXPIRED);
+
+        log.info("正在对手机号{}进行限流操作",phone);
+        operateCodeRepository.setRateLimit(phone);
     }
 
     @Override

@@ -20,26 +20,32 @@ public class OperateCodeRepository implements IOperateCodeRepository {
     @Resource
     private RedissonService redissonService;
 
-    /*
-     * 用手机号在redis中获取验证码
-     * @param phone 手机号
-     * @return 验证码
-     */
     @Override
     public String getCodeByPhone(String phone) {
         return redissonService.<String>getValue(RedisKey.CODE.getKeyPrefix()+phone);
     }
 
-    /*
-     * 在redis中存储验证码
-     * @param phone 手机号
-     * @param code 验证码
-     * @param expired 过期时间
-     */
     @Override
     public void setCode(String phone, String code, long expired) {
         String key=RedisKey.CODE.getKeyPrefix()+phone;
         redissonService.setValue(key,code,expired);
     }
 
+    @Override
+    public void setRateLimit(String phone) {
+        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+        redissonService.setValue(key,1,55);
+    }
+
+    @Override
+    public Boolean checkRateLimit(String phone) {
+        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+
+        if(null == redissonService.getValue(key)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
