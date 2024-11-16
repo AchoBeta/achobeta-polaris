@@ -53,8 +53,8 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         log.info("正在将AT和RT存入redis,userId:{}", tokenVO.getUserId());
 
         // 调用RedisService的storeAccessToken和storeReflashToken方法将accessToken和refreshToken存入Redis
-        tokenRepository.storeAccessToken(accessToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId());
-        tokenRepository.storeReflashToken(refreshToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIsAutoLogin());
+        tokenRepository.storeAccessToken(accessToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp());
+        tokenRepository.storeReflashToken(refreshToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getIsAutoLogin());
 
         log.info("AT和RT存入redis成功,userId:{}", tokenVO.getUserId());
 

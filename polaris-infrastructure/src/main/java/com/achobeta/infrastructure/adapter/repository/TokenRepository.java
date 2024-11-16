@@ -31,11 +31,12 @@ public class TokenRepository implements ITokenRepository {
     private long DAY = 24*60*60*1000;
 
     @Override
-    public void storeAccessToken(String token, String userId, String phone, String devicId) {
+    public void storeAccessToken(String token, String userId, String phone, String devicId, String ip) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         redissonService.addToMap(key, "user_id",userId);
         redissonService.addToMap(key, "phone",phone);
         redissonService.addToMap(key, "device_id",devicId);
+        redissonService.addToMap(key, "ip",ip);
         redissonService.addToMap(key, "type","AT");
         redissonService.addToMap(key, "is_deleted","0");
 
@@ -47,11 +48,12 @@ public class TokenRepository implements ITokenRepository {
     }
 
     @Override
-    public void storeReflashToken(String token, String userId, String phone, String devicId, Boolean isAutoLogin) {
+    public void storeReflashToken(String token, String userId, String phone, String devicId, String ip, Boolean isAutoLogin) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         redissonService.addToMap(key, "user_id",userId);
         redissonService.addToMap(key, "phone",phone);
         redissonService.addToMap(key, "device_id",devicId);
+        redissonService.addToMap(key, "ip",ip);
         if(isAutoLogin){
             redissonService.addToMap(key, "type","RT30");
 
