@@ -61,4 +61,10 @@ public interface ITokenRepository {
      * @param token token的值
      */
     void resetReflashTokenExpired(String token);
+
+    /**
+     * 根据token获取token信息
+     * @param token token的值
+     */
+    TokenVO getReflashTokenInfo(String token);
 }

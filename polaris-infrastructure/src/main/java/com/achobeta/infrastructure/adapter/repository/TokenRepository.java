@@ -1,11 +1,15 @@
 package com.achobeta.infrastructure.adapter.repository;
 
 import com.achobeta.domain.login.adapter.repository.ITokenRepository;
+import com.achobeta.domain.login.model.valobj.TokenVO;
 import com.achobeta.infrastructure.redis.RedissonService;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.enums.RedisKey;
+import com.achobeta.types.exception.AppException;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -137,11 +141,47 @@ public class TokenRepository implements ITokenRepository {
 
         String type = redissonService.getFromMap(key, "type");
 
-        if(type.equals("RT12")){
+        if(type != null){
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getMessage());
+        }
+        else if(type.equals("AT")){
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
+        }
+        else if(type.equals("RT12")){
             redissonService.setMapExpired(key,12*HOUR);
-        }else{
-            redissonService.setMapExpired(key,30*DAY);
+        }
+        else if(type.equals("RT30")){
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
+        }
+        else {
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
         }
 
+    }
+
+    @Override
+    public TokenVO getReflashTokenInfo(String token) {
+        String key = RedisKey.TOKEN.getKeyPrefix() + token;
+
+        Map<String, String> javaMap = redissonService.getMapToJavaMap(key);
+
+        if(null == javaMap || javaMap.isEmpty()){
+            return null;
+        }
+
+        Boolean isAutoLogin;
+        if(javaMap.get("type").equals("RT7")) {
+            isAutoLogin = false;
+        }else{
+            isAutoLogin = true;
+        }
+
+        return TokenVO.builder()
+               .userId(Long.valueOf(javaMap.get("user_id")))
+               .phone(javaMap.get("phone"))
+               .deviceId(javaMap.get("device_id"))
+               .ip(javaMap.get("ip"))
+               .isAutoLogin(isAutoLogin)
+               .build();
     }
 }
