@@ -18,4 +18,5 @@ public interface IAnnounceRepository {
      */
     List<AnnounceEntity> queryAnnouncesByUserId(String userId,Integer limit,String lastAnnounceId);
     Integer readAnnounce(String userId,String announceId);
+    Integer queryAnnounceCountByUserId(String userId);
 }

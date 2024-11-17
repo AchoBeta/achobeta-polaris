@@ -2,11 +2,9 @@ package com.achobeta.domain.announce.service;
 
 import com.achobeta.domain.announce.adapter.repository.IAnnounceRepository;
 import com.achobeta.domain.announce.model.bo.AnnounceBO;
-import com.achobeta.domain.announce.model.entity.AnnounceEntity;
-import com.achobeta.domain.announce.model.entity.PageResult;
-import com.achobeta.domain.announce.model.entity.ReadAnnounceEntity;
-import com.achobeta.domain.announce.model.entity.UserAnnounceEntity;
+import com.achobeta.domain.announce.model.entity.*;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
+import com.achobeta.domain.announce.service.get.AnnounceCountPostProcessor;
 import com.achobeta.domain.announce.service.get.AnnouncePostProcessor;
 import com.achobeta.domain.announce.service.read.ReadAnnouncePostProcessor;
 import com.achobeta.types.common.Constants;
@@ -85,6 +83,30 @@ public class DefaultAnnounceService extends AbstractFunctionPostProcessor implem
         if(i==0){
             throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
         }
+    }
+
+    @Override
+    public Integer queryAnnounceCountByUserId(String userId) {
+        PostContext<AnnounceCountEntity> postContext = buildPostContext(userId);
+        super.doPostProcessor(postContext, AnnounceCountPostProcessor.class, new AbstractPostProcessorOperation<AnnounceCountEntity>() {
+            @Override
+            public PostContext<AnnounceCountEntity> doMainProcessor(PostContext<AnnounceCountEntity> postContext) {
+                Integer count = repository.queryAnnounceCountByUserId(postContext.getBizData().getUserId());
+                postContext.getBizData().setCount(count);
+                return postContext;
+            }
+        });
+        return postContext.getBizData().getCount();
+    }
+
+    private static PostContext<AnnounceCountEntity> buildPostContext(String userId) {
+        return PostContext.<AnnounceCountEntity>builder()
+                .bizId(BizModule.ANNOUNCE.getCode())
+                .bizName(BizModule.ANNOUNCE.getName())
+                .bizData(AnnounceCountEntity.builder()
+                        .userId(userId)
+                        .build())
+                .build();
     }
 
     private static PostContext<AnnounceBO> buildPostContext(String userId, Integer limit, String lastAnnounceId) {
