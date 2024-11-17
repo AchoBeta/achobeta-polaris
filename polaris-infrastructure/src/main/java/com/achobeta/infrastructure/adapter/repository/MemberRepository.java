@@ -1,11 +1,14 @@
 package com.achobeta.infrastructure.adapter.repository;
 
-import com.achobeta.domain.team.adapter.repository.IPositionRepository;
+import cn.hutool.core.collection.CollectionUtil;
+import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
+import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
+import com.achobeta.infrastructure.redis.RedissonService;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
@@ -13,15 +16,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yangzhiyao
- * @description 职位仓储接口实现类
- * @create 2024/11/7
+ * @description 团队成员仓储接口
+ * @date 2024/11/17
  */
 @Slf4j
 @Repository
-public class PositionRepository implements IPositionRepository {
+public class MemberRepository implements IMemberRepository {
 
     @Resource
     private UserMapper userMapper;
@@ -33,7 +38,7 @@ public class PositionRepository implements IPositionRepository {
     private IRedisService redisService;
 
     @Override
-    public UserEntity modifyMemberInfo(UserEntity userEntity) {
+    public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId) {
         // 这里保证用户存在，不能查缓存的得直接查数据库的
         UserPO userPO = userMapper.getUserByUserId(userEntity.getUserId());
         if (userPO == null) {
