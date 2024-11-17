@@ -19,6 +19,6 @@ public class ReadAnnounceRequestDTO implements Serializable {
     @FieldDesc(name = "用户ID")
     private String userId;
     @NotBlank(message = "修改必须指定公告ID")
-    @FieldDesc(name = "用户ID")
+    @FieldDesc(name = "公告ID")
     private String announceId;
 }
