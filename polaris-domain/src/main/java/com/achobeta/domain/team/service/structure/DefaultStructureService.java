@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
-import com.achobeta.domain.team.service.IViewStructureService;
+import com.achobeta.domain.team.service.IStructureService;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
@@ -26,7 +26,7 @@ import java.util.Queue;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamBO> implements IViewStructureService {
+public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamBO> implements IStructureService {
 
     private final IPositionRepository repository;
 

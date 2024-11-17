@@ -4,7 +4,7 @@ import com.achobeta.api.ITeamService;
 import com.achobeta.api.dto.QueryStructureRequestDTO;
 import com.achobeta.api.dto.QueryStructureResponseDTO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
-import com.achobeta.domain.team.service.IViewStructureService;
+import com.achobeta.domain.team.service.IStructureService;
 import com.achobeta.types.Response;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class TeamController implements ITeamService {
     
-    private final IViewStructureService viewStructureService;
+    private final IStructureService viewStructureService;
 
     /**
      * 查询团队组织架构
