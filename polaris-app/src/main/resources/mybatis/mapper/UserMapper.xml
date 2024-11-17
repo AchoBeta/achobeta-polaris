@@ -30,7 +30,7 @@
             <if test="experience!=null">experience = #{experience},</if>
             <if test="currentStatus!=null">current_status = #{currentStatus},</if>
             <if test="entryTime!=null">entry_time = #{entryTime},</if>
-            <if test="createBy!=null">create_by = #{createBy},</if>
+            <if test="updateBy!=null">create_by = #{updateBy},</if>
         </set>
         where user_id=#{userId} and is_deleted = 0
     </update>

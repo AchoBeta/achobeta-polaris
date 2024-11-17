@@ -14,14 +14,14 @@
     </resultMap>
 
     <insert id="addPositionToUser">
-        insert into user_position (user_id, position_id, create_by) values
+        insert into user_position (user_id, position_id, create_by, update_by) values
         <foreach collection="positionList" item="positionId" separator=",">
-        (#{userId}, #{positionId}, #{userId})
+        (#{userId}, #{positionId}, #{userId}, #{userId})
         </foreach>
     </insert>
 
     <update id="deletePositionWithUser">
-        update user_position set is_deleted = 1
+        update user_position set is_deleted = 1, update_by = #{userId}
         where user_id = #{userId} and position_id in
         <foreach collection="deletePositions" item="positionId" separator="," open="(" close=")">
         #{positionId}
