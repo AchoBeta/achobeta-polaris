@@ -1,5 +1,6 @@
 package com.achobeta.infrastructure.adapter.repository;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
@@ -43,10 +44,14 @@ public class MemberRepository implements IMemberRepository {
                     GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
         }
 
-        positionMapper.addPositionToUser(addPositions, userEntity.getUserId());
-        positionMapper.deletePositionWithUser(deletePositions, userEntity.getUserId());
+        if (!CollectionUtil.isEmpty(addPositions)) {
+            positionMapper.addPositionToUser(addPositions, userEntity.getUserId());
+        }
+        if (!CollectionUtil.isEmpty(deletePositions)) {
+            positionMapper.deletePositionWithUser(deletePositions, userEntity.getUserId());
+        }
 
-        userMapper.updateUserInfo(UserPO.builder()
+        userMapper.updateMemberInfo(UserPO.builder()
                 .userId(userEntity.getUserId())
                 .userName(userEntity.getUserName())
                 .phone(userEntity.getPhone())
