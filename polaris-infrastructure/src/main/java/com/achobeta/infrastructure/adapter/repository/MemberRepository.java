@@ -8,6 +8,7 @@ import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.RedissonService;
+import com.achobeta.types.common.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -35,10 +36,17 @@ public class MemberRepository implements IMemberRepository {
 
     @Override
     public List<UserEntity> queryMemberList(String teamId,Long lastId, Integer limit) {
-        List<UserPO> userPOList = userMapper.listMemberByTeamId(teamId, lastId, limit);
         List<UserEntity> members = new ArrayList<>();
+
+        List<UserPO> userPOList = userMapper.listMemberByTeamId(teamId, lastId, limit);
         for (UserPO userPO : userPOList) {
             String userId = userPO.getUserId();
+            // 从redis中获取用户信息
+            UserEntity userEntity = redisService.getValue(Constants.USER_INFO + userId);
+            if (userEntity!= null) {
+                members.add(userEntity);
+                continue;
+            }
             // 封装position信息，先存根节点
             List<List<PositionPO>> positionPOList = new ArrayList<>();
             List<PositionPO> listPositions = positionMapper.listPositionByUserId(userId);
@@ -72,7 +80,7 @@ public class MemberRepository implements IMemberRepository {
                 }
                 positionNames.add(tempList);
             }
-            UserEntity userEntity = UserEntity.builder()
+            userEntity = UserEntity.builder()
                     .userId(userPO.getUserId())
                     .userName(userPO.getUserName())
                     .phone(userPO.getPhone())
@@ -90,6 +98,8 @@ public class MemberRepository implements IMemberRepository {
                     .positions(positionNames)
                     .build();
             members.add(userEntity);
+            // 存入redis
+            redisService.setValue(Constants.USER_INFO + userId, userEntity);
         }
         return members;
     }
