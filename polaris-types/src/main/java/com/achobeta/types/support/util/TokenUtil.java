@@ -1,6 +1,7 @@
 package com.achobeta.types.support.util;
 
 import com.achobeta.types.support.id.SnowflakeIdWorker;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -17,7 +18,7 @@ public class TokenUtil {
 
     public static final String ACCESS_TOKEN = "access_token";
     public static final String REFRESH_TOKEN = "refresh_token";
-    public static final String[] REFRESH_TOKEN_TYPE = {"refresh_token_7","refresh_token_30"};
+    public static final String[] REFRESH_TOKEN_TYPE = {"refresh_token_12","refresh_token_30"};
 
     /**
      * 生成AccessToken
@@ -125,6 +126,17 @@ public class TokenUtil {
                         .getBody()
                         .get("type")
                         .toString();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Claims getClaimsByReflashToken(String token) {
+        try {
+            return Jwts.parser()
+                  .setSigningKey(REFRESH_TOKEN)
+                  .parseClaimsJws(token)
+                      .getBody();
         } catch (Exception e) {
             return null;
         }
