@@ -43,23 +43,23 @@ public class TeamController implements ITeamService {
             log.info("用户访问团队管理系统修改团队组织架构开始，userId:{} teamId:{}",
                     modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId());
 
-            List<Object> tempAddPositions = modifyStructureRequestDTO.getAddPositions();
-            List<Object> tempDeletePositions = modifyStructureRequestDTO.getDeletePositions();
+            List<LinkedHashMap<String, Object>> tempAddPositions = (List<LinkedHashMap<String, Object>>) modifyStructureRequestDTO.getAddPositions();
+            List<LinkedHashMap<String, Object>> tempDeletePositions = (List<LinkedHashMap<String, Object>>) modifyStructureRequestDTO.getDeletePositions();
             List<PositionEntity> addPositions = new ArrayList<>();
             List<PositionEntity> deletePositions = new ArrayList<>();
-            for (Object obj : tempAddPositions) {
+            for (LinkedHashMap<String, Object> obj : tempAddPositions) {
                 PositionEntity positionEntity = PositionEntity.builder()
-                        .positionId(((LinkedHashMap<String, String>) obj).get("parentPositionId"))
-                        .positionName(((LinkedHashMap<String, String>) obj).get("parentPositionName"))
-                        .level(((LinkedHashMap<String, Integer>) obj).get("parentPositionLevel"))
-                        .subordinateName(((LinkedHashMap<String, String>) obj).get("newPositionName"))
+                        .positionId((String) obj.get("parentPositionId"))
+                        .positionName((String) obj.get("parentPositionName"))
+                        .level((Integer) obj.get("parentPositionLevel"))
+                        .subordinateName((String) obj.get("newPositionName"))
                         .build();
                 addPositions.add(positionEntity);
             }
-            for (Object obj: tempDeletePositions) {
+            for (LinkedHashMap<String, Object> obj: tempDeletePositions) {
                 PositionEntity positionEntity = PositionEntity.builder()
-                        .positionId(((LinkedHashMap<String, String>) obj).get("positionId"))
-                        .level(((LinkedHashMap<String, Integer>) obj).get("level"))
+                        .positionId((String) obj.get("positionId"))
+                        .level((Integer) obj.get("level"))
                         .build();
                 deletePositions.add(positionEntity);
             }

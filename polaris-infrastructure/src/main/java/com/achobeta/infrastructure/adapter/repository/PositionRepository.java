@@ -5,7 +5,7 @@ import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
-import com.achobeta.infrastructure.redis.RedissonService;
+import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -28,7 +28,7 @@ public class PositionRepository implements IPositionRepository {
     private PositionMapper positionMapper;
 
     @Resource
-    private RedissonService redissonService;
+    private IRedisService redisService;
 
     /**
      * 查询某职位/分组下一级的所有职位/分组
@@ -39,16 +39,17 @@ public class PositionRepository implements IPositionRepository {
     @Override
     public List<PositionEntity> querySubordinatePosition(String positionId, String teamId) {
         // 从缓存中获取数据
-        List<PositionEntity> positionEntityList = redissonService.
-                getValue(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":" + positionId);
-        if (!CollectionUtil.isEmpty(positionEntityList)) {
-            return positionEntityList;
+        if (redisService.isExists(Constants.TEAM_STRUCTURE + teamId)) {
+            List<PositionEntity> tempList = redisService.getFromMap(Constants.TEAM_STRUCTURE + teamId, positionId);
+            if (!CollectionUtil.isEmpty(tempList)) {
+                return tempList;
+            }
         }
 
         // 从数据库中查询下级职位/分组
         List<PositionPO> positionPOList = positionMapper.
                 listSubordinateByPositionId(positionId);
-        positionEntityList = new ArrayList<>();
+        List<PositionEntity> positionEntityList = new ArrayList<>();
         for (PositionPO positionPO : positionPOList) {
             positionEntityList.add(PositionEntity.builder()
                     .positionId(positionPO.getPositionId())
@@ -59,7 +60,7 @@ public class PositionRepository implements IPositionRepository {
         }
 
         // 缓存数据
-        redissonService.setValue(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":" + positionId, positionEntityList);
+        redisService.addToMap(Constants.TEAM_STRUCTURE + teamId, positionId, positionEntityList);
         return positionEntityList;
     }
 
@@ -87,8 +88,7 @@ public class PositionRepository implements IPositionRepository {
         // 保存到数据库中
         positionMapper.addPosition(positionPOList);
 
-        // TODO: 清除缓存，批量操作待实现
-        redissonService.remove(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":*");
+        redisService.remove(Constants.TEAM_STRUCTURE + teamId);
     }
 
     @Override
@@ -97,8 +97,7 @@ public class PositionRepository implements IPositionRepository {
         positionMapper.deletePositionInPosition(positionsToDelete);
         positionMapper.deletePositionInUserPosition(positionsToDelete);
 
-        // TODO: 清除缓存，批量操作待实现
-        redissonService.remove(Constants.TEAM_STRUCTURE_SUBORDINATE + teamId + ":*");
+        redisService.remove(Constants.TEAM_STRUCTURE + teamId);
     }
 
     @Override
