@@ -33,7 +33,7 @@ public class ResponseMemberListDTO {
     private String phone;
 
     @FieldDesc(name = "成员性别")
-    private Byte gender;
+    private Integer gender;
 
     @FieldDesc(name = "成员身份证号")
     private String idCard;
