@@ -92,4 +92,25 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
             return Response.SERVICE_ERROR(e.getMessage());
         }
     }
+
+    @Override
+    @PostMapping("/readAllAnnounce")
+    public Response readAllAnnounce(@Valid @RequestBody ReadAllAnnounceRequestDTO readAllAnnounceRequestDTO) {
+        try {
+            log.info("用户读取所有公告开始，userId:{}",
+                    readAllAnnounceRequestDTO.getUserId());
+            service.readAllAnnounce(readAllAnnounceRequestDTO.getUserId());
+            log.info("用户读取所有公告结束");
+            return Response.SYSTEM_SUCCESS();
+        }catch (AppException e){
+            log.error("用户读取所有公告失败，userId:{} 已知异常e:{}",
+                    readAllAnnounceRequestDTO.getUserId(), e.getMessage(),e);
+            return Response.CUSTOMIZE_ERROR(GlobalServiceStatusCode.PARAM_NOT_VALID);
+        }
+        catch (Exception e){
+            log.error("用户读取所有公告失败，userId:{} ",
+                    readAllAnnounceRequestDTO.getUserId(), e);
+            return Response.SERVICE_ERROR(e.getMessage());
+        }
+    }
 }
