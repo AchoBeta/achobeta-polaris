@@ -1,8 +1,6 @@
 package com.achobeta.domain.team.adapter.repository;
 
-import com.achobeta.domain.team.model.entity.PositionEntity;
-
-import java.util.List;
+import com.achobeta.domain.user.model.entity.UserEntity;
 
 /**
  * @author yangzhiyao
@@ -11,5 +9,11 @@ import java.util.List;
  */
 public interface IPositionRepository {
 
+    /**
+     * 修改成员信息
+     * @param userEntity
+     * @return
+     */
+    UserEntity modifyMemberInfo(UserEntity userEntity);
 
 }
