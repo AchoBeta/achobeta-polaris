@@ -8,7 +8,9 @@ import com.achobeta.domain.render.service.IRenderTextService;
 import com.achobeta.types.Response;
 import com.achobeta.types.annotation.Creator;
 import com.achobeta.types.annotation.Updater;
-import lombok.RequiredArgsConstructor;
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,9 +27,8 @@ import javax.validation.constraints.Min;
 @Slf4j
 @Validated
 @RestController()
-@CrossOrigin("${app.config.cross-origin}:*")
+@CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/read/")
-@RequiredArgsConstructor
 public class ReadController implements IReadService {
 
     @Resource(name = "functionRenderTextService")
