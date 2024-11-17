@@ -5,16 +5,14 @@ import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
-import com.achobeta.infrastructure.redis.RedissonService;
+import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.Constants;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RMap;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yangzhiyao
@@ -29,7 +27,7 @@ public class PositionRepository implements IPositionRepository {
     private PositionMapper positionMapper;
 
     @Resource
-    private RedissonService redissonService;
+    private IRedisService redisService;
 
     /**
      * 查询某职位/分组下一级的所有职位/分组
@@ -40,11 +38,11 @@ public class PositionRepository implements IPositionRepository {
     @Override
     public List<PositionEntity> querySubordinatePosition(String positionId, String teamId) {
         // 从缓存中获取数据
-        RMap<String, List<PositionEntity>> positionMap =  redissonService.getMap(Constants.TEAM_STRUCTURE + teamId);
-        if (!CollectionUtil.isEmpty(positionMap)) {
-            return positionMap.get(positionId);
-        } else {
-            positionMap = (RMap<String, List<PositionEntity>>) new ConcurrentHashMap<String, List<PositionEntity>>();
+        if (redisService.isExists(Constants.TEAM_STRUCTURE + teamId)) {
+            List<PositionEntity> tempList = redisService.getFromMap(Constants.TEAM_STRUCTURE + teamId, positionId);
+            if (!CollectionUtil.isEmpty(tempList)) {
+                return tempList;
+            }
         }
 
         // 从数据库中查询下级职位/分组
@@ -61,8 +59,7 @@ public class PositionRepository implements IPositionRepository {
         }
 
         // 缓存数据
-        positionMap.put(positionId, positionEntityList);
-        redissonService.setValue(Constants.TEAM_STRUCTURE + teamId, positionMap);
+        redisService.addToMap(Constants.TEAM_STRUCTURE + teamId, positionId, positionEntityList);
         return positionEntityList;
     }
 
