@@ -6,6 +6,7 @@ import com.achobeta.domain.announce.model.entity.*;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 import com.achobeta.domain.announce.service.get.AnnounceCountPostProcessor;
 import com.achobeta.domain.announce.service.get.AnnouncePostProcessor;
+import com.achobeta.domain.announce.service.read.ReadAllAnnouncePostProcessor;
 import com.achobeta.domain.announce.service.read.ReadAnnouncePostProcessor;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.BizModule;
@@ -97,6 +98,23 @@ public class DefaultAnnounceService extends AbstractFunctionPostProcessor implem
             }
         });
         return postContext.getBizData().getCount();
+    }
+
+    @Override
+    public void readAllAnnounce(String userId) {
+        PostContext postContext = buildPostContext(userId,null);
+        super.doPostProcessor(postContext, ReadAllAnnouncePostProcessor.class, new AbstractPostProcessorOperation<ReadAnnounceEntity>() {
+            @Override
+            public PostContext<ReadAnnounceEntity> doMainProcessor(PostContext<ReadAnnounceEntity> postContext) {
+                Integer row = repository.ReadAllAnnounce(postContext.getBizData().getUserId());
+                postContext.addExtraData(Constants.AFFECT_LENGTH,row);
+                return postContext;
+            }
+        });
+        Integer row = (Integer)postContext.getExtra().get(Constants.AFFECT_LENGTH);
+        if(row==0){
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
+        }
     }
 
     private static PostContext<AnnounceCountEntity> buildPostContext(String userId) {

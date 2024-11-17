@@ -13,4 +13,5 @@ public interface IAnnounceService {
     Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid GetUserAnnounceRequestDTO getUserAnnounceRequestDTO);
     Response readAnnounce(@Valid ReadAnnounceRequestDTO readAnnounceRequestDTO);
     Response<GetUserAnnounceCountResponseDTO> getUserAnnounceCount(@Valid GetUserAnnounceCountRequestDTO getUserAnnounceCountRequestDTO);
+    Response readAllAnnounce(@Valid ReadAllAnnounceRequestDTO readAllAnnounceRequestDTO);
 }
