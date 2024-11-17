@@ -1,4 +1,4 @@
-package com.achobeta.domain.user.service.modify;
+package com.achobeta.domain.user.service.info;
 
 import com.achobeta.domain.user.model.bo.UserBO;
 import com.achobeta.types.support.postprocessor.BasePostProcessor;
