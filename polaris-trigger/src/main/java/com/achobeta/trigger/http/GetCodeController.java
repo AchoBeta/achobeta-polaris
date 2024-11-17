@@ -23,13 +23,14 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController()
-@CrossOrigin("*")
-@RequestMapping("/api/v1/auth/")
+@CrossOrigin("${app.config.cross-origin}")
+@RequestMapping("/api/${app.config.api-version}/auth/")
 @RequiredArgsConstructor
 public class GetCodeController implements IGetCodeService {
 
     private final ISendCodeService sendCodeService;
-    @GetMapping(value = "getcode")
+
+    @PostMapping(value = "getcode")
     @Override
     public Response<GetCodeResponseDTO> getCode(@Valid @RequestBody GetCodeRequestDTO getCodeRequestDTO) {
         try {

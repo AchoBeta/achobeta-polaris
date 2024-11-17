@@ -24,6 +24,7 @@ public interface IOperateCodeRepository {
      */
     void setCode(String phone,String code,long expired);
 
+
     /**
      * 设置手机号的发送验证码频率限制
      * @param phone
@@ -57,4 +58,5 @@ public interface IOperateCodeRepository {
      * @param code 验证码
      */
     void unlockCheckCode(String phone, String code);
+
 }

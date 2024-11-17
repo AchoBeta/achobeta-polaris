@@ -32,6 +32,7 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
     public boolean handleBefore(PostContext<SendCodeBO> postContext) {
 
         CodeVO codeVO = postContext.getBizData().getCodeVO();
+
         log.info("正在对手机号{}进行频率限制验证",codeVO.getPhone());
 
         if(operateCodeRepository.checkRateLimit(codeVO.getPhone())){
@@ -53,6 +54,7 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
 
         log.info("正在对手机号{}进行限流操作",phone);
         operateCodeRepository.setRateLimit(phone);
+
     }
 
     @Override
