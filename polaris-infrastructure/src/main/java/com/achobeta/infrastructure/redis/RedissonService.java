@@ -161,6 +161,11 @@ public class RedissonService implements IRedisService {
     }
 
     @Override
+    public void unLock(String key) {
+        redissonClient.getLock(key).unlock();
+    }
+
+    @Override
     public RLock getFairLock(String key) {
         return redissonClient.getFairLock(key);
     }

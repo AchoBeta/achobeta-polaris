@@ -22,11 +22,22 @@ public class OperateCodeRepository implements IOperateCodeRepository {
     @Resource
     private RedissonService redissonService;
 
+    /*
+     * 用手机号在redis中获取验证码
+     * @param phone 手机号
+     * @return 验证码
+     */
     @Override
     public String getCodeByPhone(String phone) {
         return redissonService.<String>getValue(RedisKey.CODE.getKeyPrefix()+phone);
     }
 
+    /*
+     * 在redis中存储验证码
+     * @param phone 手机号
+     * @param code 验证码
+     * @param expired 过期时间
+     */
     @Override
     public void setCode(String phone, String code, long expired) {
         String key=RedisKey.CODE.getKeyPrefix()+phone;
@@ -50,4 +61,28 @@ public class OperateCodeRepository implements IOperateCodeRepository {
             return false;
         }
     }
+
+    @Override
+    public void deleteCode(String phone, String code) {
+        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+
+        try {
+            redissonService.remove(key);
+        } catch (Exception e) {
+            //删除失败则不做处理
+        }
+    }
+
+    @Override
+    public void lockCheckCode(String phone, String code) {
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        redissonService.getLock(key);
+    }
+
+    @Override
+    public void unlockCheckCode(String phone, String code) {
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        redissonService.unLock(key);
+    }
+
 }

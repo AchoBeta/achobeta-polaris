@@ -242,6 +242,13 @@ public interface IRedisService {
     RLock getLock(String key);
 
     /**
+     * 释放 Redis 锁
+     *
+     * @param key 键
+     */
+    void unLock(String key);
+
+    /**
      * 获取 Redis 锁（公平锁）
      *
      * @param key 键

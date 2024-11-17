@@ -30,6 +30,9 @@ public class UserRepository implements IUserRepository {
     @Override
     public UserEntity getUserByPhone(String phone){
         UserPO userPO = userMapper.getUserByPhone(phone);
+        if(null == userPO){
+            return null;
+        }
         return UserEntity.builder()
                             .userId(userPO.getUserId())
                             .build();
