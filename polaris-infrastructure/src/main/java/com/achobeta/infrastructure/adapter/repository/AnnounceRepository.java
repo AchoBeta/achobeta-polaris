@@ -60,4 +60,9 @@ public class AnnounceRepository implements IAnnounceRepository {
     public Integer readAnnounce(String userId, String announceId) {
         return announceMapper.readAnnounce(userId, announceId);
     }
+
+    @Override
+    public Integer queryAnnounceCountByUserId(String userId) {
+        return announceMapper.getAnnounceCount(userId);
+    }
 }

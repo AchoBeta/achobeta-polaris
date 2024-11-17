@@ -37,6 +37,10 @@
             limit #{limit}
             and is_deleted = 0
     </select>
+    <select id="getAnnounceCount" resultType="int">
+        select count(1) from user_announce
+        where user_id = #{userId} and is_deleted = 0
+    </select>
 
     <update id="readAnnounce">
         update  user_announce set is_read = 1
