@@ -31,7 +31,7 @@ public class DeviceController implements com.achobeta.api.IDeviceService {
      * @param getUserDeviceRequestDTO
      * @return
      */
-    @GetMapping("/getDevices")
+    @PostMapping("/getDevices")
     @Override
     public Response<GetUserDeviceResponseDTO> getDevices(@Valid @RequestBody  GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
         try {
