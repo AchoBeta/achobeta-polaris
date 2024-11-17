@@ -50,4 +50,27 @@ public class OperateCodeRepository implements IOperateCodeRepository {
             return false;
         }
     }
+
+    @Override
+    public void deleteCode(String phone, String code) {
+        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+
+        try {
+            redissonService.remove(key);
+        } catch (Exception e) {
+            //删除失败则不做处理
+        }
+    }
+
+    @Override
+    public void lockCheckCode(String phone, String code) {
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        redissonService.getLock(key);
+    }
+
+    @Override
+    public void unlockCheckCode(String phone, String code) {
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        redissonService.unLock(key);
+    }
 }

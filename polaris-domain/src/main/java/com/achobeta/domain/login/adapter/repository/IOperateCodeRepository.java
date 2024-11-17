@@ -36,4 +36,25 @@ public interface IOperateCodeRepository {
      * @return 是否达到频率限制
      */
     Boolean checkRateLimit(String phone);
+
+    /**
+     * 从redis中删除验证码
+     * @param phone 手机号
+     * @param code 验证码
+     */
+    void deleteCode(String phone, String code);
+
+    /**
+     * 在redis中校验验证码是否正确时的加锁操作
+     * @param phone 手机号
+     * @param code 验证码
+     */
+    void lockCheckCode(String phone, String code);
+
+    /**
+     * 在redis中校验验证码是否正确时的解锁操作
+     * @param phone 手机号
+     * @param code 验证码
+     */
+    void unlockCheckCode(String phone, String code);
 }
