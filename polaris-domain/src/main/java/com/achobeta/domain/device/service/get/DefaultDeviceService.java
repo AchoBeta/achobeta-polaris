@@ -16,7 +16,6 @@ import com.achobeta.types.support.postprocessor.PostContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -36,14 +35,14 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
 
         UserCommonDevicesEntities userEntities = postContext.getBizData().getUserCommonDevicesEntities();
         PageResult pageResult = postContext.getBizData().getPageResult();
-        //查数据库时加将长度加一，确认是否有剩余数据
-        List<DeviceEntity> devices = repository.queryCommonUseDevicesById(userEntities.getUserId(),pageResult.getLimit()+1,pageResult.getLastDeviceId());
-
-        if(CollectionUtils.isEmpty(devices)){
+        Integer deviceCount = repository.queryCommonUserDeviceCountById(userEntities.getUserId(), pageResult.getLimit() + 1, pageResult.getLastDeviceId());
+        //判断参数是否正确
+        if(deviceCount==null||deviceCount==0){
             log.error("设备不存在！userId：{},limit:{},lastDeviceId:{}",userEntities.getUserId(),pageResult.getLimit(),pageResult.getLastDeviceId());
             throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
         }
-
+        //查数据库时加将长度加一，确认是否有剩余数据
+        List<DeviceEntity> devices = repository.queryCommonUseAutoLoginDevicesById(userEntities.getUserId(),pageResult.getLimit()+1,pageResult.getLastDeviceId());
         //判断还有没有更多数据
         boolean flag = devices.size() > pageResult.getLimit();
         if(flag){

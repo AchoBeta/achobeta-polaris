@@ -26,12 +26,11 @@ public class DeviceRepository implements IDeviceRepository {
      * @param userId 用户ID
      * @param lastDeviceId 单页最后一台设备
      * @param limit 表行数
-     * @return 设备Entity集合
+     * @return 登录设备Entity集合
      */
     @Override
-    public List<DeviceEntity> queryCommonUseDevicesById(String userId,int limit,String lastDeviceId) {
-
-        List<DevicePO> devicesPO = deviceMapper.queryCommonUseDevicesById(userId,limit,lastDeviceId);
+    public List<DeviceEntity> queryCommonUseAutoLoginDevicesById(String userId, int limit, String lastDeviceId) {
+        List<DevicePO> devicesPO = deviceMapper.queryCommonUseAutoLoginDevicesById(userId,limit,lastDeviceId);
         return devicesPO.stream()
                 .map(devicePO -> DeviceEntity.builder()
                         .deviceId(devicePO.getDeviceId())
@@ -40,5 +39,17 @@ public class DeviceRepository implements IDeviceRepository {
                         .lastLoginTime(devicePO.getUpdateTime())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     *
+     * @param userId
+     * @param limit
+     * @param lastDeviceId
+     * @return 查询该参数下，设备数
+     */
+    @Override
+    public Integer queryCommonUserDeviceCountById(String userId, int limit, String lastDeviceId) {
+        return deviceMapper.queryCommonUserDeviceCountById(userId, limit, lastDeviceId);
     }
 }
