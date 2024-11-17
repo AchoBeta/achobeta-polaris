@@ -33,9 +33,9 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
      * @param getUserAnnounceRequestDTO
      * @return
      */
-    @GetMapping("/getUserAnnounce")
+    @PostMapping("/getUserAnnounce")
     @Override
-    public Response<GetUserAnnounceResponseDTO> getUserAnnounce(GetUserAnnounceRequestDTO getUserAnnounceRequestDTO) {
+    public Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid @RequestBody GetUserAnnounceRequestDTO getUserAnnounceRequestDTO) {
         try {
             log.info("用户访问公告渲染系统开始，userId:{} limit:{} lastAnnounceId:{}",
                     getUserAnnounceRequestDTO.getUserId(), getUserAnnounceRequestDTO.getLimit(), getUserAnnounceRequestDTO.getLastAnnounceId());
@@ -67,7 +67,7 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
             return Response.SYSTEM_SUCCESS();
         }catch (AppException e){
             log.error("用户访问读公告失败，userId:{} announceId:{} 已知异常e:{}",
-                    readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId(), e);
+                    readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId(), e.getMessage(),e);
             return Response.CUSTOMIZE_ERROR(GlobalServiceStatusCode.PARAM_NOT_VALID);
         }
         catch (Exception e){

@@ -12,6 +12,6 @@ import javax.validation.Valid;
  * @date 2024/11/11
  */
 public interface IAnnounceService {
-    Response<GetUserAnnounceResponseDTO> getUserAnnounce(GetUserAnnounceRequestDTO getUserAnnounceRequestDTO);
+    Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid GetUserAnnounceRequestDTO getUserAnnounceRequestDTO);
     Response readAnnounce(@Valid ReadAnnounceRequestDTO readAnnounceRequestDTO);
 }
