@@ -2,11 +2,16 @@ name: CI-CD Pipeline
 
 on:
   push:
-    tags: # 表示在创建新的 tag 时触发
+#    branches: [ master, test, prod]
+    tags:
       - v*
+#  pull_request:
+#    branches: [ master, test, prod]
+#  release:
+#    types: [ created ] # 表示在创建新的 Release 时触发
 
 env:
-  IMAGE_TAG: ${{ github.ref_name }}
+  IMAGE_TAG: ${{ github.ref }}
   IMAGE_ENV: ghcr.io
   IMAGE_REGISTRY: bantanger/achobeta
 
@@ -43,8 +48,8 @@ jobs:
       - name: docker compose build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./polaris-app
-          file: ./polaris-app/Dockerfile
+          context: .
+          file: ./Dockerfile
           # 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
           platforms: linux/amd64,linux/arm64/v8
           # 镜像推送时间
