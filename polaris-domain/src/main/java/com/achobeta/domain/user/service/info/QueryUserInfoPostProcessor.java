@@ -8,4 +8,4 @@ import com.achobeta.types.support.postprocessor.BasePostProcessor;
  * @description 用户个人中心信息扩展接口
  * @date 2024/11/6
  */
-public interface UserInfoPostProcessor extends BasePostProcessor<UserBO> { }
+public interface QueryUserInfoPostProcessor extends BasePostProcessor<UserBO> { }

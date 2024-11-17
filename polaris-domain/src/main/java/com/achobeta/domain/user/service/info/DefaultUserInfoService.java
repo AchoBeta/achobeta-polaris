@@ -27,7 +27,7 @@ public class DefaultUserInfoService extends AbstractFunctionPostProcessor<UserBO
     @Override
     public UserEntity getUserInfo(String userId) {
         PostContext<UserBO> userContext = buildPostContext(userId);
-        userContext = super.doPostProcessor(userContext, UserInfoPostProcessor.class,
+        userContext = super.doPostProcessor(userContext, QueryUserInfoPostProcessor.class,
                 new AbstractPostProcessorOperation<UserBO>() {
                     @Override
                     public PostContext<UserBO> doMainProcessor(PostContext<UserBO> postContext) {
