@@ -9,5 +9,6 @@ import com.achobeta.types.support.postprocessor.BasePostProcessor;
  * @Date: 2024/11/9 21:04
  * @Version: 1.0
  */
+
 public interface LoginPostProcessor extends BasePostProcessor<LoginBO> {
 }

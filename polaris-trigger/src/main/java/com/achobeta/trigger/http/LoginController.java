@@ -5,7 +5,9 @@ import com.achobeta.api.dto.LoginRequestDTO;
 import com.achobeta.api.dto.LoginResponseDTO;
 import com.achobeta.domain.login.model.valobj.LoginVO;
 import com.achobeta.domain.login.service.IAuthorizationService;
+import com.achobeta.domain.login.service.IReflashTokenService;
 import com.achobeta.types.Response;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.util.DeviceNameUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,9 @@ public class LoginController implements ILoginService {
     @Resource
     private IAuthorizationService authorizationService;
 
+    @Resource
+    private IReflashTokenService reflashTokenService;
+
     @Override
     @PostMapping(value = "login")
     public Response<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest request, HttpServletResponse response) {
@@ -55,6 +60,10 @@ public class LoginController implements ILoginService {
 //            // 设置Cookie的过期时间（可选）
 //            accessTokenCookie.setMaxAge(60); // 1小时
 //            refreshTokenCookie.setMaxAge(60); // 7天86400 * 7
+
+//            //设置Cookie只能以https的形式发送
+//            accessTokenCookie.setSecure(true);
+//            refreshTokenCookie.setSecure(true);
 
             // 设置Cookie的路径（可选）
             accessTokenCookie.setPath("/achobeta/polaris/access_token");
@@ -79,6 +88,55 @@ public class LoginController implements ILoginService {
             return Response.SERVICE_ERROR(e.getInfo());
         }catch (Exception e) {
             log.error("用户访问登录系统失败,phone:{}", loginRequestDTO.getPhone(), e);
+            return Response.SERVICE_ERROR(e.getMessage());
+        }
+    }
+
+    @Override
+    @PostMapping(value = "reflash")
+    public Response<LoginResponseDTO> refresh(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // 从请求头中获取refreshToken
+            String reflashToken = request.getHeader("reflash_token");
+
+            log.info("正在访问无感刷新接口,reflashToken:{}", reflashToken);
+            if(null == reflashToken || reflashToken.isEmpty()) {
+                log.info("refreshToken缺失");
+                throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getCode()),GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getMessage());
+            }
+            LoginVO loginVO = reflashTokenService.reflash( reflashToken);
+
+            // 将access_token和refresh_token添加到Cookie中
+            Cookie accessTokenCookie = new Cookie("access_token", loginVO.getAccessToken());
+
+//            // 设置Cookie的过期时间（可选）
+//            accessTokenCookie.setMaxAge(60); // 1小时
+
+//            //设置Cookie只能以https的形式发送
+//            accessTokenCookie.setSecure(true);
+
+            // 设置Cookie的路径（可选）
+            accessTokenCookie.setPath("/achobeta/polaris/access_token");
+
+            // 将Cookie添加到响应中
+            response.addCookie(accessTokenCookie);
+
+            //todo
+//            RedirectView redirectView = new RedirectView();
+//            redirectView.setUrl("/achobeta/polaris/home");
+
+            return Response.SYSTEM_SUCCESS(
+                    LoginResponseDTO.builder()
+                           .phone(loginVO.getPhone())
+                           .build()
+            );
+        } catch (AppException e) {
+            log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader("refresh_token"));
+
+            return Response.SERVICE_ERROR(e.getInfo());
+        }catch (Exception e) {
+            log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader("refresh_token"));
+
             return Response.SERVICE_ERROR(e.getMessage());
         }
     }
