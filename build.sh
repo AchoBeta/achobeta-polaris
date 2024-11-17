@@ -8,8 +8,10 @@ usage(){
   exit 1
 }
 
+# 为脚本赋予权限
 # shellcheck disable=SC2164
 cd docs/dev-ops
+chmod +x *.sh
 
 # Check if Docker is installed
 if ! command -v docker >/dev/null 2>&1; then
@@ -33,25 +35,22 @@ fi
 
 # 启动基础环境（必须）
 base(){
-  $COMPOSE_COMMAND -f docker-compose-environment.yml up -d
+  $COMPOSE_COMMAND up -f docker-compose-environment.yml up -d
 }
-
-CONTAINER_NAME=polaris
-#IMAGE_NAME=ghcr.io/bantanger/achobeta/polaris-app:latest
 
 # 启动程序模块（必须）
 services(){
-  $COMPOSE_COMMAND -f docker-compose-app.yml up
+  $COMPOSE_COMMAND up -f docker-compose-app.yml up -d
 }
 
 # 关闭服务模块
 stop(){
-  $COMPOSE_COMMAND -f docker-compose-app.yml stop ${CONTAINER_NAME}
+  $COMPOSE_COMMAND stop polaris
 }
 
 # 删除服务模块
 rm(){
-  $COMPOSE_COMMAND -f docker-compose-app.yml rm ${CONTAINER_NAME}
+  $COMPOSE_COMMAND rm polaris
 }
 
 # 删除所有未使用的镜像
