@@ -1,8 +1,6 @@
 package com.achobeta.api;
 
-import com.achobeta.api.dto.announce.GetUserAnnounceRequestDTO;
-import com.achobeta.api.dto.announce.GetUserAnnounceResponseDTO;
-import com.achobeta.api.dto.announce.ReadAnnounceRequestDTO;
+import com.achobeta.api.dto.announce.*;
 import com.achobeta.types.Response;
 
 import javax.validation.Valid;
@@ -14,4 +12,5 @@ import javax.validation.Valid;
 public interface IAnnounceService {
     Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid GetUserAnnounceRequestDTO getUserAnnounceRequestDTO);
     Response readAnnounce(@Valid ReadAnnounceRequestDTO readAnnounceRequestDTO);
+    Response<GetUserAnnounceCountResponseDTO> getUserAnnounceCount(@Valid GetUserAnnounceCountRequestDTO getUserAnnounceCountRequestDTO);
 }

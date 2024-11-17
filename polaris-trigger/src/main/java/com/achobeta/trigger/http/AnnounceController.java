@@ -1,8 +1,6 @@
 package com.achobeta.trigger.http;
 
-import com.achobeta.api.dto.announce.GetUserAnnounceRequestDTO;
-import com.achobeta.api.dto.announce.GetUserAnnounceResponseDTO;
-import com.achobeta.api.dto.announce.ReadAnnounceRequestDTO;
+import com.achobeta.api.dto.announce.*;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 import com.achobeta.domain.announce.service.IAnnounceService;
 import com.achobeta.types.Response;
@@ -73,6 +71,24 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
         catch (Exception e){
             log.error("用户访问读公告失败，userId:{} announceId:{}",
                     readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId(), e);
+            return Response.SERVICE_ERROR(e.getMessage());
+        }
+    }
+
+    @Override
+    @PostMapping("/getAnnounceCount")
+    public Response<GetUserAnnounceCountResponseDTO> getUserAnnounceCount(@Valid @RequestBody GetUserAnnounceCountRequestDTO getUserAnnounceCountRequestDTO) {
+        try {
+            log.info("用户获取公告数量开始，userId:{}",
+                    getUserAnnounceCountRequestDTO.getUserId());
+            Integer count = service.queryAnnounceCountByUserId(getUserAnnounceCountRequestDTO.getUserId());
+            log.info("用户获取公告数量结束");
+            return Response.SYSTEM_SUCCESS(GetUserAnnounceCountResponseDTO.builder()
+                            .count(count)
+                    .build());
+        }catch (Exception e){
+            log.error("用户获取公告数量失败，userId:{} ",
+                    getUserAnnounceCountRequestDTO.getUserId(), e);
             return Response.SERVICE_ERROR(e.getMessage());
         }
     }

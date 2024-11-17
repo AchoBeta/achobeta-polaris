@@ -12,4 +12,5 @@ public interface IAnnounceService {
     UserAnnounceVO queryAnnouncesByUserId(String userId,Integer limit,String lastAnnounceId);
     /**读单条公告*/
     void readAnnounce(String userId,String announceId);
+    Integer queryAnnounceCountByUserId(String userId);
 }
