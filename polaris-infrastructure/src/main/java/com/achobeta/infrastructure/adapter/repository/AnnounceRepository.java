@@ -65,4 +65,9 @@ public class AnnounceRepository implements IAnnounceRepository {
     public Integer queryAnnounceCountByUserId(String userId) {
         return announceMapper.getAnnounceCount(userId);
     }
+
+    @Override
+    public Integer ReadAllAnnounce(String userId) {
+        return announceMapper.readAllAnnounce(userId);
+    }
 }

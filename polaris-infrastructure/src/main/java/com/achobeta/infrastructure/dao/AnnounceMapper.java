@@ -43,5 +43,6 @@ public interface AnnounceMapper {
      * @return 用户公告数量
      */
     Integer getAnnounceCount(String userId);
+    Integer readAllAnnounce(String userId);
 
 }
