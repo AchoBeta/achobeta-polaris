@@ -9,7 +9,7 @@ import java.util.List;
  * @description 修改团队组织架构接口
  * @date 2024/11/11
  */
-public interface IModifyStructureService {
+public interface IStructureService {
 
     /**
      * 修改团队组织架构

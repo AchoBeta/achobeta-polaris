@@ -1,4 +1,4 @@
-package com.achobeta.domain.team.service.structure.modify;
+package com.achobeta.domain.team.service.structure;
 
 import com.achobeta.types.support.postprocessor.BasePostProcessor;
 

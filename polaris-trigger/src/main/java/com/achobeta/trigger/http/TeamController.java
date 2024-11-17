@@ -4,7 +4,7 @@ import com.achobeta.api.ITeamService;
 import com.achobeta.api.dto.ModifyStructureRequestDTO;
 import com.achobeta.api.dto.ModifyStructureResponseDTO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
-import com.achobeta.domain.team.service.IModifyStructureService;
+import com.achobeta.domain.team.service.IStructureService;
 import com.achobeta.types.Response;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamController implements ITeamService {
 
-    private final IModifyStructureService modifyStructureService;
+    private final IStructureService modifyStructureService;
 
     /**
      * 修改团队组织架构
