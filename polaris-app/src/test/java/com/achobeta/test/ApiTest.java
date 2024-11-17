@@ -1,10 +1,12 @@
 package com.achobeta.test;
 
+import com.achobeta.test.composite.PositionEntity;
 import com.achobeta.types.constraint.PrefixConstraint;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
@@ -98,6 +100,14 @@ public class ApiTest {
         }
 
         return diffCode.toString();
+    }
+
+    /**
+     * 生成团队架构树形结构
+     * @param positionEntityList 同一父ID（teamId）的架构节点集合
+     */
+    public void generateTeamStructureTree(List<PositionEntity> positionEntityList) {
+
     }
 
 }

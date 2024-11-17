@@ -46,6 +46,9 @@ public enum GlobalServiceStatusCode {
 
     USER_NO_PERMISSION(2403, "用户无权限"),
     USER_CAPTCHA_CODE_ERROR(2500, "验证码错误"),
+
+    /* 团队架构 */
+    TEAM_GENERATE_TREE_FAIL(4000, "生成团队架构树失败")
     ;
 
     private Integer code;
