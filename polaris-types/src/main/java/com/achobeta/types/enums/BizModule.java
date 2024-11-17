@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum BizModule {
     RENDER("biz_001", "文本渲染模块"),
-    DEVICE("biz002","设备渲染模块")
+    DEVICE("biz010","设备渲染模块")
+    LOGIN("biz_006", "用户登陆模块"),
     ;
 
     private String code;
