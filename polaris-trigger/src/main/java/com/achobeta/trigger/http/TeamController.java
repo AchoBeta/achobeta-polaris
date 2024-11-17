@@ -9,10 +9,9 @@ import com.achobeta.types.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -28,9 +27,14 @@ public class TeamController implements ITeamService {
 
     private final IMemberService memberService;
 
+    /**
+     * 修改团队成员信息
+     * @param requestDTO
+     * @return 修改信息
+     */
     @Override
     @PutMapping("member")
-    public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(ModifyMemberInfoRequestDTO requestDTO) {
+    public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequestDTO requestDTO) {
         String teamId = requestDTO.getTeamId();
         String memberId = requestDTO.getMemberId();
         log.info("用户访问修改团队成员信息接口，userId：{}, memberId：{}, teamId:{}", requestDTO.getUserId(), memberId, teamId);
