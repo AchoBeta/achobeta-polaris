@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.Duration;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -134,6 +135,14 @@ public class RedissonService implements IRedisService {
     public String getFromMap(String key, String field) {
         RMap<String, String> map = redissonClient.getMap(key);
         return map.get(field);
+    }
+
+    public Map<String,String> getMapToJavaMap(String key) {
+        RMap<String, String> map = redissonClient.getMap(key);
+        if(map == null){
+            return null;
+        }
+        return map.readAllMap();
     }
 
     @Override

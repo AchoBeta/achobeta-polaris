@@ -2,6 +2,7 @@ package com.achobeta.infrastructure.redis;
 
 import org.redisson.api.*;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -207,6 +208,13 @@ public interface IRedisService {
      * @return 值
      */
     String getFromMap(String key, String field);
+
+    /**
+     * 获取Map并转换为Java Map
+     * @param key 键
+     * @return
+     */
+    Map<String,String> getMapToJavaMap(String key);
 
     /**
      * 获取哈希表中指定字段的值
