@@ -2,6 +2,8 @@ package com.achobeta.domain.team.adapter.repository;
 
 import com.achobeta.domain.user.model.entity.UserEntity;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 成员仓储接口
@@ -14,6 +16,6 @@ public interface IMemberRepository {
      * @param teamId
      * @return
      */
-    UserEntity modifyMemberInfo(UserEntity userEntity, String teamId);
+    UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<String> addPositions,List<String> deletePositions);
 
 }

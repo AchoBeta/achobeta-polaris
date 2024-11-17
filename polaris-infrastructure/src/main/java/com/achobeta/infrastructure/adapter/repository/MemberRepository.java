@@ -1,14 +1,11 @@
 package com.achobeta.infrastructure.adapter.repository;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
-import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.infrastructure.redis.RedissonService;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
@@ -16,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +34,7 @@ public class MemberRepository implements IMemberRepository {
     private IRedisService redisService;
 
     @Override
-    public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId) {
+    public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<String> addPositions, List<String> deletePositions) {
         // 这里保证用户存在，不能查缓存的得直接查数据库的
         UserPO userPO = userMapper.getUserByUserId(userEntity.getUserId());
         if (userPO == null) {
@@ -47,7 +43,8 @@ public class MemberRepository implements IMemberRepository {
                     GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
         }
 
-        positionMapper.addPositionToUser(userEntity.getPositions(), userEntity.getUserId());
+        positionMapper.addPositionToUser(addPositions, userEntity.getUserId());
+        positionMapper.deletePositionWithUser(deletePositions, userEntity.getUserId());
 
         userMapper.updateUserInfo(UserPO.builder()
                 .userId(userEntity.getUserId())

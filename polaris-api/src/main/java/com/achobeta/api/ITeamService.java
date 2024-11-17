@@ -1,5 +1,9 @@
 package com.achobeta.api;
 
+import com.achobeta.api.dto.ModifyMemberInfoRequestDTO;
+import com.achobeta.api.dto.ModifyMemberInfoResponseDTO;
+import com.achobeta.types.Response;
+
 /**
  * @author yangzhiyao
  * @description 团队服务接口
@@ -7,5 +11,11 @@ package com.achobeta.api;
  */
 public interface ITeamService {
 
+    /**
+     * 修改成员信息
+     * @param requestDTO
+     * @return
+     */
+    Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(ModifyMemberInfoRequestDTO requestDTO);
 
 }

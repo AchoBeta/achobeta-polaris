@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 团队成员服务默认实现
@@ -21,9 +23,13 @@ import org.springframework.stereotype.Service;
 public class DefaultMemberService extends AbstractPostProcessor<TeamBO> implements IMemberService {
 
     @Override
-    public UserEntity modifyMember(String teamId, UserEntity userEntity) {
+    public UserEntity modifyMember(String teamId, UserEntity userEntity, List<String> addPositions, List<String> deletePositions) {
         PostContext<TeamBO> postContext = buildPostContext(teamId, userEntity);
+        postContext.addExtraData("addPositions", addPositions);
+        postContext.addExtraData("deletePositions", deletePositions);
         postContext = super.doPostProcessor(postContext, ModifyMemberInfoPostProcessor.class);
+        ModifyMemberInfoPostProcessor processor = new ModifyMemberInfoPostProcessor();
+        postContext = processor.doMainProcessor(postContext);
         return postContext.getBizData().getUserEntity();
     }
 
@@ -37,6 +43,6 @@ public class DefaultMemberService extends AbstractPostProcessor<TeamBO> implemen
 
     @Override
     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
-        return null;
+        return postContext;
     }
 }

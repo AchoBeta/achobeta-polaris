@@ -20,4 +20,12 @@
         </foreach>
     </insert>
 
+    <update id="deletePositionWithUser">
+        update user_position set is_deleted = 1
+        where user_id = #{userId} and position_id in
+        <foreach collection="deletePositions" item="position" separator="," open="(" close=")">
+        #{positionId}
+        </foreach>
+    </update>
+
 </mapper>

@@ -13,4 +13,6 @@ import java.util.List;
 public interface PositionMapper {
 
     void addPositionToUser(List<String> positionList, String userId);
+
+    void deletePositionWithUser(List<String> deletePositions, String userId);
 }
