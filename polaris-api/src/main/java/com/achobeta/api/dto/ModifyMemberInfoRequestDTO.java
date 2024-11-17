@@ -25,9 +25,11 @@ import java.util.List;
 @NoArgsConstructor
 public class ModifyMemberInfoRequestDTO implements Serializable {
 
+    @NotBlank(message = "团队ID不能为空")
     @FieldDesc(name = "团队ID")
     private String teamId;
 
+    @NotBlank(message = "被修改的成员的用户ID不能为空")
     @FieldDesc(name = "被修改的成员的用户ID")
     private String memberId;
 
@@ -38,6 +40,7 @@ public class ModifyMemberInfoRequestDTO implements Serializable {
     @FieldDesc(name = "用户名")
     private String userName;
 
+    @NotBlank(message = "手机号不能为空")
     @Pattern(regexp = "^1[34578]\\d{9}$", message = "手机号格式不正确")
     @FieldDesc(name = "手机号")
     private String phone;
