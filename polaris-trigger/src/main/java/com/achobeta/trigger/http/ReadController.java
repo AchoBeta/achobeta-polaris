@@ -8,17 +8,15 @@ import com.achobeta.domain.render.service.IRenderTextService;
 import com.achobeta.types.Response;
 import com.achobeta.types.annotation.Creator;
 import com.achobeta.types.annotation.Updater;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 /**
  * @author BanTanger 半糖
@@ -32,7 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ReadController implements IReadService {
 
-    private final IRenderTextService renderTextService;
+    @Resource(name = "functionRenderTextService")
+    private IRenderTextService renderTextService;
 
     /**
      * demo 接口，熟悉包结构
