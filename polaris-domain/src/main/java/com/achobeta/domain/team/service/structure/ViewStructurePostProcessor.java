@@ -1,4 +1,4 @@
-package com.achobeta.domain.team.service.structure.view;
+package com.achobeta.domain.team.service.structure;
 
 import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.types.support.postprocessor.BasePostProcessor;
