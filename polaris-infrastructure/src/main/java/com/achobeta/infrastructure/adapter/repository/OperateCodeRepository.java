@@ -64,7 +64,7 @@ public class OperateCodeRepository implements IOperateCodeRepository {
 
     @Override
     public void deleteCode(String phone, String code) {
-        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+        String key=RedisKey.CODE.getKeyPrefix()+phone;
 
         try {
             redissonService.remove(key);
@@ -75,13 +75,13 @@ public class OperateCodeRepository implements IOperateCodeRepository {
 
     @Override
     public void lockCheckCode(String phone, String code) {
-        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone"+phone+"code"+code;
         redissonService.getLock(key);
     }
 
     @Override
     public void unlockCheckCode(String phone, String code) {
-        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone"+phone+"code"+code;
         redissonService.unLock(key);
     }
 
