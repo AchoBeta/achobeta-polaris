@@ -17,9 +17,9 @@
     </resultMap>
 
     <select id="listMemberByTeamId" resultMap="UserResultMap">
-        select id,user_id,user_name,id_card,student_id,current_status,
-                entry_time,like_count,create_by,create_time,update_by,
-                update_time ,phone,gender,email,grade,major,experience
+        select t1.id,t1.user_id,t1.user_name,t1.id_card,t1.student_id,t1.current_status,
+                t1.entry_time,like_count,t1.create_by,t1.create_time,t1.update_by,
+                t1.update_time,t1.phone,t1.gender,t1.email,t1.grade,t1.major,t1.experience
         from user as t1, member as t2
         where t1.user_id=t2.user_id
                 and t2.team_id = #{teamId}

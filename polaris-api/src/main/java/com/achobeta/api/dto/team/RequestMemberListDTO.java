@@ -3,8 +3,8 @@ package com.achobeta.api.dto.team;
 import com.achobeta.types.annotation.FieldDesc;
 import lombok.Getter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 /**
  * @author yangzhiyao
@@ -21,7 +21,7 @@ public class RequestMemberListDTO {
     @FieldDesc(name = "最后一条记录的ID")
     private Long lastId;
 
-    @Size(min = 1, message = "每页记录数必须大于0")
+    @Min(value = 1, message = "每页记录数不能小于1")
     @FieldDesc(name = "每页记录数")
     private Integer limit;
 }

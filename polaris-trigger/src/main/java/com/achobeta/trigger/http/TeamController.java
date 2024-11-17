@@ -39,9 +39,8 @@ public class TeamController implements ITeamService {
                         requestMemberListDTO.getLimit());
 
         log.info("用户访问团队管理系统结束，teamId：{}",requestMemberListDTO.getTeamId());
-
         return Response.SYSTEM_SUCCESS(ResponseMemberListDTO.builder()
-               .members(members)
-               .build());
+                .members(members)
+                .build());
     }
 }
