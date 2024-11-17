@@ -27,6 +27,7 @@
         <foreach collection="announceIds" item="announceId" open="(" separator="," close=")">
             #{announceId}
         </foreach>
+        and is_deleted = 0
     </select>
 
     <select id="queryReadByUserIdAnnounceId" resultMap="AnnounceRevicer">
@@ -34,9 +35,10 @@
         where user_id = #{userId} and announce_id > #{announceId}
         order by announce_id
             limit #{limit}
+            and is_deleted = 0
     </select>
 
-    <update id="readAnnounce" >
+    <update id="readAnnounce">
         update  user_announce set is_read = 1
         where user_id = #{userId} and announce_id = #{announceId}
     </update>
