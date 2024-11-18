@@ -1,6 +1,7 @@
 package com.achobeta.api.dto;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -45,7 +46,13 @@ public class LoginRequestDTO {
     /*
      * 登录用户的是否自动登录
      */
-    @NotNull(message = "是否自动登录不能为空")
+    @NotBlank(message = "是否自动登录不能为空")
+    @Pattern(regexp = "^(true|false)$", message = "是否自动登录只能是true或者false")
+    private String isAutoLogin;
+
+    /*
+     * 登录用户的是否自动登录
+     */
     private boolean autoLogin;
 
 }

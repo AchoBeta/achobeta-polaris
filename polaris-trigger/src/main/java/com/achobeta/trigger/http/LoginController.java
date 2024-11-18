@@ -44,7 +44,15 @@ public class LoginController implements ILoginService {
     @PostMapping(value = "login")
     public Response<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest request, HttpServletResponse response) {
         try {
-            log.info("用户访问登录系统开始，phone:{}", loginRequestDTO.getPhone());
+            log.info("用户访问登录系统开始,phone:{}", loginRequestDTO.getPhone());
+
+            if(loginRequestDTO.getIsAutoLogin().equals("true")){
+                log.info("用户选择自动登录,phone:{}", loginRequestDTO.getPhone());
+                loginRequestDTO.setAutoLogin(true);
+            }else{
+                log.info("用户选择非自动登录,phone:{}", loginRequestDTO.getPhone());
+                loginRequestDTO.setAutoLogin(false);
+            }
 
             // 从请求头中获取设备信息
             String userAgent = request.getHeader("User-Agent");
