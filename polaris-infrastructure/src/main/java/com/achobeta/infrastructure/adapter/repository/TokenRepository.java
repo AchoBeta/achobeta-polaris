@@ -6,6 +6,7 @@ import com.achobeta.infrastructure.redis.RedissonService;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.enums.RedisKey;
 import com.achobeta.types.exception.AppException;
+import com.achobeta.types.support.util.TokenUtil;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -41,7 +42,7 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(key, "phone",phone);
         redissonService.addToMap(key, "device_id",devicId);
         redissonService.addToMap(key, "ip",ip);
-        redissonService.addToMap(key, "type","AT");
+        redissonService.addToMap(key, "type", TokenUtil.ACCESS_TOKEN);
         redissonService.addToMap(key, "is_deleted","0");
 
         // 存储设备id和token的关联关系
@@ -58,13 +59,13 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(key, "phone",phone);
         redissonService.addToMap(key, "device_id",devicId);
         redissonService.addToMap(key, "ip",ip);
-        if(isAutoLogin){
-            redissonService.addToMap(key, "type","RT30");
+        if(!isAutoLogin){
+            redissonService.addToMap(key, "type",TokenUtil.REFRESH_TOKEN_TYPE[0]);
 
             //设置该token的生存时间
             redissonService.setMapExpired(key,12*HOUR);
         }else{
-            redissonService.addToMap(key, "type","RT12");
+            redissonService.addToMap(key, "type",TokenUtil.REFRESH_TOKEN_TYPE[1]);
 
             //设置该token的生存时间
             redissonService.setMapExpired(key,30*DAY);
@@ -141,16 +142,16 @@ public class TokenRepository implements ITokenRepository {
 
         String type = redissonService.getFromMap(key, "type");
 
-        if(type != null){
+        if(type == null){
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getMessage());
         }
-        else if(type.equals("AT")){
+        else if(type.equals(TokenUtil.ACCESS_TOKEN)){
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
         }
-        else if(type.equals("RT12")){
+        else if(type.equals(TokenUtil.REFRESH_TOKEN_TYPE[0])){
             redissonService.setMapExpired(key,12*HOUR);
         }
-        else if(type.equals("RT30")){
+        else if(type.equals(TokenUtil.REFRESH_TOKEN_TYPE[1])){
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
         }
         else {
@@ -170,7 +171,7 @@ public class TokenRepository implements ITokenRepository {
         }
 
         Boolean isAutoLogin;
-        if(javaMap.get("type").equals("RT7")) {
+        if(javaMap.get("type").equals(TokenUtil.REFRESH_TOKEN_TYPE[0])) {
             isAutoLogin = false;
         }else{
             isAutoLogin = true;

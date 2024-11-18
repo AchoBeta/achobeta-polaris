@@ -17,8 +17,8 @@ import java.util.Map;
 public class TokenUtil {
 
     public static final String ACCESS_TOKEN = "access_token";
-    public static final String REFRESH_TOKEN = "refresh_token";
-    public static final String[] REFRESH_TOKEN_TYPE = {"refresh_token_12","refresh_token_30"};
+    public static final String REFRESH_TOKEN = "reflash_token";
+    public static final String[] REFRESH_TOKEN_TYPE = {"reflash_token_12","reflash_token_30"};
 
     /**
      * 生成AccessToken
