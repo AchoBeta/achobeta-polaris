@@ -2,6 +2,8 @@ package com.achobeta.infrastructure.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description 职位/分组dao
@@ -9,5 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PositionMapper {
+
+    void addPositionsToMember(String userId, String memberId, List<String> positionIds);
 
 }
