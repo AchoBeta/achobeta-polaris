@@ -70,7 +70,7 @@ public class DefaultReflashTokenService extends AbstractPostProcessor<LoginBO> i
 
         if(!tokenVO.getIsAutoLogin()){
             log.info("检测到用户未开启自动登录,正在重置reflashToken的有效时间,userId:{}", tokenVO.getUserId());
-            // 调用resetRefreshTokenExpiration将refreshToken的有效时间重置为30天
+            // 调用resetRefreshTokenExpiration将refreshToken的有效时间重置为12小时
             tokenRepository.resetReflashTokenExpired(tokenVO.getRefreshToken());
         }
         else {
