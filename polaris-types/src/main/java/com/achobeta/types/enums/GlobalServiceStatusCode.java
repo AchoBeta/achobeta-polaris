@@ -53,6 +53,10 @@ public enum GlobalServiceStatusCode {
     LOGIN_REFLASH_TOKEN_MISSING(6003, "refreshToken缺失"),
     LOGIN_REFRESH_TOKEN_EXPIRED(6004, "refreshToken已过期"),
     LOGIN_REFRESH_TOKEN_INVALID(6005, "refreshToken无效"),
+    LOGIN_ACCESS_TOKEN_MISSING(6006, "accessToken缺失"),
+    LOGIN_ACCESS_TOKEN_EXPIRED(6007, "accessToken已过期"),
+    LOGIN_ACCESS_TOKEN_INVALID(6008, "accessToken无效"),
+    LOGIN_ACCESS_TOKEN_NEED_REFLAH(6009, "accessToken即将过期，需要刷新"),
     ;
 
     private Integer code;
