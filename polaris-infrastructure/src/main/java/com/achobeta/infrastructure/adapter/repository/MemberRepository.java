@@ -53,7 +53,7 @@ public class MemberRepository implements IMemberRepository {
     }
 
     @Override
-    public List<String> queryTeamsOfMember(String userId) {
-        return userMapper.listTeamIdByUserId(userId);
+    public List<String> queryTeamsOfMember(String phone) {
+        return userMapper.listTeamIdByUserId(phone);
     }
 }

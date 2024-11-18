@@ -50,11 +50,11 @@
                <if test="experience!= null">,#{experience}</if>)
     </insert>
 
-    <select id="listTeamIdByUserId" resultType="java.lang.String">
+    <select id="listTeamIdByPhone" resultType="java.lang.String">
         SELECT t2.team_id
         FROM user as t1,member as t2
         WHERE t1.user_id = t2.user_id
-                and t1.user_id = #{userId}
+                and t1.phone = #{phone}
                 and is_deleted = 0
         group by t2.team_id
     </select>

@@ -22,9 +22,10 @@ public interface IMemberRepository {
 
     /**
      * 查询用户所属团队
-     * @param userId
+     * 判断是否已在团队中
+     * @param phone 添加的团队成员的手机号
      * @return
      */
-    List<String> queryTeamsOfMember(String userId);
+    List<String> queryTeamsOfMember(String phone);
 
 }

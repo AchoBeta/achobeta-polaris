@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    List<String> listTeamIdByUserId(String userId);
+    List<String> listTeamIdByPhone(String phone);
 
     void addMember(String userId, String teamId);
 
