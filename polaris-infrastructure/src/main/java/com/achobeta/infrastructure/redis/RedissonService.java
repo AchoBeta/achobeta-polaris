@@ -132,6 +132,11 @@ public class RedissonService implements IRedisService {
         map.expire(Duration.ofMillis(expired));
     }
 
+    public Long getMapExpired(String key) {
+        RMap<String, String> map = redissonClient.getMap(key);
+        return map.remainTimeToLive();
+    }
+
     public String getFromMap(String key, String field) {
         RMap<String, String> map = redissonClient.getMap(key);
         return map.get(field);
@@ -139,9 +144,6 @@ public class RedissonService implements IRedisService {
 
     public Map<String,String> getMapToJavaMap(String key) {
         RMap<String, String> map = redissonClient.getMap(key);
-        if(map == null){
-            return null;
-        }
         return map.readAllMap();
     }
 

@@ -200,6 +200,15 @@ public interface IRedisService {
      */
     void setMapExpired(String key, long expired);
 
+
+    /**
+     * 获取Map的过期时间
+     *
+     * @param key 键
+     * @return 值
+     */
+    Long getMapExpired(String key);
+
     /**
      * 获取哈希表中指定字段的值
      *
