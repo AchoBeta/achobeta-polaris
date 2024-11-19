@@ -1,6 +1,10 @@
 package com.achobeta.infrastructure.dao;
 
+import com.achobeta.infrastructure.dao.po.PositionPO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author yangzhiyao
@@ -10,4 +14,18 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PositionMapper {
 
+    /**
+     * 获取某个职位的上级职位
+     * 用以查询用户的个人职位
+     * @param positions
+     * @return
+     */
+    List<PositionPO> listParentPositionByPositions(Collection<PositionPO> positions);
+
+    /**
+     * 获取某个用户的职位列表
+     * @param userId
+     * @return
+     */
+    List<PositionPO> listPositionByUserId(String userId);
 }
