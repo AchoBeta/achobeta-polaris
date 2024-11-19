@@ -21,11 +21,10 @@ public interface IMemberRepository {
     void addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
 
     /**
-     * 查询用户所属团队
-     * 判断是否已在团队中
+     * 根据手机号查询所有团队中存在的对应用户
      * @param phone 添加的团队成员的手机号
      * @return
      */
-    List<String> queryTeamsOfMember(String phone);
+    UserEntity queryMemberByPhone(String phone);
 
 }

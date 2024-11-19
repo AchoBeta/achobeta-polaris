@@ -20,4 +20,25 @@
         </foreach>
     </insert>
 
+    <select id="listParentPositionByPositions" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+        create_by,create_time,update_by,update_time
+        from position
+        where subordinate in
+        <foreach collection="positions" item="position" separator="," open="(" close=")">
+            #{position.positionId}
+        </foreach>
+        and is_deleted = 0
+    </select>
+
+    <select id="listPositionByUserId" resultMap="PositionResultMap">
+        select t1.id,t1.position_id,t1.position_name,t1.level,t1.subordinate,t1.team_id,
+        t1.create_by,t1.create_time,t1.update_by,t1.update_time
+        from position as t1, user_position as t2
+        where t2.user_id = #{userId}
+        and t1.position_id = t2.position_id
+        and t1.is_deleted = 0
+        and t2.is_deleted = 0
+    </select>
+
 </mapper>

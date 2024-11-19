@@ -3,8 +3,6 @@ package com.achobeta.infrastructure.dao;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
-
 /**
  * @author yangzhiyao
  * @description UserDao接口
@@ -13,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    List<String> listTeamIdByPhone(String phone);
+    UserPO getMemberByPhone(String phone);
 
     void addMember(String userId, String teamId);
 
