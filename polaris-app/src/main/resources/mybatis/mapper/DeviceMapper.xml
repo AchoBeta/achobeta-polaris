@@ -44,4 +44,9 @@
                    and is_deleted = 0
     </select>
 
+    <select id="getUserIdByDeviceId" resultMap="DeviceResultMap">
+        SELECT user_id FROM device
+                 WHERE device_id = #{deviceId}
+                   and is_deleted = 0
+    </select>
 </mapper>
