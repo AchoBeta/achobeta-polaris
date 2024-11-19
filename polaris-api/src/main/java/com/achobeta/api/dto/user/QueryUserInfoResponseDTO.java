@@ -30,7 +30,7 @@ public class QueryUserInfoResponseDTO implements Serializable {
     private String phone;
 
     @FieldDesc(name = "用户性别")
-    private Byte gender;
+    private Integer gender;
 
     @FieldDesc(name = "身份证号")
     private String idCard;
