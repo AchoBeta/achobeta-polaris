@@ -1,4 +1,4 @@
-package com.achobeta.infrastructure.dao.po;
+package com.achobeta.domain.user.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -8,22 +8,19 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author yangzhiyao
- * @description user持久类对象，时间类不加那几个注解存不了Redis
- * @date 2024/11/7
+ * @description 用户实体对象,，时间类不加那几个注解存不了Redis
+ * @date 2024/11/5
  */
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserPO {
-    /**
-     * 主键id
-     */
-    private Long id;
+public class UserEntity {
     /**
      * 用户业务id
      */
@@ -80,25 +77,11 @@ public class UserPO {
      */
     private Integer likeCount;
     /**
-     * 创建该用户的用户业务id
+     * 用户点赞状态
      */
-    private String createBy;
+    private Boolean liked;
     /**
-     * 更新该用户的用户业务id
+     * 用户所属职位/分组
      */
-    private String updateBy;
-    /**
-     * 创建时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createTime;
-    /**
-     * 更新时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime updateTime;
+    private List<List<String>> positions;
 }

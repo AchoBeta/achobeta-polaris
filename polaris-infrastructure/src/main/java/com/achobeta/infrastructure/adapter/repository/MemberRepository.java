@@ -1,8 +1,8 @@
 package com.achobeta.infrastructure.adapter.repository;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
+import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
@@ -20,12 +20,12 @@ import java.util.List;
 
 /**
  * @author yangzhiyao
- * @description 用户仓储接口实现类
- * @date 2024/11/6
+ * @description 团队成员仓储接口
+ * @date 2024/11/17
  */
 @Slf4j
 @Repository
-public class UserRepository implements IUserRepository {
+public class MemberRepository implements IMemberRepository {
 
     @Resource
     private UserMapper userMapper;
@@ -37,7 +37,7 @@ public class UserRepository implements IUserRepository {
     private IRedisService redisService;
 
     @Override
-    public UserEntity queryUserInfo(String userId) {
+    public UserEntity queryMemberInfo(String userId) {
         log.info("尝试从redis中获取用户信息，userId: {}",userId);
         UserEntity userBaseInfo = redisService.getValue(Constants.USER_INFO + userId);
         if(userBaseInfo!= null) {
@@ -111,5 +111,6 @@ public class UserRepository implements IUserRepository {
         log.info("将用户信息缓存到redis成功，userId: {}",userId);
         return userEntity;
     }
+
 
 }
