@@ -6,7 +6,6 @@ import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.service.IStructureService;
 import com.achobeta.types.enums.BizModule;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.postprocessor.AbstractFunctionPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
@@ -17,6 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_NOT_EXIST;
+import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID;
 
 /**
  * @author yangzhiyao
@@ -42,6 +44,13 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         List<PositionEntity> newPositionList = teamBO.getPositionEntityList();
                         List<PositionEntity> positionsToDelete = (List<PositionEntity>) postContext.getExtraData("positionsToDelete");
                         String teamId = (String) postContext.getExtraData("teamId");
+
+                        // 判断团队是否存在
+                        if (!repository.isTeamExists(teamId)) {
+                            log.error("团队不存在！teamId:{}", teamId);
+                            throw new AppException(TEAM_NOT_EXIST.getCode().toString(),
+                                    TEAM_NOT_EXIST.getMessage());
+                        }
 
                         // 删除职位/分组
                         if (!CollectionUtil.isEmpty(positionsToDelete)) {
@@ -110,7 +119,7 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         // 有需要新增的职位/分组
                         if (!CollectionUtil.isEmpty(newPositionList)) {
                             // 哈希表，key-name，value-uuid
-                            ConcurrentHashMap<String, String> positionMap = new ConcurrentHashMap<>(newPositionList.size());
+                            ConcurrentHashMap<String, String> positionMap = new ConcurrentHashMap<>();
                             for (PositionEntity positionEntity : newPositionList) {
                                 String newId = UUID.randomUUID().toString();
                                 // 为新职位创建固有节点
@@ -121,6 +130,7 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                                         .subordinateId("")
                                         .level(positionEntity.getLevel() + 1)
                                         .build();
+                                // 将新职位及其ID放入哈希表
                                 positionMap.put(positionEntity.getSubordinateName(), newId);
                                 // 看父节点，按照逻辑父节点要么是之前创建的有id，要么是新创建的
                                 // 如果新创建的，在遍历过程总会先生成UUID放入哈希表，所以这里如果没有那就是非法请求
@@ -128,11 +138,14 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                                 if (positionId == null || positionId.isEmpty()) {
                                     positionId = positionMap.get(positionEntity.getPositionName());
                                     if (positionId == null) {
-                                        throw new AppException(String.valueOf(GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID.getCode()),
-                                                GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID.getMessage());
+                                        throw new AppException(String.valueOf(TEAM_STRUCTURE_ADD_INVALID.getCode()),
+                                                TEAM_STRUCTURE_ADD_INVALID.getMessage());
                                     } else {
                                         positionEntity.setPositionId(positionId);
                                     }
+                                } else {
+                                    // 将本次操作之前已存在的父节点ID放入哈希表
+                                    positionMap.put(positionEntity.getPositionName(), positionEntity.getPositionId());
                                 }
                                 positionEntity.setSubordinateId(positionMap.get(positionEntity.getSubordinateName()));
                                 positionEntity.setTeamId(teamId);
