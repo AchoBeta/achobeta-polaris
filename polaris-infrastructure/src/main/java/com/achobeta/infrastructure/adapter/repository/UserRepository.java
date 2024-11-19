@@ -6,12 +6,13 @@ import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.Constants;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+
+import static com.achobeta.types.enums.GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST;
 
 /**
  * @author yangzhiyao
@@ -35,8 +36,8 @@ public class UserRepository implements IUserRepository {
         UserPO userPO = userMapper.getUserByUserId(userEntity.getUserId());
         if (userPO == null) {
             log.error("用户不存在！userId：{}",userEntity.getUserId());
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getCode()),
-                    GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
+            throw new AppException(String.valueOf(USER_ACCOUNT_NOT_EXIST.getCode()),
+                    USER_ACCOUNT_NOT_EXIST.getMessage());
         }
         log.info("更新用户信息：{}",userEntity.getUserId());
          userMapper.updateUserInfo(UserPO.builder()
