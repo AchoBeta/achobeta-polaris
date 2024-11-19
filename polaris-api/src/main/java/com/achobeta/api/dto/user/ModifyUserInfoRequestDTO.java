@@ -27,7 +27,7 @@ public class ModifyUserInfoRequestDTO implements Serializable {
     private String userName;
 
     @FieldDesc(name = "性别")
-    private Byte gender;
+    private Integer gender;
 
     @FieldDesc(name = "身份证号")
     @Pattern(regexp = "^$|^(?:\\d{15}|\\d{17}(\\d|X))$", message = "身份证号格式不正确")

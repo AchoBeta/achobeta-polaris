@@ -26,7 +26,7 @@ public class ModifyUserInfoResponseDTO implements Serializable {
     /**
      * 用户性别
      */
-    private Byte gender;
+    private Integer gender;
     /**
      * 用户身份证号
      */
