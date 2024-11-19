@@ -34,7 +34,7 @@ public class UserController implements IUserService {
      * @author yangzhiyao
      * @date 2024/11/9
      */
-    @PostMapping("/modify")
+    @PutMapping("/modify")
     @Override
     public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Valid @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
         try {
