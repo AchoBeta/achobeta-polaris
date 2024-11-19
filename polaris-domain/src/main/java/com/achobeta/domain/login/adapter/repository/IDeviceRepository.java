@@ -14,21 +14,21 @@ import java.time.LocalDateTime;
 
 public interface IDeviceRepository {
 
-    /*
+    /**
      * 设备信息查询
      * @param userId 用户id
      * @param ip ip地址
-     * @return
+     * @return 设备信息
      */
     DeviceEntity getDeviceByIp(String userId,String ip);
 
-    /*
+    /**
      * 插入设备
      * @param deviceEntity 设备实体
      */
     void insertDevice(DeviceEntity deviceEntity);
 
-    /*
+    /**
      * 更新设备
      * @param updateTime 更新时间
      * @param isCancel 是否登陆
@@ -36,12 +36,19 @@ public interface IDeviceRepository {
      */
     void updateDevice(String deviceId, LocalDateTime updateTime, int isCancel);
 
-    /*
+    /**
      * 删除设备
      * @param deviceId 设备id
      * @param updateTime 更新时间
      * @param isDeleted 是否删除
      */
     void deleteDevice(String deviceId, LocalDateTime updateTime, int isDeleted);
+
+    /**
+     * 根据设备id查询用户id
+     * @param deviceId 设备id
+     * @return 用户id
+     */
+    String getUserIdByDeviceId(String deviceId);
 
 }
