@@ -64,7 +64,7 @@ public class OperateCodeRepository implements IOperateCodeRepository {
 
     @Override
     public void deleteCode(String phone, String code) {
-        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+        String key=RedisKey.CODE.getKeyPrefix()+phone;
 
         try {
             redissonService.remove(key);
