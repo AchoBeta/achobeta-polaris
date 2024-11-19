@@ -14,6 +14,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: 严豪哲
@@ -25,6 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @Aspect
 public class LoginVerificationAspect {
+
+    private final long EXPIRED = 100*1000;
+
+    private final String ACCESS_TOKEN_NEED_REFRESH = "access_token_need_refresh";
 
     @Resource
     private ITokenRepository tokenRepository;
@@ -46,9 +51,16 @@ public class LoginVerificationAspect {
     public Object checkToken(ProceedingJoinPoint joinPoint) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
+        HttpServletResponse response = attributes.getResponse();
         String token = request.getHeader("access_token");
 
         if (checkAT(token)&&checkATFromRedis(token)) {
+
+            Long accessTokenExpired = tokenRepository.getAccessTokenExpired(token);
+            if(accessTokenExpired <= EXPIRED){
+                //如果token是持久化的或者已经超时失效也会进这里 被delete的token也有概率能进
+                response.setHeader(ACCESS_TOKEN_NEED_REFRESH, "1");
+            }
             return joinPoint.proceed();
         }
         else {
