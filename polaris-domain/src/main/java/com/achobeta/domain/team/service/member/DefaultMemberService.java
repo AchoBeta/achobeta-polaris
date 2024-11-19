@@ -31,11 +31,17 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
                         TeamBO userBO = postContext.getBizData();
-                        log.info("开始查询团队成员信息，userId:{}，memberId:{}", userBO.getUserEntity().getUserId(), userBO.getUserId());
+                        log.info("开始查询团队成员信息，userId:{}，memberId:{}, teamId:{}",
+                                userBO.getUserId(),
+                                userBO.getUserEntity().getUserId(),
+                                userBO.getTeamId());
 
                         UserEntity userEntity = memberRepository.queryMemberInfo(userBO.getUserEntity().getUserId());
 
-                        log.info("查询团队成员信息成功，userId:{}，memberId:{}",userBO.getUserEntity().getUserId(), userBO.getUserId());
+                        log.info("查询团队成员信息成功，userId:{}，memberId:{}, teamId:{}",
+                                userBO.getUserId(),
+                                userBO.getUserEntity().getUserId(),
+                                userBO.getTeamId());
                         postContext.setBizData(TeamBO.builder().userEntity(userEntity).build());
                         return postContext;
                     }
