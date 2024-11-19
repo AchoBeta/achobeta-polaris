@@ -9,7 +9,6 @@ import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.Constants;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.achobeta.types.enums.GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST;
 
 /**
  * @author yangzhiyao
@@ -48,8 +49,8 @@ public class UserRepository implements IUserRepository {
         UserPO userPO = userMapper.getUserByUserId(userId);
         if(userPO == null) {
             log.error("用户不存在！userId：{}",userId);
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getCode()),
-                    GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
+            throw new AppException(String.valueOf(USER_ACCOUNT_NOT_EXIST.getCode()),
+                    USER_ACCOUNT_NOT_EXIST.getMessage());
         }
         // 封装position信息，先存根节点
         List<List<PositionPO>> positionPOList = new ArrayList<>();

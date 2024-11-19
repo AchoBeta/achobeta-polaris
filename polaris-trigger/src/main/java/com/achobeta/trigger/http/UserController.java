@@ -6,9 +6,11 @@ import com.achobeta.api.dto.user.QueryUserInfoResponseDTO;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.user.service.IUserInfoService;
 import com.achobeta.types.Response;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +65,11 @@ public class UserController implements IUserService {
         } catch (AppException e) {
             log.error("用户访问个人中心信息页面系统失败！userId:{}",
                     queryUserInfoRequestDTO.getUserId(), e);
-            return Response.SERVICE_ERROR(e.getInfo());
+            return Response.<QueryUserInfoResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
         } catch (Exception e) {
             log.error("用户访问个人中心信息页面系统失败！userId:{}",
                     queryUserInfoRequestDTO.getUserId(), e);
