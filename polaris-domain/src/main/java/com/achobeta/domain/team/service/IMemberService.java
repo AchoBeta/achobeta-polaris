@@ -11,6 +11,8 @@ public interface IMemberService {
 
     /**
      * 查询成员信息详情
+     * @author yangzhiyao
+     * @date 2024/11/19
      * @param memberId 成员ID
      * @return 查询到的成员信息
      */
