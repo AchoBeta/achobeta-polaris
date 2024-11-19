@@ -33,7 +33,7 @@ public class TeamController implements ITeamService {
     /**
      * 查看团队成员信息详情接口
      */
-    @GetMapping("/member/detail")
+    @PostMapping("/member/detail")
     @Override
     public Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid @RequestBody QueryMemberInfoRequestDTO requestDTO) {
         try {
