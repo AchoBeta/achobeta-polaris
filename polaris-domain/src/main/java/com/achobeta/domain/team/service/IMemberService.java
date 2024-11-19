@@ -18,6 +18,6 @@ public interface IMemberService {
      * @param teamId
      * @param positionIds
      */
-    void addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
+    UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
 
 }
