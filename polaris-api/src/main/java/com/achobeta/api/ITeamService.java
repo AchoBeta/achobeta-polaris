@@ -3,6 +3,9 @@ package com.achobeta.api;
 import com.achobeta.api.dto.AddMemberRequestDTO;
 import com.achobeta.api.dto.AddMemberResponseDTO;
 import com.achobeta.types.Response;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -18,6 +21,6 @@ public interface ITeamService {
      * @param requestDTO AddMemberRequestDTO
      * @return Response<AddMemberResponseDTO>
      */
-    Response<AddMemberResponseDTO> addMember(AddMemberRequestDTO requestDTO);
+    Response<AddMemberResponseDTO> addMember(@Valid @RequestBody AddMemberRequestDTO requestDTO);
 
 }

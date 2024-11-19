@@ -3,16 +3,15 @@ package com.achobeta.trigger.http;
 import com.achobeta.api.ITeamService;
 import com.achobeta.api.dto.AddMemberRequestDTO;
 import com.achobeta.api.dto.AddMemberResponseDTO;
-import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.team.service.IMemberService;
+import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.types.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -37,7 +36,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @PostMapping("member")
-    public Response<AddMemberResponseDTO> addMember(AddMemberRequestDTO requestDTO) {
+    public Response<AddMemberResponseDTO> addMember(@Valid @RequestBody AddMemberRequestDTO requestDTO) {
         try {
             log.info("访问添加团队成员接口开始, userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
 
