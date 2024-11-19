@@ -22,7 +22,7 @@
     </insert>
 
     <insert id="addUser" parameterType="com.achobeta.infrastructure.dao.po.UserPO">
-        insert into user (user_id
+        insert into user (user_id, phone
             <if test="idCard!= null">,id_card</if>
             <if test="studentId!= null">,student_id</if>
             <if test="currentStatus!= null">,current_status</if>
@@ -35,7 +35,7 @@
             <if test="grade    != null">,grade</if>
             <if test="major    != null">,major</if>
             <if test="experience!= null">,experience</if>)
-        values (#{userId}
+        values (#{userId}, #{phone}
                <if test="idCard!= null">,#{idCard}</if>
                <if test="studentId!= null">,#{studentId}</if>
                <if test="currentStatus!= null">,#{currentStatus}</if>
@@ -51,13 +51,11 @@
     </insert>
 
     <select id="getMemberByPhone" resultMap="UserResultMap">
-        SELECT t1.id,t1.user_id,user_name,id_card,student_id,current_status,
-                entry_time,like_count,t1.create_by,t1.create_time,t1.update_by,
-                t1.update_time ,phone,gender,email,grade,major,experience
-        FROM user as t1, member as t2
-        WHERE t1.phone = #{phone}
-              and t1.user_id = t2.user_id
-              and t1.is_deleted = 0
-              and t2.is_deleted = 0
+        SELECT id,user_id,user_name,id_card,student_id,current_status,
+                entry_time,like_count,create_by,create_time,update_by,
+                update_time ,phone,gender,email,grade,major,experience
+        FROM user
+        WHERE phone = #{phone}
+              and is_deleted = 0
     </select>
 </mapper>

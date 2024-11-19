@@ -21,7 +21,7 @@ public interface IMemberRepository {
     void addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
 
     /**
-     * 根据手机号查询所有团队中存在的对应用户
+     * 根据手机号查询对应用户
      * @param phone 添加的团队成员的手机号
      * @return
      */

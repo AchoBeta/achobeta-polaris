@@ -40,6 +40,7 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                         UserEntity user = memberRepository.queryMemberByPhone(userEntity.getPhone());
                         if (user!= null) {
                             log.warn("手机号所属用户已存在，phone:{}, teamId:{}",userEntity.getPhone(), teamId);
+                            postContext.setBizData(TeamBO.builder().userEntity(user).build());
                             return postContext;
                         }
 

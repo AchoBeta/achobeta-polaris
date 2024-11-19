@@ -50,7 +50,7 @@ public class AddMemberRequestDTO implements Serializable {
     private Integer gender;
 
     @FieldDesc(name = "身份证号")
-    @Pattern(regexp = "^\\d{18}$|^\\d{15}$", message = "身份证号格式不正确")
+    @Pattern(regexp = "^$|^\\d{18}$|^\\d{15}$", message = "身份证号格式不正确")
     private String idCard;
 
     @Email(message = "邮箱格式不正确")
