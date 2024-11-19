@@ -60,7 +60,7 @@ public class TeamController implements ITeamService {
                     requestDTO.getUserId(),
                     requestDTO.getTeamId(),
                     requestDTO.getPositions());
-            Integer statusCode = userEntity.getUserId() == null ? 0 : 1;
+            Integer statusCode = userEntity.getLikeCount() == null ? 0 : 1;
 
             log.info("访问添加团队成员接口结束userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
             return Response.SYSTEM_SUCCESS(AddMemberResponseDTO.builder()
