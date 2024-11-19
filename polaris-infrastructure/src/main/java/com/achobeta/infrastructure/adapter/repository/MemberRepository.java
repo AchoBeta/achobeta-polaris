@@ -56,7 +56,9 @@ public class MemberRepository implements IMemberRepository {
                 positionPOList.add(tempList);
             }
             // 顺序获取父节点，并父子节点添加到根节点的children中
-            listPositions = positionMapper.listParentPositionByPositions(listPositions);
+            if (!CollectionUtil.isEmpty(listPositions)) {
+                listPositions = positionMapper.listParentPositionByPositions(listPositions);
+            }
             while(!CollectionUtil.isEmpty(listPositions)) {
                 for (PositionPO positionPO : listPositions) {
                     for (List<PositionPO> positionList : positionPOList) {
