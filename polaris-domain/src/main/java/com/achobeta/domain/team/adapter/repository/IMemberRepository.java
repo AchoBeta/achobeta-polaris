@@ -16,6 +16,6 @@ public interface IMemberRepository {
      * @param teamId
      * @return
      */
-    List<UserEntity> queryMemberList(String teamId,Long lastId, Integer limit);
+    List<UserEntity> queryMemberList(String teamId,String lastUserId, Integer limit);
 
 }

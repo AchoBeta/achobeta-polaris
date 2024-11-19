@@ -15,4 +15,6 @@ public interface UserMapper {
 
     List<UserPO> listMemberByTeamId(String teamId,Long lastId, Integer limit);
 
+    Long getIdByUserId(String userId);
+
 }

@@ -26,15 +26,14 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     private final IMemberRepository memberRepository;
 
     @Override
-    public List<UserEntity> queryMembers(String teamId, Long lastId, Integer limit) {
+    public List<UserEntity> queryMembers(String teamId, String lastId, Integer limit) {
         PostContext<TeamBO> postContext = buildPostContext(teamId, lastId, limit);
         postContext = super.doPostProcessor(postContext, MemberPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
                         String teamId = postContext.getBizData().getTeamId();
-                        Long lastId = (Long) postContext.getExtraData("lastId");
-                        lastId = lastId == null? 0 : lastId;
+                        String lastId = (String) postContext.getExtraData("lastId");
                         Integer limit = (Integer) postContext.getExtraData("limit");
                         log.info("开始查询团队成员列表，teamId:{}", teamId);
 
@@ -48,7 +47,7 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
         return postContext.getBizData().getMembers();
     }
 
-    private static PostContext<TeamBO> buildPostContext(String teamId, Long lastId, Integer limit) {
+    private static PostContext<TeamBO> buildPostContext(String teamId, String lastId, Integer limit) {
         PostContext<TeamBO> postContext = PostContext.<TeamBO>builder()
                .bizName(BizModule.TEAM.getName())
                .bizData(TeamBO.builder().teamId(teamId).build())

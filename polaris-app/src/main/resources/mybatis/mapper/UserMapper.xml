@@ -29,4 +29,8 @@
         order by t1.id
         limit #{limit}
     </select>
+
+    <select id="getIdByUserId" resultType="java.lang.Long">
+        select id from user where user_id = #{userId}
+    </select>
 </mapper>

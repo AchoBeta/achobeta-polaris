@@ -35,9 +35,10 @@ public class MemberRepository implements IMemberRepository {
     private RedissonService redisService;
 
     @Override
-    public List<UserEntity> queryMemberList(String teamId,Long lastId, Integer limit) {
+    public List<UserEntity> queryMemberList(String teamId, String lastUserId, Integer limit) {
         List<UserEntity> members = new ArrayList<>();
 
+        Long lastId = lastUserId==null || lastUserId.isEmpty() ? 0 : userMapper.getIdByUserId(lastUserId);
         List<UserPO> userPOList = userMapper.listMemberByTeamId(teamId, lastId, limit);
         for (UserPO userPO : userPOList) {
             String userId = userPO.getUserId();

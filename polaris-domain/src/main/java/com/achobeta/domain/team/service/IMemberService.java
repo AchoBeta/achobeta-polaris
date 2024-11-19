@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface IMemberService {
 
-    List<UserEntity> queryMembers(String teamId,Long lastId, Integer limit);
+    List<UserEntity> queryMembers(String teamId,String lastId, Integer limit);
 
 }
