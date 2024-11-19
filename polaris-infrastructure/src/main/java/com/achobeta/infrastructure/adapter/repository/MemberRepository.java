@@ -55,6 +55,7 @@ public class MemberRepository implements IMemberRepository {
         positionMapper.addPositionsToMember(userId, userEntity.getUserId(), positionIds);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public UserEntity queryMemberByPhone(String phone) {
         log.info("从数据库中查询用户信息，phone: {}",phone);

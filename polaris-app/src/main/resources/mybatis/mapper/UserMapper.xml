@@ -17,25 +17,25 @@
     </resultMap>
 
     <insert id="addMember">
-        insert into member (user_id,teamId)
+        insert into member (user_id,team_id)
         values (#{userId},#{teamId})
     </insert>
 
     <insert id="addUser" parameterType="com.achobeta.infrastructure.dao.po.UserPO">
-        insert into user (#{userId},
-            <if test="idCard!= null">,#{idCard}</if>
-            <if test="studentId!= null">,#{studentId}</if>
-            <if test="currentStatus!= null">,#{currentStatus}</if>
-            <if test="entryTime!= null">,#{entryTime}</if>
-            <if test="createBy != null">,#{createBy}</if>
-            <if test="updateBy != null">,#{updateBy}</if>
-            <if test="userName    != null">,#{userName}</if>
-            <if test="gender   != null">,#{gender}</if>
-            <if test="email    != null">,#{email}</if>
-            <if test="grade    != null">,#{grade}</if>
-            <if test="major    != null">,#{major}</if>
-            <if test="experience!= null">,#{experience}</if>)
-        values (#{userId},
+        insert into user (user_id
+            <if test="idCard!= null">,id_card</if>
+            <if test="studentId!= null">,student_id</if>
+            <if test="currentStatus!= null">,current_status</if>
+            <if test="entryTime!= null">,entry_time</if>
+            <if test="createBy != null">,create_by</if>
+            <if test="updateBy != null">,update_by</if>
+            <if test="userName    != null">,user_name</if>
+            <if test="gender   != null">,gender</if>
+            <if test="email    != null">,email</if>
+            <if test="grade    != null">,grade</if>
+            <if test="major    != null">,major</if>
+            <if test="experience!= null">,experience</if>)
+        values (#{userId}
                <if test="idCard!= null">,#{idCard}</if>
                <if test="studentId!= null">,#{studentId}</if>
                <if test="currentStatus!= null">,#{currentStatus}</if>
