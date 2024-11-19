@@ -6,8 +6,11 @@ import com.achobeta.api.dto.AddMemberResponseDTO;
 import com.achobeta.domain.team.service.IMemberService;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.types.Response;
+import com.achobeta.types.common.Constants;
+import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,7 +67,15 @@ public class TeamController implements ITeamService {
                                         .userInfo(userEntity)
                                         .statusCode(statusCode)
                                         .build());
-        } catch (Exception e) {
+        } catch (AppException e) {
+            log.error("用户访问添加团队成员接口失败！{}, error:{}",
+                    requestDTO, e.toString(), e);
+            return Response.<AddMemberResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+        }catch (Exception e) {
             log.error("访问添加团队成员接口失败！",e);
             return Response.SYSTEM_FAIL();
         }
