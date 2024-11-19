@@ -32,7 +32,7 @@ public class TeamController implements ITeamService {
     private final IMemberService memberService;
 
     @Override
-    @GetMapping("/member")
+    @PostMapping("/member")
     public Response<ResponseMemberListDTO> queryMemberList(@Valid @RequestBody RequestMemberListDTO requestMemberListDTO) {
         try {
             log.info("用户访问团队管理系统开始，teamId：{}",requestMemberListDTO.getTeamId());
