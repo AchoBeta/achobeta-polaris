@@ -6,9 +6,11 @@ import com.achobeta.api.dto.ModifyStructureResponseDTO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.team.service.IStructureService;
 import com.achobeta.types.Response;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,7 +76,11 @@ public class TeamController implements ITeamService {
         } catch (AppException e) {
             log.error("修改团队组织架构失败！userId:{}, teamId:{}, 可知原因error:{}",
                     modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId(), e.toString(), e);
-            return Response.SERVICE_ERROR(e.getInfo());
+            return Response.<ModifyStructureResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
         } catch (Exception e) {
             log.error("修改团队组织架构失败！userId:{}, teamId:{}, 未知异常error:{}",
                     modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId(), e.toString(), e);
