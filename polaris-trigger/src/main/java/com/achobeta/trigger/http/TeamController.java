@@ -31,6 +31,11 @@ public class TeamController implements ITeamService {
 
     private final IMemberService memberService;
 
+    /**
+     * 查询团队成员列表
+     * @param requestMemberListDTO
+     * @return
+     */
     @Override
     @PostMapping("/member")
     public Response<ResponseMemberListDTO> queryMemberList(@Valid @RequestBody RequestMemberListDTO requestMemberListDTO) {
