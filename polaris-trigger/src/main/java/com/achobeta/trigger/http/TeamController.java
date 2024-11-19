@@ -10,10 +10,9 @@ import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -34,7 +33,7 @@ public class TeamController implements ITeamService {
      */
     @GetMapping("/member/detail")
     @Override
-    public Response<QueryMemberInfoResponseDTO> queryMemberInfo(QueryMemberInfoRequestDTO requestDTO) {
+    public Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid @RequestBody QueryMemberInfoRequestDTO requestDTO) {
         try {
             log.info("用户访问个人中心信息页面系统开始，{}", requestDTO);
 

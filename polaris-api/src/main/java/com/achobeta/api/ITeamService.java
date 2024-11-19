@@ -3,6 +3,9 @@ package com.achobeta.api;
 import com.achobeta.api.dto.QueryMemberInfoRequestDTO;
 import com.achobeta.api.dto.QueryMemberInfoResponseDTO;
 import com.achobeta.types.Response;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -16,6 +19,6 @@ public interface ITeamService {
      * @param requestDTO 查询请求参数，包含用户ID、团队ID，成员ID
      * @return 成员个人信息
      */
-    Response<QueryMemberInfoResponseDTO> queryMemberInfo(QueryMemberInfoRequestDTO requestDTO);
+    Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid @RequestBody QueryMemberInfoRequestDTO requestDTO);
 
 }
