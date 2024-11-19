@@ -185,4 +185,28 @@ public class TokenRepository implements ITokenRepository {
                .isAutoLogin(isAutoLogin)
                .build();
     }
+
+    @Override
+    public TokenVO getAccessTokenInfo(String token) {
+        String key = RedisKey.TOKEN.getKeyPrefix() + token;
+
+        Map<String, String> javaMap = redissonService.getMapToJavaMap(key);
+
+        if(null == javaMap || javaMap.isEmpty()){
+            return null;
+        }
+
+        return TokenVO.builder()
+                .userId(Long.valueOf(javaMap.get("user_id")))
+                .phone(javaMap.get("phone"))
+                .deviceId(javaMap.get("device_id"))
+                .ip(javaMap.get("ip"))
+                .build();
+    }
+
+    @Override
+    public Long getAccessTokenExpired(String token) {
+        String key = RedisKey.TOKEN.getKeyPrefix() + token;
+        return redissonService.getMapExpired(key);
+    }
 }

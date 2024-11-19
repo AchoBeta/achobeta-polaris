@@ -63,8 +63,22 @@ public interface ITokenRepository {
     void resetReflashTokenExpired(String token);
 
     /**
-     * 根据token获取token信息
+     * 根据refrtoken获取token信息
      * @param token token的值
      */
     TokenVO getReflashTokenInfo(String token);
+
+    /**
+     * 根据accesstoken获取token信息
+     * @param token
+     * @return
+     */
+    TokenVO getAccessTokenInfo(String token);
+
+    /**
+     * 获取accesstoken的过期时间
+     * @param token
+     * @return
+     */
+    Long getAccessTokenExpired(String token);
 }
