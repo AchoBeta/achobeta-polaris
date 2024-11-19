@@ -35,7 +35,7 @@ public class TeamController implements ITeamService {
      * @param querystructureRequestDTO 入参包括用户id和团队id
      * @return
      */
-    @GetMapping("structure")
+    @PostMapping("structure")
     @Override
     public Response<QueryStructureResponseDTO> queryStructure(@Valid @RequestBody QueryStructureRequestDTO querystructureRequestDTO) {
         try {
