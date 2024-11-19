@@ -27,6 +27,13 @@ public class TeamController implements ITeamService {
 
     private final IMemberService memberService;
 
+    /**
+     * 添加团队成员接口
+     * @author yangzhiyao
+     * @date 2024/11/19
+     * @param requestDTO AddMemberRequestDTO
+     * @return 用户实体，状态码 0-成功，1-已存在用户
+     */
     @Override
     public Response<AddMemberResponseDTO> addMember(AddMemberRequestDTO requestDTO) {
         try {
