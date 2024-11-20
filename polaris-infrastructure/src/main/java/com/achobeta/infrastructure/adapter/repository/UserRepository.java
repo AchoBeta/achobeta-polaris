@@ -8,7 +8,7 @@ import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.common.RedisKey;
 import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -40,7 +40,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public UserEntity queryUserInfo(String userId) {
         log.info("尝试从redis中获取用户信息，userId: {}",userId);
-        UserEntity userBaseInfo = redisService.getValue(Constants.USER_INFO + userId);
+        UserEntity userBaseInfo = redisService.getValue(RedisKey.USER_INFO + userId);
         if(userBaseInfo!= null) {
             return userBaseInfo;
         }
@@ -108,7 +108,7 @@ public class UserRepository implements IUserRepository {
                 .build();
 
         log.info("将用户信息缓存到redis，userId: {}",userId);
-        redisService.setValue(Constants.USER_INFO + userId,userEntity);
+        redisService.setValue(RedisKey.USER_INFO + userId,userEntity);
         log.info("将用户信息缓存到redis成功，userId: {}",userId);
         return userEntity;
     }
