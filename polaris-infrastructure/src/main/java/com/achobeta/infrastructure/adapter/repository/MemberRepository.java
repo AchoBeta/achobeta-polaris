@@ -7,7 +7,7 @@ import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.common.RedisKey;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class MemberRepository implements IMemberRepository {
                 .updateBy(userEntity.getUserId())
                 .build());
 
-        redisService.remove(Constants.USER_INFO + userEntity.getUserId());
+        redisService.remove(RedisKey.USER_INFO + userEntity.getUserId());
         return userEntity;
     }
 
