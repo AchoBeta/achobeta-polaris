@@ -36,7 +36,7 @@ public class UserController implements IUserService {
      * @author yangzhiyao
      * @date 2024/11/9
      */
-    @PutMapping("/modify")
+    @PutMapping("info")
     @Override
     public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Valid @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
         try {
@@ -55,18 +55,7 @@ public class UserController implements IUserService {
                           .build();
             modifyUserInfoService.modifyUserInfo(userEntity);
             log.info("用户访问修改个人信息系统结束，userId:{}", modifyUserInfoRequestDTO.getUserId());
-            return Response.SYSTEM_SUCCESS(ModifyUserInfoResponseDTO.builder()
-                    .userId(modifyUserInfoRequestDTO.getUserId())
-                    .userName(modifyUserInfoRequestDTO.getUserName())
-                    .gender(modifyUserInfoRequestDTO.getGender())
-                    .idCard(modifyUserInfoRequestDTO.getIdCard())
-                    .email(modifyUserInfoRequestDTO.getEmail())
-                    .grade(modifyUserInfoRequestDTO.getGrade())
-                    .major(modifyUserInfoRequestDTO.getMajor())
-                    .studentId(modifyUserInfoRequestDTO.getStudentId())
-                    .experience(modifyUserInfoRequestDTO.getExperience())
-                    .currentStatus(modifyUserInfoRequestDTO.getCurrentStatus())
-                    .build());
+            return Response.SYSTEM_SUCCESS();
         }  catch (AppException e) {
             log.error("用户访问修改个人信息系统失败！userId:{}",
                     modifyUserInfoRequestDTO.getUserId(), e);

@@ -39,6 +39,10 @@ public class UserRepository implements IUserRepository {
             throw new AppException(String.valueOf(USER_ACCOUNT_NOT_EXIST.getCode()),
                     USER_ACCOUNT_NOT_EXIST.getMessage());
         }
+
+        log.info("清除用户缓存信息，userId: {}",userEntity.getUserId());
+        redisService.remove(RedisKey.USER_INFO + userEntity.getUserId());
+
         log.info("更新用户信息：{}",userEntity.getUserId());
          userMapper.updateUserInfo(UserPO.builder()
                  .userId(userEntity.getUserId())
@@ -58,27 +62,6 @@ public class UserRepository implements IUserRepository {
                  .build());
         log.info("更新用户信息成功，userId: {}",userEntity.getUserId());
 
-        log.info("更新用户信息缓存，userId: {}",userEntity.getUserId());
-        redisService.remove(RedisKey.USER_INFO + userEntity.getUserId());
-        // 注意这里修改了的是userEntity的，无法改的取userPO的
-        redisService.setValue(
-                RedisKey.USER_INFO + userEntity.getUserId(),
-                UserEntity.builder()
-                        .userId(userPO.getUserId())
-                        .userName(userEntity.getUserName())
-                        .phone(userPO.getPhone())
-                        .gender(userEntity.getGender())
-                        .idCard(userEntity.getIdCard())
-                        .email(userEntity.getEmail())
-                        .grade(userEntity.getGrade())
-                        .major(userEntity.getMajor())
-                        .studentId(userEntity.getStudentId())
-                        .experience(userEntity.getExperience())
-                        .currentStatus(userEntity.getCurrentStatus())
-                        .entryTime(userPO.getEntryTime())
-                        .likeCount(userPO.getLikeCount())
-                        .build());
-        log.info("更新用户信息缓存成功，userId: {}",userEntity.getUserId());
     }
 
 }
