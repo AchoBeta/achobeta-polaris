@@ -159,6 +159,12 @@ public interface IRedisService {
     boolean isSetMember(String key, String value);
 
     /**
+     * 设置set的过期时间
+     *
+     */
+    void setSetExpired(String key, long expired);
+
+    /**
      * 将指定的值添加到列表中
      *
      * @param key   键

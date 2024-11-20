@@ -59,21 +59,32 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(key, "phone",phone);
         redissonService.addToMap(key, "device_id",devicId);
         redissonService.addToMap(key, "ip",ip);
+
+        // 存储设备id和token的关联关系
+        redissonService.addToSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, token);
+
         if(!isAutoLogin){
             redissonService.addToMap(key, "type",TokenUtil.REFRESH_TOKEN_TYPE[0]);
 
             //设置该token的生存时间
             redissonService.setMapExpired(key,12*HOUR);
+
+            //设置该关联关系的生存时间
+            redissonService.setSetExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, 12*HOUR + 6*MIN);
         }else{
             redissonService.addToMap(key, "type",TokenUtil.REFRESH_TOKEN_TYPE[1]);
 
             //设置该token的生存时间
             redissonService.setMapExpired(key,30*DAY);
+
+            //设置该关联关系的生存时间
+            redissonService.setSetExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, 30*DAY + 6*MIN);
         }
         redissonService.addToMap(key, "is_deleted","0");
 
-        // 存储设备id和token的关联关系
-        redissonService.addToSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, token);
+
+
+
     }
 
     @Override
@@ -163,16 +174,17 @@ public class TokenRepository implements ITokenRepository {
         if(type == null){
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getMessage());
         }
-        else if(type.equals(TokenUtil.ACCESS_TOKEN)){
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
-        }
         else if(type.equals(TokenUtil.REFRESH_TOKEN_TYPE[0])){
+
+            //重置token的有效时间
             redissonService.setMapExpired(key,12*HOUR);
-        }
-        else if(type.equals(TokenUtil.REFRESH_TOKEN_TYPE[1])){
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
+
+            //重置关联关系的有效时间
+            redissonService.setSetExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() +
+                    redissonService.getFromMap(key, "device_id"), 12*HOUR + 6*MIN);
         }
         else {
+            //类型为access_token或者reflash_token30或者其他
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
         }
 
