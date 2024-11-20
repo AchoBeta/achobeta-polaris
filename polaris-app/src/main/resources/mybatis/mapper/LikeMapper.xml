@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.achobeta.infrastructure.dao.LikeMapper">
+
+    <update id="updateLiked">
+        update `like` set is_liked = #{liked}
+        where user_id = #{fromId} and to_Id = #{toId}
+    </update>
+
+    <update id="addLikeCount">
+        update `user` set good_count = good_count + #{likeCount}
+        where user_id = #{userId}
+    </update>
+    <insert id="insertLiked">
+        insert into `like`(user_id,to_id,is_liked) values (#{fromId},#{toId},#{liked})
+    </insert>
+    <select id="queryUserById" resultType="int">
+        select count(1) from `user` where user_id = #{userId}
+    </select>
+    <select id="queryLikedById" resultType="boolean">
+        select is_liked from `like`
+        where user_id = #{fromId} and to_Id = #{toId}
+    </select>
+</mapper>
