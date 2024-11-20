@@ -5,7 +5,7 @@ import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.common.RedisKey;
 import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -59,10 +59,10 @@ public class UserRepository implements IUserRepository {
         log.info("更新用户信息成功，userId: {}",userEntity.getUserId());
 
         log.info("更新用户信息缓存，userId: {}",userEntity.getUserId());
-        redisService.remove(Constants.USER_INFO + userEntity.getUserId());
+        redisService.remove(RedisKey.USER_INFO + userEntity.getUserId());
         // 注意这里修改了的是userEntity的，无法改的取userPO的
         redisService.setValue(
-                Constants.USER_INFO + userEntity.getUserId(),
+                RedisKey.USER_INFO + userEntity.getUserId(),
                 UserEntity.builder()
                         .userId(userPO.getUserId())
                         .userName(userEntity.getUserName())
