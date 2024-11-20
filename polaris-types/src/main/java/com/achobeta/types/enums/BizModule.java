@@ -16,7 +16,8 @@ public enum BizModule {
     RENDER("biz_001", "文本渲染模块"),
     DEVICE("biz004","设备渲染模块"),
     ANNOUNCE("biz_005","公告渲染模块"),
-    READANNOUNCE("biz_006","读公告模块")
+    READANNOUNCE("biz_006","读公告模块"),
+    LIKE("biz_013","点赞模块")
     ;
 
     private String code;
