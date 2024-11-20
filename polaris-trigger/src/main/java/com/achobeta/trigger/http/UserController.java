@@ -36,7 +36,7 @@ public class UserController implements IUserService {
      * @author yangzhiyao
      * @date 2024/11/6
      */
-    @GetMapping("/center")
+    @PostMapping("info")
     @Override
     public Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid @RequestBody QueryUserInfoRequestDTO queryUserInfoRequestDTO) {
         try {
