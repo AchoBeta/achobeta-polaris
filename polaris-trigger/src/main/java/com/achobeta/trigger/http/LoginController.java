@@ -5,7 +5,7 @@ import com.achobeta.api.dto.LoginRequestDTO;
 import com.achobeta.api.dto.LoginResponseDTO;
 import com.achobeta.domain.login.model.valobj.LoginVO;
 import com.achobeta.domain.login.service.IAuthorizationService;
-import com.achobeta.domain.login.service.IReflashTokenService;
+import com.achobeta.domain.login.service.IRefreshTokenService;
 import com.achobeta.types.Response;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
@@ -38,7 +38,7 @@ public class LoginController implements ILoginService {
     private IAuthorizationService authorizationService;
 
     @Resource
-    private IReflashTokenService reflashTokenService;
+    private IRefreshTokenService reflashTokenService;
 
     @Override
     @PostMapping(value = "login")

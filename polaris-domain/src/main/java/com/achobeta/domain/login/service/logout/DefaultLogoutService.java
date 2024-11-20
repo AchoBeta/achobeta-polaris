@@ -49,7 +49,6 @@ public class DefaultLogoutService extends AbstractPostProcessor<LogoutBO> implem
 
         String accessToken = postContext.getBizData().getAccessToken();
         String deviceId = postContext.getBizData().getDeviceId();
-
         TokenVO accessTokenInfo = tokenRepository.getAccessTokenInfo(accessToken);
         if (accessTokenInfo == null){
             log.info("accessToken已过期,请刷新", accessToken);
@@ -57,21 +56,18 @@ public class DefaultLogoutService extends AbstractPostProcessor<LogoutBO> implem
         }
 
         if(null == deviceId || deviceId.equals(accessTokenInfo.getDeviceId())){
+            //下线当前设备
             deviceId = accessTokenInfo.getDeviceId();
+            logoutByDeviceId(accessTokenInfo.getUserId().toString(), deviceId);
         }
-        else if(accessTokenInfo.getUserId().toString().equals(deviceRepository.getUserIdByDeviceId(deviceId))){}
+        else if(accessTokenInfo.getUserId().toString().equals(deviceRepository.getUserIdByDeviceId(deviceId))){
+            //设备属于该用户
+            logoutByDeviceId(accessTokenInfo.getUserId().toString(), deviceId);
+        }
         else {
-            log.info("用户{}要下线的设备{}不属于自己,下线失败", accessTokenInfo.getUserId().toString(), deviceId);
+            log.info("用户{}要下线的设备{}不属于自己,下线失败", accessTokenInfo.getUserId(), deviceId);
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_FAILED_TO_FORCE_LOGOUT.getCode()), GlobalServiceStatusCode.LOGIN_FAILED_TO_FORCE_LOGOUT.getMessage());
         }
-
-        String userId = accessTokenInfo.getUserId().toString();
-
-        log.info("正在进行登出,userId:{},deviceId:{}", userId, deviceId);
-        log.info("正在删除该设备的所有token,userId:{},deviceId:{}", userId, deviceId);
-        tokenRepository.deleteTokenByDeviceId(deviceId);
-        log.info("正在更新设备表,userId:{},deviceId:{}", userId, deviceId);
-        deviceRepository.updateDevice(deviceId, LocalDateTime.now(), 0);
         log.info("用户{}的设备{}已下线", accessTokenInfo.getUserId(), deviceId);
 
         return postContext;
@@ -92,4 +88,11 @@ public class DefaultLogoutService extends AbstractPostProcessor<LogoutBO> implem
                 .build();
     }
 
+    private void logoutByDeviceId(String userId, String deviceId){
+        log.info("正在进行登出,userId:{},deviceId:{}", userId, deviceId);
+        log.info("正在删除该设备的所有token,userId:{},deviceId:{}", userId, deviceId);
+        tokenRepository.deleteTokenByDeviceId(deviceId);
+        log.info("正在更新设备表,userId:{},deviceId:{}", userId, deviceId);
+        deviceRepository.updateDevice(deviceId, LocalDateTime.now(), 0);
+    }
 }
