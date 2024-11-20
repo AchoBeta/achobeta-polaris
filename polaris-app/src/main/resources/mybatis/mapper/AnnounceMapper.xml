@@ -16,7 +16,7 @@
         <id column="id" property="id"/>
         <result column="announce_id" property="announceId" />
         <result column="user_id" property="userId" />
-        <result column="read" property="read"/>
+        <result column="is_read" property="read"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -32,10 +32,13 @@
 
     <select id="queryReadByUserIdAnnounceId" resultMap="AnnounceRevicer">
         select announce_id,is_read from user_announce
-        where user_id = #{userId} and announce_id > #{announceId}
+        where user_id = #{userId}
+        <if test="announceId != null">
+            and announce_id > #{announceId}
+        </if>
+        and is_deleted = 0
         order by announce_id
-            limit #{limit}
-            and is_deleted = 0
+        limit #{limit}
     </select>
 
     <select id="getAnnounceCount" resultType="int">
