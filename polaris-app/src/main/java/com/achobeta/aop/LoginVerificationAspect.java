@@ -1,9 +1,11 @@
 package com.achobeta.aop;
 
 import com.achobeta.domain.login.adapter.repository.ITokenRepository;
+import com.achobeta.domain.login.model.valobj.TokenVO;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.util.TokenUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Version: 1.0
  */
 
+@Slf4j
 @Component
 @Aspect
 public class LoginVerificationAspect {
@@ -54,18 +57,43 @@ public class LoginVerificationAspect {
         HttpServletResponse response = attributes.getResponse();
         String token = request.getHeader("access_token");
 
-        if (checkAT(token)&&checkATFromRedis(token)) {
-
-            Long accessTokenExpired = tokenRepository.getAccessTokenExpired(token);
-            if(accessTokenExpired <= EXPIRED){
-                //如果token是持久化的或者已经超时失效也会进这里 被delete的token也有概率能进
-                response.setHeader(ACCESS_TOKEN_NEED_REFRESH, "1");
-            }
-            return joinPoint.proceed();
-        }
-        else {
+        if (!checkAT(token)) {
+            log.info("accessToken:{}被伪造,是无效token", token);
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_INVALID.getMessage());
         }
+
+        // 获取token的过期时间
+        Long accessTokenExpired = tokenRepository.getAccessTokenExpired(token);
+
+        //从redis中获取token信息
+        TokenVO tokenVO = tokenRepository.getAccessTokenInfo(token);
+
+        // token校验
+        switch(tokenRepository.checkAccessToken(token)){
+            case 0:
+                log.info("accessToken:{}已过期", token);
+                throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_INVALID.getMessage());
+            case -1:
+                log.info("accessToken:{}已刷新", token);
+                throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_HAVE_REFRESHED.getCode()), GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_HAVE_REFRESHED.getMessage());
+            case 1:
+                log.info("accessToken:{}校验通过", token);
+                break;
+            default:
+                log.info("accessToken:{}未知错误", token);
+                throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getCode()), GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getMessage());
+        }
+
+        if(accessTokenExpired <= EXPIRED){
+            //如果token是持久化的或者已经超时失效也会进这里
+            response.setHeader(ACCESS_TOKEN_NEED_REFRESH, "true");
+        }
+
+        //将token信息并将其放在请求头
+        request.setAttribute("tokenInfo", tokenVO);
+
+        //执行目标接口
+        return joinPoint.proceed();
 
     }
 
@@ -79,10 +107,6 @@ public class LoginVerificationAspect {
             return false;
         }
 
-    }
-
-    private Boolean checkATFromRedis(String token) {
-        return tokenRepository.checkToken(token);
     }
 
 }

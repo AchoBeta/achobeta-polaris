@@ -57,6 +57,13 @@ public interface ITokenRepository {
     Boolean checkToken(String token);
 
     /**
+     * 检查accesstoken
+     * @param token token的值
+     * @return 0:已过期 1:未过期 -1:已删除
+     */
+    int checkAccessToken(String token);
+
+    /**
      * 重置Reflashtoken的过期时间
      * @param token token的值
      */

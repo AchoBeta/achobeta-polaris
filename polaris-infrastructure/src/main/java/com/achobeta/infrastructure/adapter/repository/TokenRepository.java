@@ -137,6 +137,24 @@ public class TokenRepository implements ITokenRepository {
     }
 
     @Override
+    public int checkAccessToken(String token) {
+        String key = RedisKey.TOKEN.getKeyPrefix() + token;
+        String isDeleted = redissonService.getFromMap(key, "is_deleted");
+        if(null==isDeleted){
+            //此时token不存在,已过期
+            return 0;
+        }
+        else if(isDeleted.equals("1")){
+            //此时token已被删除
+            return -1;
+        }
+        else{
+            //此时token有效
+            return 1;
+        }
+    }
+
+    @Override
     public void resetReflashTokenExpired(String token) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
 
