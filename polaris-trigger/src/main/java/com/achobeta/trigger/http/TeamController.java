@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController()
-@CrossOrigin("${app.config.cross-origin}:*")
+@CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/team/")
 @RequiredArgsConstructor
 public class TeamController implements ITeamService {
