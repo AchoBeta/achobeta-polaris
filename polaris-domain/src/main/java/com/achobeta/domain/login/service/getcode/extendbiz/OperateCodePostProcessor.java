@@ -28,6 +28,7 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
     @Resource
     private IOperateCodeRepository operateCodeRepository;
 
+    // 验证码发送前的限流逻辑处理
     @Override
     public boolean handleBefore(PostContext<SendCodeBO> postContext) {
 
@@ -45,6 +46,7 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
         }
     }
 
+    // 验证码发送后的存储验证码逻辑处理
     @Override
     public void handleAfter(PostContext<SendCodeBO> postContext) {
         String code = postContext.getBizData().getCodeVO().getCode();
@@ -57,6 +59,7 @@ public class OperateCodePostProcessor implements SendCodePostProcessor {
 
     }
 
+    // 优先级设置为最高，确保最先执行
     @Override
     public int getPriority() {
         return Integer.MIN_VALUE;

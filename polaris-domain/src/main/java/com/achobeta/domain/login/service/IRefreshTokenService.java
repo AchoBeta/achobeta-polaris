@@ -8,7 +8,7 @@ import com.achobeta.domain.login.model.valobj.LoginVO;
  * @Date: 2024/11/17 15:56
  * @Version: 1.0
  */
-public interface IReflashTokenService {
+public interface IRefreshTokenService {
 
     /**
      * 刷新token
