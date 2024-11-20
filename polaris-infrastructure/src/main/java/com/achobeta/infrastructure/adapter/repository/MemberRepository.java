@@ -8,7 +8,7 @@ import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.RedissonService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.common.RedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +43,7 @@ public class MemberRepository implements IMemberRepository {
         for (UserPO userPO : userPOList) {
             String userId = userPO.getUserId();
             // 从redis中获取用户信息
-            UserEntity userEntity = redisService.getValue(Constants.USER_INFO + userId);
+            UserEntity userEntity = redisService.getValue(RedisKey.USER_INFO + userId);
             if (userEntity!= null) {
                 members.add(userEntity);
                 continue;
@@ -102,7 +102,7 @@ public class MemberRepository implements IMemberRepository {
                     .build();
             members.add(userEntity);
             // 存入redis
-            redisService.setValue(Constants.USER_INFO + userId, userEntity);
+            redisService.setValue(RedisKey.USER_INFO + userId, userEntity);
         }
         return members;
     }
