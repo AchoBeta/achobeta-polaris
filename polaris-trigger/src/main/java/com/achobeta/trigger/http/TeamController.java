@@ -40,14 +40,14 @@ public class TeamController implements ITeamService {
     @PostMapping("/member/list")
     public Response<ResponseMemberListDTO> queryMemberList(@Valid @RequestBody RequestMemberListDTO requestMemberListDTO) {
         try {
-            log.info("用户访问团队管理系统开始，teamId：{}",requestMemberListDTO.getTeamId());
+            log.info("用户访问团队管理系统开始，{}",requestMemberListDTO);
 
             List<UserEntity> members = memberService
                 .queryMembers(requestMemberListDTO.getTeamId(),
                         requestMemberListDTO.getLastId(),
                         requestMemberListDTO.getLimit());
 
-            log.info("用户访问团队管理系统结束，teamId：{}",requestMemberListDTO.getTeamId());
+            log.info("用户访问团队管理系统结束，{}",requestMemberListDTO);
             return Response.SYSTEM_SUCCESS(ResponseMemberListDTO.builder()
                 .members(members)
                 .build());
@@ -60,8 +60,8 @@ public class TeamController implements ITeamService {
                     .info(e.getInfo())
                     .build();
         }catch (Exception e) {
-            log.error("用户访问团队管理系统失败！userId:{}, teamId:{}, 未知异常error:{}",
-                    requestMemberListDTO.getUserId(), requestMemberListDTO.getTeamId(), e.toString(), e);
+            log.error("用户访问团队管理系统失败！{}, 未知异常error:{}",
+                    requestMemberListDTO, e.toString(), e);
             return Response.SERVICE_ERROR();
         }
     }
