@@ -6,5 +6,4 @@ public class Constants {
 
     public final static String TRACE_ID = "traceId";
 
-    public final static String TEAM_STRUCTURE = "ab:polaris:team:structure:";
 }

@@ -6,7 +6,7 @@ import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.Constants;
+import com.achobeta.types.common.RedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -39,8 +39,8 @@ public class PositionRepository implements IPositionRepository {
     @Override
     public List<PositionEntity> querySubordinatePosition(String positionId, String teamId) {
         // 从缓存中获取数据
-        if (redisService.isExists(Constants.TEAM_STRUCTURE + teamId)) {
-            List<PositionEntity> tempList = redisService.getFromMap(Constants.TEAM_STRUCTURE + teamId, positionId);
+        if (redisService.isExists(RedisKey.TEAM_STRUCTURE + teamId)) {
+            List<PositionEntity> tempList = redisService.getFromMap(RedisKey.TEAM_STRUCTURE + teamId, positionId);
             if (!CollectionUtil.isEmpty(tempList)) {
                 return tempList;
             }
@@ -60,7 +60,7 @@ public class PositionRepository implements IPositionRepository {
         }
 
         // 缓存数据
-        redisService.addToMap(Constants.TEAM_STRUCTURE + teamId, positionId, positionEntityList);
+        redisService.addToMap(RedisKey.TEAM_STRUCTURE + teamId, positionId, positionEntityList);
         return positionEntityList;
     }
 
@@ -88,7 +88,7 @@ public class PositionRepository implements IPositionRepository {
         // 保存到数据库中
         positionMapper.addPosition(positionPOList);
 
-        redisService.remove(Constants.TEAM_STRUCTURE + teamId);
+        redisService.remove(RedisKey.TEAM_STRUCTURE + teamId);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class PositionRepository implements IPositionRepository {
         positionMapper.deletePositionInPosition(positionsToDelete);
         positionMapper.deletePositionInUserPosition(positionsToDelete);
 
-        redisService.remove(Constants.TEAM_STRUCTURE + teamId);
+        redisService.remove(RedisKey.TEAM_STRUCTURE + teamId);
     }
 
     @Override
