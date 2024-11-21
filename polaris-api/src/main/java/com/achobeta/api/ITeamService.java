@@ -21,6 +21,6 @@ public interface ITeamService {
      * @param requestDTO
      * @return userId, memberId, teamId
      */
-    Response<DeleteMemberResponseDTO> deleteMember(@Valid @RequestBody DeleteMemberRequestDTO requestDTO);
+    Response<DeleteMemberResponseDTO> deleteMember(@Valid DeleteMemberRequestDTO requestDTO);
 
 }

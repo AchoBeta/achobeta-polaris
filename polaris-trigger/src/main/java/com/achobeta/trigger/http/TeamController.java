@@ -36,7 +36,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @DeleteMapping("member")
-    public Response<DeleteMemberResponseDTO> deleteMember(@Valid @RequestBody DeleteMemberRequestDTO requestDTO) {
+    public Response<DeleteMemberResponseDTO> deleteMember(@Valid DeleteMemberRequestDTO requestDTO) {
         try {
             log.info("用户访问添加团队成员接口，requestDTO:{}", requestDTO);
 
