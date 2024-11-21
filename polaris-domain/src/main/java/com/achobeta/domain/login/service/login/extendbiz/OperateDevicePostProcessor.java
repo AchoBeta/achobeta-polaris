@@ -23,6 +23,10 @@ import java.time.LocalDateTime;
 @Component
 public class OperateDevicePostProcessor implements LoginPostProcessor {
 
+    private final int AUTO_LOGIN = 1;
+
+    private final int NOT_AUTO_LOGIN = 0;
+
     @Resource
     private IDeviceRepository deviceRepository;
 
@@ -55,12 +59,12 @@ public class OperateDevicePostProcessor implements LoginPostProcessor {
             log.info("用户的设备{}已存在,userId:{}", ip, userId);
             if(autoLogin) {
                 log.info("检测到用户开启了自动登录,正在更新设备{},userId:{}", ip, userId);
-                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), 1);
+                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), AUTO_LOGIN);
                 log.info("设备{}更新成功,userId:{}", ip, userId);
             }
             else{
                 log.info("用户没有开启自动登录,正在更新设备{}最近登录时间,userId:{}", ip, userId);
-                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), 0);
+                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), NOT_AUTO_LOGIN);
                 log.info("设备{}更新成功,userId:{}", ip, userId);
             }
         }
