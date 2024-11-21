@@ -35,55 +35,61 @@ public class TokenRepository implements ITokenRepository {
     //一天
     private long DAY = 24*60*60*1000;
 
+    private String USER_ID = "user_id";
+    private String PHONE = "phone";
+    private String DEVICE_ID = "device_id";
+    private String IP = "ip";
+    private String TYPE = "type";
+    private String IS_DELETED = "is_deleted";
+    private String ACCESS_TOKEN = "access_token";
+    private String REFRESH_TOKEN = "refresh_token";
+
     @Override
-    public void storeAccessToken(String token, String userId, String phone, String devicId, String ip) {
+    public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
-        redissonService.addToMap(key, "user_id",userId);
-        redissonService.addToMap(key, "phone",phone);
-        redissonService.addToMap(key, "device_id",devicId);
-        redissonService.addToMap(key, "ip",ip);
-        redissonService.addToMap(key, "type", TokenUtil.ACCESS_TOKEN);
-        redissonService.addToMap(key, "is_deleted","0");
+        redissonService.addToMap(key, USER_ID,userId);
+        redissonService.addToMap(key, PHONE,phone);
+        redissonService.addToMap(key, DEVICE_ID,deviceId);
+        redissonService.addToMap(key, IP,ip);
+        redissonService.addToMap(key, TYPE, TokenUtil.ACCESS_TOKEN);
+        redissonService.addToMap(key, IS_DELETED,"0");
 
         // 存储设备id和token的关联关系
-        redissonService.addToSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, token);
+        redissonService.addToMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, ACCESS_TOKEN, token);
 
         //设置该token的生存时间
         redissonService.setMapExpired(key,5*MIN);
     }
 
     @Override
-    public void storeReflashToken(String token, String userId, String phone, String devicId, String ip, Boolean isAutoLogin) {
+    public void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
-        redissonService.addToMap(key, "user_id",userId);
-        redissonService.addToMap(key, "phone",phone);
-        redissonService.addToMap(key, "device_id",devicId);
-        redissonService.addToMap(key, "ip",ip);
+        redissonService.addToMap(key, USER_ID,userId);
+        redissonService.addToMap(key, PHONE,phone);
+        redissonService.addToMap(key, DEVICE_ID,deviceId);
+        redissonService.addToMap(key, IP,ip);
+        redissonService.addToMap(key, IS_DELETED,"0");
 
         // 存储设备id和token的关联关系
-        redissonService.addToSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, token);
+        redissonService.addToMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, REFRESH_TOKEN, token);
 
         if(!isAutoLogin){
-            redissonService.addToMap(key, "type",TokenUtil.REFRESH_TOKEN_TYPE[0]);
+            redissonService.addToMap(key, TYPE,TokenUtil.REFRESH_TOKEN_TYPE[0]);
 
             //设置该token的生存时间
             redissonService.setMapExpired(key,12*HOUR);
 
             //设置该关联关系的生存时间
-            redissonService.setSetExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, 12*HOUR + 6*MIN);
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, 12*HOUR + 6*MIN);
         }else{
-            redissonService.addToMap(key, "type",TokenUtil.REFRESH_TOKEN_TYPE[1]);
+            redissonService.addToMap(key, TYPE,TokenUtil.REFRESH_TOKEN_TYPE[1]);
 
             //设置该token的生存时间
             redissonService.setMapExpired(key,30*DAY);
 
             //设置该关联关系的生存时间
-            redissonService.setSetExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, 30*DAY + 6*MIN);
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, 30*DAY + 6*MIN);
         }
-        redissonService.addToMap(key, "is_deleted","0");
-
-
-
 
     }
 
@@ -92,13 +98,13 @@ public class TokenRepository implements ITokenRepository {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
 
         // 取出token对应的设备id
-        String deviceId = redissonService.getFromMap(key, "device_id");
+        String deviceId = redissonService.getFromMap(key, DEVICE_ID);
 
         // 删除token
-        redissonService.addToMap(key, "is_deleted","1");
+        redissonService.addToMap(key, IS_DELETED,"1");
 
         // 删除设备id和token的关联关系
-        redissonService.removeFromSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, token);
+        redissonService.removeFromMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, ACCESS_TOKEN);
     }
 
     @Override
@@ -106,39 +112,38 @@ public class TokenRepository implements ITokenRepository {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
 
         // 取出token对应的设备id
-        String deviceId = redissonService.getFromMap(key, "device_id");
+        String deviceId = redissonService.getFromMap(key, DEVICE_ID);
 
         // 删除token
-        redissonService.addToMap(key, "is_deleted","1");
+        redissonService.addToMap(key, IS_DELETED,"1");
 
         // 删除设备id和token的关联关系
-        redissonService.removeFromSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, token);
+        redissonService.removeFromMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, REFRESH_TOKEN);
     }
 
     @Override
     public void deleteTokenByDeviceId(String deviceId) {
 
         // 取出设备id对应的token列表
-        Set<String> tokens = redissonService.getSetMembers(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId);
+        Map<String,String> tokens = redissonService.getMapToJavaMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId);
 
         // 逐个删除token
-        for (String token : tokens) {
-            String key = RedisKey.TOKEN.getKeyPrefix() + token;
-            String isDeleted = redissonService.getFromMap(key, "is_deleted");
-            if(null==isDeleted||isDeleted.equals("1")){
-                continue;
-            }
-            redissonService.addToMap(key, "is_deleted","1");
+        for (Map.Entry<String, String> token : tokens.entrySet()) {
+
+            String key = RedisKey.TOKEN.getKeyPrefix() + token.getValue();
+
+            redissonService.remove(key);
         }
 
         // 删除设备id和所有token的关联关系
         redissonService.remove(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId);
+
     }
 
     @Override
     public Boolean checkToken(String token) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
-        String isDeleted = redissonService.getFromMap(key, "is_deleted");
+        String isDeleted = redissonService.getFromMap(key, IS_DELETED);
         if(null==isDeleted||isDeleted.equals("1")){
             return false;
         }
@@ -150,7 +155,7 @@ public class TokenRepository implements ITokenRepository {
     @Override
     public int checkAccessToken(String token) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
-        String isDeleted = redissonService.getFromMap(key, "is_deleted");
+        String isDeleted = redissonService.getFromMap(key, IS_DELETED);
         if(null==isDeleted){
             //此时token不存在,已过期
             return 0;
@@ -169,7 +174,9 @@ public class TokenRepository implements ITokenRepository {
     public void resetReflashTokenExpired(String token) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
 
-        String type = redissonService.getFromMap(key, "type");
+        String type = redissonService.getFromMap(key, TYPE);
+
+        String deviceId = redissonService.getFromMap(key, DEVICE_ID);
 
         if(type == null){
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_EXPIRED.getMessage());
@@ -180,8 +187,7 @@ public class TokenRepository implements ITokenRepository {
             redissonService.setMapExpired(key,12*HOUR);
 
             //重置关联关系的有效时间
-            redissonService.setSetExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() +
-                    redissonService.getFromMap(key, "device_id"), 12*HOUR + 6*MIN);
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, 12*HOUR + 6*MIN);
         }
         else {
             //类型为access_token或者reflash_token30或者其他
@@ -201,17 +207,17 @@ public class TokenRepository implements ITokenRepository {
         }
 
         Boolean isAutoLogin;
-        if(javaMap.get("type").equals(TokenUtil.REFRESH_TOKEN_TYPE[0])) {
+        if(javaMap.get(TYPE).equals(TokenUtil.REFRESH_TOKEN_TYPE[0])) {
             isAutoLogin = false;
         }else{
             isAutoLogin = true;
         }
 
         return TokenVO.builder()
-               .userId(Long.valueOf(javaMap.get("user_id")))
-               .phone(javaMap.get("phone"))
-               .deviceId(javaMap.get("device_id"))
-               .ip(javaMap.get("ip"))
+               .userId(Long.valueOf(javaMap.get(USER_ID)))
+               .phone(javaMap.get(PHONE))
+               .deviceId(javaMap.get(DEVICE_ID))
+               .ip(javaMap.get(IP))
                .isAutoLogin(isAutoLogin)
                .build();
     }
@@ -227,10 +233,10 @@ public class TokenRepository implements ITokenRepository {
         }
 
         return TokenVO.builder()
-                .userId(Long.valueOf(javaMap.get("user_id")))
-                .phone(javaMap.get("phone"))
-                .deviceId(javaMap.get("device_id"))
-                .ip(javaMap.get("ip"))
+                .userId(Long.valueOf(javaMap.get(USER_ID)))
+                .phone(javaMap.get(PHONE))
+                .deviceId(javaMap.get(DEVICE_ID))
+                .ip(javaMap.get(IP))
                 .build();
     }
 
@@ -238,5 +244,7 @@ public class TokenRepository implements ITokenRepository {
     public Long getAccessTokenExpired(String token) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         return redissonService.getMapExpired(key);
+
     }
+
 }
