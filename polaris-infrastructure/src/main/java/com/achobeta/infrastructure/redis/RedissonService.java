@@ -152,6 +152,11 @@ public class RedissonService implements IRedisService {
         return map.readAllMap();
     }
 
+    public void removeFromMap(String key, String field) {
+        RMap<String, String> map = redissonClient.getMap(key);
+        map.remove(field);
+    }
+
     @Override
     public <K, V> V getFromMap(String key, K field) {
         return redissonClient.<K, V>getMap(key).get(field);

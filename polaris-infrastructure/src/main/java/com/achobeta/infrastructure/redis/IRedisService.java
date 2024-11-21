@@ -232,6 +232,14 @@ public interface IRedisService {
     Map<String,String> getMapToJavaMap(String key);
 
     /**
+     * 移除哈希表中指定字段的值
+     *
+     * @param key   键
+     * @param field 字段
+     */
+    void removeFromMap(String key, String field);
+
+    /**
      * 获取哈希表中指定字段的值
      *
      * @param key   键
