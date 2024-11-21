@@ -18,6 +18,7 @@ public class ModifyStructureResponseDTO implements Serializable {
 
     /**
      * 真正的添加节点数据
+     * 实际为List<PositionEntity>，PositionEntity包括该该类中的其他字段
      */
     Object addPositions;
     /**
