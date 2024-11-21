@@ -19,6 +19,6 @@ public interface ITeamService {
      * @param requestDTO 查询请求参数，包含用户ID、团队ID，成员ID
      * @return 成员个人信息
      */
-    Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid @RequestBody QueryMemberInfoRequestDTO requestDTO);
+    Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid QueryMemberInfoRequestDTO requestDTO);
 
 }

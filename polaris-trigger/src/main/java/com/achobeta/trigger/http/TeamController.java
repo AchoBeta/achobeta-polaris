@@ -33,9 +33,9 @@ public class TeamController implements ITeamService {
     /**
      * 查看团队成员信息详情接口
      */
-    @PostMapping("/member/detail")
+    @GetMapping("/member/detail")
     @Override
-    public Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid @RequestBody QueryMemberInfoRequestDTO requestDTO) {
+    public Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid QueryMemberInfoRequestDTO requestDTO) {
         try {
             log.info("用户访问个人中心信息页面系统开始，{}", requestDTO);
 
