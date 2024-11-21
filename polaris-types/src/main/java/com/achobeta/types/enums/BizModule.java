@@ -16,6 +16,7 @@ public enum BizModule {
     RENDER("biz_001", "文本渲染模块"),
     USER("biz_002", "用户模块"),
     DEVICE("biz010","设备渲染模块"),
+    DEVICE("biz010","设备渲染模块"),
     LOGIN("biz_006", "用户登陆模块"),
     ;
 

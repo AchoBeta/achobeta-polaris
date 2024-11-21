@@ -1,10 +1,15 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.IUserService;
+import com.achobeta.api.dto.user.ModifyUserInfoRequestDTO;
+import com.achobeta.api.dto.user.ModifyUserInfoResponseDTO;
+import com.achobeta.domain.user.service.IModifyUserInfoService;
+
 import com.achobeta.api.dto.user.QueryUserInfoRequestDTO;
 import com.achobeta.api.dto.user.QueryUserInfoResponseDTO;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.domain.user.service.IUserInfoService;
+
 import com.achobeta.types.Response;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
@@ -28,7 +33,42 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController implements IUserService {
 
+    private final IModifyUserInfoService modifyUserInfoService;
+
     private final IUserInfoService userInfoService;
+  
+    /**
+     * 修改个人信息接口
+     * @param modifyUserInfoRequestDTO
+     * @author yangzhiyao
+     * @date 2024/11/9
+     */
+    @PutMapping("info")
+    @Override
+    public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Valid @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
+        try {
+            log.info("用户访问修改个人信息系统开始，userId:{}", modifyUserInfoRequestDTO.getUserId());
+             UserEntity userEntity = UserEntity.builder()
+                          .userId(modifyUserInfoRequestDTO.getUserId())
+                          .userName(modifyUserInfoRequestDTO.getUserName())
+                          .gender(modifyUserInfoRequestDTO.getGender())
+                          .idCard(modifyUserInfoRequestDTO.getIdCard())
+                          .email(modifyUserInfoRequestDTO.getEmail())
+                          .grade(modifyUserInfoRequestDTO.getGrade())
+                          .major(modifyUserInfoRequestDTO.getMajor())
+                          .studentId(modifyUserInfoRequestDTO.getStudentId())
+                          .experience(modifyUserInfoRequestDTO.getExperience())
+                          .currentStatus(modifyUserInfoRequestDTO.getCurrentStatus())
+                          .build();
+            modifyUserInfoService.modifyUserInfo(userEntity);
+            log.info("用户访问修改个人信息系统结束，userId:{}", modifyUserInfoRequestDTO.getUserId());
+            return Response.SYSTEM_SUCCESS();
+        }  catch (AppException e) {
+            log.error("用户访问修改个人信息系统失败！userId:{}",
+                    modifyUserInfoRequestDTO.getUserId(), e);
+            return Response.<ModifyUserInfoResponseDTO>builder();
+        }
+    }
 
     /**
      * 个人中心信息页面接口
