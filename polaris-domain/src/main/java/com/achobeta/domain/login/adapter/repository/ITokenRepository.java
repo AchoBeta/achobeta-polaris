@@ -12,7 +12,7 @@ import com.achobeta.domain.login.model.valobj.TokenVO;
 public interface ITokenRepository {
 
     /**
-     * 存储Accesstoken
+     * 存储Accesstoken 删除前一个Accesstoken
      * @param token token的值
      * @param userId 用户id
      * @param phone 手机号

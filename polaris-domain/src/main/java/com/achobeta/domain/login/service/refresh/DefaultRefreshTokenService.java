@@ -64,6 +64,7 @@ public class DefaultRefreshTokenService extends AbstractPostProcessor<LoginBO> i
         log.info("正在将AT存入redis,userId:{}", tokenVO.getUserId());
 
         // 调用RedisService的storeAccessToken将accessToken存入Redis
+        // 同时也会将前一个AT删除
         tokenRepository.storeAccessToken(accessToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp());
 
         log.info("AT存入redis成功,userId:{}", tokenVO.getUserId());
