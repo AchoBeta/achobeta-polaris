@@ -21,6 +21,6 @@ public interface ITeamService {
      * @author yangzhiyao
      * @date 2024/11/10
      */
-    Response<QueryStructureResponseDTO> queryStructure(@Valid @RequestBody QueryStructureRequestDTO structureRequestDTO);
+    Response<QueryStructureResponseDTO> queryStructure(@Valid QueryStructureRequestDTO structureRequestDTO);
 
 }

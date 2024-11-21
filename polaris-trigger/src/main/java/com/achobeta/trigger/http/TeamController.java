@@ -35,9 +35,9 @@ public class TeamController implements ITeamService {
      * @param querystructureRequestDTO 入参包括用户id和团队id
      * @return
      */
-    @PostMapping("structure")
+    @GetMapping("structure")
     @Override
-    public Response<QueryStructureResponseDTO> queryStructure(@Valid @RequestBody QueryStructureRequestDTO querystructureRequestDTO) {
+    public Response<QueryStructureResponseDTO> queryStructure(@Valid QueryStructureRequestDTO querystructureRequestDTO) {
         try {
             log.info("用户访问团队管理系统查询团队组织架构开始，userId:{} teamId:{}",
                     querystructureRequestDTO.getUserId(), querystructureRequestDTO.getTeamId());
