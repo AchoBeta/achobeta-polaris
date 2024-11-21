@@ -3,6 +3,7 @@ package com.achobeta.infrastructure.dao;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  */
 @Mapper
 public interface PositionMapper {
+
     /**
      * 获取某个职位的所有下属职位
      * @param positionId
@@ -33,6 +35,14 @@ public interface PositionMapper {
      * @return
      */
     PositionPO getParentPositionByPositionId(String positionId);
+
+    /**
+     * 获取某个职位的上级职位
+     * 用以查询用户的个人职位
+     * @param positions
+     * @return
+     */
+    List<PositionPO> listParentPositionByPositions(Collection<PositionPO> positions);
 
     /**
      * 获取某个用户的所有最下级职位

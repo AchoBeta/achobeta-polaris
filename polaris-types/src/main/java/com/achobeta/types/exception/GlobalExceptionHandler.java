@@ -76,5 +76,4 @@ public class GlobalExceptionHandler {
         return Response.CUSTOMIZE_MSG_ERROR(PARAM_FAILED_VALIDATE, message);
     }
 
-
 }
