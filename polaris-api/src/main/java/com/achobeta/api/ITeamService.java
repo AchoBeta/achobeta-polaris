@@ -3,7 +3,6 @@ package com.achobeta.api;
 import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
 import com.achobeta.types.Response;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 
@@ -14,6 +13,6 @@ import javax.validation.Valid;
  */
 public interface ITeamService {
 
-    Response<ResponseMemberListDTO> queryMemberList(@Valid @RequestBody RequestMemberListDTO requestMemberListDTO);
+    Response<ResponseMemberListDTO> queryMemberList(@Valid RequestMemberListDTO requestMemberListDTO);
 
 }

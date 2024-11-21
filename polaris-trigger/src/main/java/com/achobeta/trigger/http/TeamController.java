@@ -37,8 +37,8 @@ public class TeamController implements ITeamService {
      * @return
      */
     @Override
-    @PostMapping("/member/list")
-    public Response<ResponseMemberListDTO> queryMemberList(@Valid @RequestBody RequestMemberListDTO requestMemberListDTO) {
+    @GetMapping("/member/list")
+    public Response<ResponseMemberListDTO> queryMemberList(@Valid RequestMemberListDTO requestMemberListDTO) {
         try {
             log.info("用户访问团队管理系统开始，{}",requestMemberListDTO);
 
