@@ -46,6 +46,10 @@ public enum GlobalServiceStatusCode {
 
     USER_NO_PERMISSION(2403, "用户无权限"),
     USER_CAPTCHA_CODE_ERROR(2500, "验证码错误"),
+
+    /* 登录模块错误 6001-7000*/
+    LOGIN_CODE_EXIT(6001,"需要等待一段时间后才能再次尝试"),
+    LOGIN_SMS_SEND_FAIL(6002, "验证码发送失败"),
     ;
 
     private Integer code;

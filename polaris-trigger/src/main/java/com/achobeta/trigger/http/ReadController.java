@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Validated
 @RestController()
-@CrossOrigin("${app.config.cross-origin}:*")
+@CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/read/")
 public class ReadController implements IReadService {
 
