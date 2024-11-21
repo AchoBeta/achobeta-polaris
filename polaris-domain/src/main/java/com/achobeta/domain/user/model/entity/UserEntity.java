@@ -83,5 +83,6 @@ public class UserEntity {
     /**
      * 用户所属职位/分组
      */
-    private List<String> positions;
+    private List<List<String>> positions;
+  
 }
