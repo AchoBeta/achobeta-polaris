@@ -14,9 +14,9 @@
     </resultMap>
 
     <insert id="addPositionsToMember" parameterType="java.util.List">
-        insert into user_position (user_id,position_id,create_by,update_by) values
+        insert into user_position (user_id,position_id,team_id,create_by,update_by) values
         <foreach collection="positionIds" item="positionId" separator=",">
-            (#{memberId},#{positionId},#{userId},#{userId})
+            (#{memberId},#{positionId},#{teamId},#{userId},#{userId})
         </foreach>
     </insert>
 

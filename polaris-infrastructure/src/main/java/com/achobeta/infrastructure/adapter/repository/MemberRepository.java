@@ -53,7 +53,7 @@ public class MemberRepository implements IMemberRepository {
                 .build());
         userMapper.addMember(userEntity.getUserId(), teamId);
         if (!CollectionUtil.isEmpty(positionIds)) {
-            positionMapper.addPositionsToMember(userId, userEntity.getUserId(), positionIds);
+            positionMapper.addPositionsToMember(userId, userEntity.getUserId(), positionIds, teamId);
         }
     }
 

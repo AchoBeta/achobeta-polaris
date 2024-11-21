@@ -20,7 +20,7 @@ public interface PositionMapper {
      * @param memberId 成员ID
      * @param positionIds 职位ID列表
      */
-    void addPositionsToMember(String userId, String memberId, List<String> positionIds);
+    void addPositionsToMember(String userId, String memberId, List<String> positionIds, String teamId);
 
     /**
      * 获取职位的上级职位
