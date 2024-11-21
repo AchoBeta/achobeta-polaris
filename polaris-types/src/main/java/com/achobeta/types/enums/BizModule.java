@@ -18,7 +18,6 @@ public enum BizModule {
     ANNOUNCE("biz_011","公告渲染模块"),
     READANNOUNCE("biz_012","读公告模块")
     LOGIN("biz_006", "用户登陆模块"),
-
     ;
 
     private String code;
