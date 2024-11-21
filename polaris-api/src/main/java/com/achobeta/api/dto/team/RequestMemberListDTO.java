@@ -1,7 +1,7 @@
 package com.achobeta.api.dto.team;
 
 import com.achobeta.types.annotation.FieldDesc;
-import lombok.Getter;
+import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.Min;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  * @description 查询队员列表请求DTO
  * @date 2024/11/17
  */
-@Getter
+@Data
 @ToString
 public class RequestMemberListDTO {
 
