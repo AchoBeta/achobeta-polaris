@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface PositionMapper {
 
-    void addPositionToUser(List<String> positionList, String userId);
+    void addPositionToUser(List<String> positionList, String userId, String teamId);
 
     void deletePositionWithUser(List<String> deletePositions, String userId);
 }

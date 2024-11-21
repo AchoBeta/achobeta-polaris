@@ -14,9 +14,9 @@
     </resultMap>
 
     <insert id="addPositionToUser">
-        insert into user_position (user_id, position_id, create_by, update_by) values
+        insert into user_position (user_id, position_id, team_id) values
         <foreach collection="positionList" item="positionId" separator=",">
-        (#{userId}, #{positionId}, #{userId}, #{userId})
+        (#{userId}, #{positionId}, #{teamId})
         </foreach>
     </insert>
 

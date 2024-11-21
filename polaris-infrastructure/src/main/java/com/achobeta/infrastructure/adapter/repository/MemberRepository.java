@@ -45,7 +45,7 @@ public class MemberRepository implements IMemberRepository {
         }
 
         if (!CollectionUtil.isEmpty(addPositions)) {
-            positionMapper.addPositionToUser(addPositions, userEntity.getUserId());
+            positionMapper.addPositionToUser(addPositions, userEntity.getUserId(), teamId);
         }
         if (!CollectionUtil.isEmpty(deletePositions)) {
             positionMapper.deletePositionWithUser(deletePositions, userEntity.getUserId());
