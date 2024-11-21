@@ -19,8 +19,6 @@ public enum RedisKey {
     TOKEN("ab:polaris:login:token:","token"),
     DEVICE_TO_TOKEN("ab:polaris:login:device_to_token:","设备id关联token"),
     CODE_LOCK("ab:polaris:login:code_lock:","验证码加锁"),
-    DEVICE_TO_TOKEN_AT("access_token:","token类型"),
-    DEVICE_TO_TOKEN_RT("reflash_token:","token类型")
     ;
 
     private String keyPrefix;
