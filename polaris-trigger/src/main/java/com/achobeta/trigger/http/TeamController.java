@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author yangzhiyao
@@ -35,7 +35,8 @@ public class TeamController implements ITeamService {
      * @return
      */
     @Override
-    public Response<DeleteMemberResponseDTO> deleteMember(DeleteMemberRequestDTO requestDTO) {
+    @DeleteMapping("member")
+    public Response<DeleteMemberResponseDTO> deleteMember(@Valid @RequestBody DeleteMemberRequestDTO requestDTO) {
         try {
             log.info("用户访问添加团队成员接口，requestDTO:{}", requestDTO);
 
