@@ -2,12 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.achobeta.infrastructure.dao.UserMapper">
 
-    <update id="deleteUser">
-        update user
-        set is_deleted = 1, update_by = #{userId}
-        where user_id = #{deleteUserId}
-    </update>
-
     <update id="deleteMember">
         update user
         set is_deleted = 1, update_by = #{userId}
@@ -21,14 +15,5 @@
         where user_id = #{memberId}
               and team_id = #{teamId}
     </update>
-
-    <select id="countTeamOfMember" resultType="java.lang.Integer">
-        select count(*)
-        from user as t1, member as t2
-        where t1.user_id = t2.user_id
-              and t1.user_id = #{memberId}
-              and t1.is_deleted = 0
-              and t2.is_deleted = 0
-    </select>
 
 </mapper>

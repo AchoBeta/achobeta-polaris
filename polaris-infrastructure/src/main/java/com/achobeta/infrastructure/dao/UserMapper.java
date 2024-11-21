@@ -11,12 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
 
     /**
-     * 逻辑删除用户
-     * @param userId
-     */
-    void deleteUser(String userId, String deleteUserId);
-
-    /**
      * 逻辑删除团队成员
      * @param userId
      */
@@ -27,12 +21,5 @@ public interface UserMapper {
      * @param userId
      */
     void deleteUserPosition(String userId, String memberId, String teamId);
-
-    /**
-     * 获取成员的团队数量
-     * @param memberId
-     * @return
-     */
-    Integer countTeamOfMember(String memberId);
 
 }

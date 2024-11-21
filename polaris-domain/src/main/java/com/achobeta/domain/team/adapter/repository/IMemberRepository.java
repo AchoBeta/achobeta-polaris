@@ -16,19 +16,4 @@ public interface IMemberRepository {
      */
     void deleteMember(String userId, String memberId, String teamId);
 
-    /**
-     * 删除用户
-     * @param userId
-     * @param deleteUserId
-     * @date 2024/11/21
-     */
-    void deleteUser(String userId, String deleteUserId);
-
-    /**
-     * 获取成员的团队数量
-     * @param memberId
-     * @return
-     */
-    Integer countTeamOfMember(String memberId);
-
 }
