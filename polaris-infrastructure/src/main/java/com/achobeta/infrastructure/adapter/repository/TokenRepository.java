@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: 严豪哲
@@ -26,26 +26,17 @@ public class TokenRepository implements ITokenRepository {
     @Resource
     private RedissonService redissonService;
 
-    //一分钟
-    private long MIN = 60*1000;
-
-    //一小时
-    private long HOUR = 60*60*1000;
-
-    //一天
-    private long DAY = 24*60*60*1000;
-
-    private String USER_ID = "user_id";
-    private String PHONE = "phone";
-    private String DEVICE_ID = "device_id";
-    private String IP = "ip";
-    private String TYPE = "type";
-    private String IS_DELETED = "is_deleted";
-    private String ACCESS_TOKEN = "access_token";
-    private String REFRESH_TOKEN = "refresh_token";
-    private String UNDELETEDED= "0";
-    private String DELETEDED= "1";
-
+    private final String USER_ID = "user_id";
+    private final String PHONE = "phone";
+    private final String DEVICE_ID = "device_id";
+    private final String IP = "ip";
+    private final String TYPE = "type";
+    private final String IS_DELETED = "is_deleted";
+    private final String ACCESS_TOKEN = "access_token";
+    private final String REFRESH_TOKEN = "refresh_token";
+    private final String UNDELETEDED= "0";
+    private final String DELETEDED= "1";
+final
     @Override
     public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
@@ -66,7 +57,7 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, ACCESS_TOKEN, token);
 
         //设置该token的生存时间
-        redissonService.setMapExpired(key,5*MIN);
+        redissonService.setMapExpired(key, TimeUnit.MINUTES.toMillis(5));
     }
 
     @Override
@@ -84,18 +75,18 @@ public class TokenRepository implements ITokenRepository {
             redissonService.addToMap(key, TYPE,TokenUtil.REFRESH_TOKEN_TYPE[0]);
 
             //设置该token的生存时间
-            redissonService.setMapExpired(key,12*HOUR);
+            redissonService.setMapExpired(key,TimeUnit.HOURS.toMillis(12));
 
             //设置该关联关系的生存时间
-            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, 12*HOUR + 6*MIN);
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, TimeUnit.HOURS.toMillis(12) + TimeUnit.MINUTES.toMillis(6));
         }else{
             redissonService.addToMap(key, TYPE,TokenUtil.REFRESH_TOKEN_TYPE[1]);
 
             //设置该token的生存时间
-            redissonService.setMapExpired(key,30*DAY);
+            redissonService.setMapExpired(key,TimeUnit.DAYS.toMillis(30));
 
             //设置该关联关系的生存时间
-            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, 30*DAY + 6*MIN);
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, TimeUnit.DAYS.toMillis(30) + TimeUnit.MINUTES.toMillis(6));
         }
 
         redissonService.addToMap(key, IS_DELETED,UNDELETEDED);
@@ -187,10 +178,10 @@ public class TokenRepository implements ITokenRepository {
         else if(type.equals(TokenUtil.REFRESH_TOKEN_TYPE[0])){
 
             //重置token的有效时间
-            redissonService.setMapExpired(key,12*HOUR);
+            redissonService.setMapExpired(key,TimeUnit.MINUTES.toMillis(5));
 
             //重置关联关系的有效时间
-            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, 12*HOUR + 6*MIN);
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, TimeUnit.HOURS.toMillis(12) + TimeUnit.MINUTES.toMillis(6));
         }
         else {
             //类型为access_token或者reflash_token30或者其他
@@ -209,12 +200,7 @@ public class TokenRepository implements ITokenRepository {
             return null;
         }
 
-        Boolean isAutoLogin;
-        if(javaMap.get(TYPE).equals(TokenUtil.REFRESH_TOKEN_TYPE[0])) {
-            isAutoLogin = false;
-        }else{
-            isAutoLogin = true;
-        }
+        Boolean isAutoLogin = javaMap.get(TYPE).equals(TokenUtil.REFRESH_TOKEN_TYPE[1]);
 
         return TokenVO.builder()
                .userId(Long.valueOf(javaMap.get(USER_ID)))
