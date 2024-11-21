@@ -18,7 +18,7 @@ public interface IUserService {
      * @param queryUserInfoRequestDTO
      * @return Response<QueryUserInfoResponseDTO>
      */
-    Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid @RequestBody QueryUserInfoRequestDTO queryUserInfoRequestDTO);
+    Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid QueryUserInfoRequestDTO queryUserInfoRequestDTO);
 
 
 }

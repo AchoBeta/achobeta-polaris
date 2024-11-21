@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController()
 @Validated
-@CrossOrigin("${app.config.cross-origin}:*")
+@CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/user/")
 @RequiredArgsConstructor
 public class UserController implements IUserService {
@@ -36,9 +36,9 @@ public class UserController implements IUserService {
      * @author yangzhiyao
      * @date 2024/11/6
      */
-    @PostMapping("info")
+    @GetMapping("info")
     @Override
-    public Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid @RequestBody QueryUserInfoRequestDTO queryUserInfoRequestDTO) {
+    public Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid QueryUserInfoRequestDTO queryUserInfoRequestDTO) {
         try {
             log.info("用户访问个人中心信息页面系统开始，userId:{}", queryUserInfoRequestDTO.getUserId());
 
