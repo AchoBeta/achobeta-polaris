@@ -31,12 +31,7 @@ public class DeviceRepository implements IDeviceRepository {
     @Override
     public DeviceEntity getDeviceByIp(String userId, String ip) {
 
-        DevicePO devicePO = null;
-        devicePO = deviceMapper.getDeviceByIp(userId, ip);
-
-        if (devicePO == null) {
-            return null;
-        }
+        DevicePO devicePO = deviceMapper.getDeviceByIp(userId, ip);
         return DeviceEntity.builder()
                 .deviceId(devicePO.getDeviceId())
                 .deviceName(devicePO.getDeviceName())
