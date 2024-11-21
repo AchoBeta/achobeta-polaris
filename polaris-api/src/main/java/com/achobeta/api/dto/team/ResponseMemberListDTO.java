@@ -15,7 +15,7 @@ import lombok.*;
 @Builder
 public class ResponseMemberListDTO {
 
-    @FieldDesc(name = "实际成员列表")
+    @FieldDesc(name = "实际成员列表用户信息")
     private Object members;
 
 }

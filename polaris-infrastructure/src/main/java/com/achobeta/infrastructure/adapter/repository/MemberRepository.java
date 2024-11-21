@@ -45,6 +45,8 @@ public class MemberRepository implements IMemberRepository {
             // 从redis中获取用户信息
             UserEntity userEntity = redisService.getValue(RedisKey.USER_INFO + userId);
             if (userEntity!= null) {
+                // 转换positionNames格式，便于前端选择显示
+                userEntity = convertToMemberListPositionNames(userEntity);
                 members.add(userEntity);
                 continue;
             }
@@ -77,8 +79,7 @@ public class MemberRepository implements IMemberRepository {
             List<List<String>> positionNames = new ArrayList<>();
             for(List<PositionPO> positionList : positionPOList) {
                 List<String> tempList = new ArrayList<>();
-                tempList.add(positionList.get(0).getPositionId());
-                for(int i = positionList.size() - 1; i >= 0; i--) {
+                for(int i = positionList.size() - 2; i >= 0; i--) {
                     tempList.add(positionList.get(i).getPositionName());
                 }
                 positionNames.add(tempList);
@@ -100,11 +101,28 @@ public class MemberRepository implements IMemberRepository {
                     .liked(false)
                     .positions(positionNames)
                     .build();
-            members.add(userEntity);
             // 存入redis
             redisService.setValue(RedisKey.USER_INFO + userId, userEntity);
+
+            // 转换positionNames格式，便于前端选择显示
+            userEntity = convertToMemberListPositionNames(userEntity);
+            members.add(userEntity);
         }
         return members;
+    }
+
+    private static UserEntity convertToMemberListPositionNames(UserEntity userEntity) {
+        List<List<String>> positionNames = userEntity.getPositions();
+        List<String> resultNameList = new ArrayList<>();
+        for (List<String> positionList : positionNames) {
+            List<String> tempList = new ArrayList<>();
+            for (int i = 2; i < positionList.size(); i++) {
+                tempList.add(positionList.get(i));
+            }
+            resultNameList.add(String.join("-", tempList));
+        }
+        userEntity.setPositionList(resultNameList);
+        return userEntity;
     }
 
 }
