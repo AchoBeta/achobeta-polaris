@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 
 public interface IDeviceRepository {
 
-    /*
+    /**
      * 设备信息查询
      * @param userId 用户id
-     * @param ip ip地址
+     * @param mac ip地址
      * @return
      */
-    DeviceEntity getDeviceByIp(String userId,String ip);
+    DeviceEntity getDeviceByMac(String userId,String mac);
 
     /*
      * 插入设备
@@ -34,7 +34,7 @@ public interface IDeviceRepository {
      * @param isCancel 是否登陆
      * @param deviceId 设备id
      */
-    void updateDevice(String deviceId, LocalDateTime updateTime, int isCancel);
+    void updateDevice(String deviceId, int isCancel);
 
     /*
      * 删除设备
@@ -42,6 +42,6 @@ public interface IDeviceRepository {
      * @param updateTime 更新时间
      * @param isDeleted 是否删除
      */
-    void deleteDevice(String deviceId, LocalDateTime updateTime, int isDeleted);
+    void deleteDevice(String deviceId);
 
 }

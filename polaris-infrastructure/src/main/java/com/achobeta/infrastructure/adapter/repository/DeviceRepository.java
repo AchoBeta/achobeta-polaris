@@ -22,6 +22,8 @@ public class DeviceRepository implements IDeviceRepository {
     @Resource
     private DeviceMapper deviceMapper;
 
+    private static final int DELETED = 1;
+
     /*
      * 根据用户id和ip地址查询设备信息
      * @param userId 用户id
@@ -29,11 +31,9 @@ public class DeviceRepository implements IDeviceRepository {
      * @return DeviceEntity 设备信息
      */
     @Override
-    public DeviceEntity getDeviceByIp(String userId, String ip) {
+    public DeviceEntity getDeviceByMac(String userId, String mac) {
 
-        DevicePO devicePO = null;
-        devicePO = deviceMapper.getDeviceByIp(userId, ip);
-
+        DevicePO devicePO = deviceMapper.getDeviceByMac(userId, mac);
         if (devicePO == null) {
             return null;
         }
@@ -42,6 +42,7 @@ public class DeviceRepository implements IDeviceRepository {
                 .deviceName(devicePO.getDeviceName())
                 .userId(devicePO.getUserId())
                 .IP(devicePO.getIp())
+                .mac(devicePO.getMac())
                 .createTime(devicePO.getCreateTime())
                 .updateTime(devicePO.getUpdateTime())
                 .build();
@@ -55,14 +56,15 @@ public class DeviceRepository implements IDeviceRepository {
     public void insertDevice(DeviceEntity deviceEntity) {
 
         DevicePO devicePO = DevicePO.builder()
-               .deviceId(deviceEntity.getDeviceId())
-               .deviceName(deviceEntity.getDeviceName())
-               .userId(deviceEntity.getUserId())
-               .ip(deviceEntity.getIP())
-               .createTime(deviceEntity.getCreateTime())
-               .updateTime(deviceEntity.getUpdateTime())
+                .deviceId(deviceEntity.getDeviceId())
+                .deviceName(deviceEntity.getDeviceName())
+                .userId(deviceEntity.getUserId())
+                .ip(deviceEntity.getIP())
+                .createTime(deviceEntity.getCreateTime())
+                .updateTime(deviceEntity.getUpdateTime())
                 .isCancel(deviceEntity.getIsCancel())
-               .build();
+                .mac(deviceEntity.getMac())
+                .build();
         deviceMapper.insertDevice(devicePO);
 
     }
@@ -74,8 +76,8 @@ public class DeviceRepository implements IDeviceRepository {
      * @param isCancel 是否自动登陆
      */
     @Override
-    public void updateDevice(String deviceId, LocalDateTime updateTime, int isCancel){
-        deviceMapper.updateDevice(deviceId, updateTime, isCancel);
+    public void updateDevice(String deviceId, int isCancel) {
+        deviceMapper.updateDevice(deviceId, LocalDateTime.now(), isCancel);
     }
 
     /*
@@ -85,7 +87,7 @@ public class DeviceRepository implements IDeviceRepository {
      * @param isDeleted
      */
     @Override
-    public void deleteDevice(String deviceId, LocalDateTime updateTime, int isDeleted) {
-        deviceMapper.deleteDevice(deviceId, updateTime, isDeleted);
+    public void deleteDevice(String deviceId) {
+        deviceMapper.deleteDevice(deviceId, LocalDateTime.now(), DELETED);
     }
 }

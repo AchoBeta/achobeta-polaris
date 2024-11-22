@@ -18,10 +18,10 @@ public interface DeviceMapper {
     /*
      * 根据userId和ip获取设备
      * @param userId
-     * @param ip
+     * @param mac
      * @return DevicePO
      */
-    DevicePO getDeviceByIp(String userId, String ip);
+    DevicePO getDeviceByMac(String userId, String mac);
 
     /*
      * 根据deviceId更新设备

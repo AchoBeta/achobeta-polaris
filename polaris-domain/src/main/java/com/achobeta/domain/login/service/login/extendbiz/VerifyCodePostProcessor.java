@@ -33,7 +33,7 @@ public class VerifyCodePostProcessor implements LoginPostProcessor {
         String code = tokenVO.getCode();
         log.info("正在校验手机号为{}的用户的验证码:{}",phone,code);
         //加锁
-        operateCodeRepository.lockCheckCode(phone,code);
+        //operateCodeRepository.lockCheckCode(phone,code);
         String codeByPhone = operateCodeRepository.getCodeByPhone(phone);
         if(null == codeByPhone){
             log.info("手机号为{}的用户的验证码不存在",phone);
@@ -45,7 +45,7 @@ public class VerifyCodePostProcessor implements LoginPostProcessor {
             log.info("手机号为{}的用户的验证码正确",phone);
             operateCodeRepository.deleteCode(phone,code);
             //解锁
-            operateCodeRepository.unlockCheckCode(phone,code);
+            //operateCodeRepository.unlockCheckCode(phone,code);
             return true;
         }
     }

@@ -75,13 +75,13 @@ public class OperateCodeRepository implements IOperateCodeRepository {
 
     @Override
     public void lockCheckCode(String phone, String code) {
-        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone"+phone+"code"+code;
         redissonService.getLock(key);
     }
 
     @Override
     public void unlockCheckCode(String phone, String code) {
-        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone "+phone+" code "+code;
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone"+phone+"code"+code;
         redissonService.unLock(key);
     }
 
