@@ -40,44 +40,6 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
                         TeamBO teamBO = postContext.getBizData();
-                        PositionEntity positionEntity = teamBO.getPositionEntity();
-                        String teamId = positionEntity.getTeamId();
-
-                        // 判断团队是否存在
-                        if (!repository.isTeamExists(teamId)) {
-                            log.error("团队不存在！teamId：{}", teamId);
-                            throw new AppException(String.valueOf(TEAM_NOT_EXIST.getCode()),
-                                    TEAM_NOT_EXIST.getMessage());
-                        }
-
-                        // 查询团队组织架构
-                        positionEntity.setPositionId(teamId);
-                        Queue<PositionEntity> queue = new LinkedList<>();
-                        queue.add(positionEntity);
-                        while(!queue.isEmpty()) {
-                            PositionEntity tempPosition = queue.poll();
-                            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId(), teamId);
-                            tempPosition.setSubordinates(subordinates);
-                            if(!CollectionUtil.isEmpty(subordinates)) {
-                                queue.addAll(subordinates);
-                            }
-                        }
-
-                        postContext.setBizData(TeamBO.builder().positionEntity(positionEntity).build());
-                        return postContext;
-                    }
-                });
-        return postContext.getBizData().getPositionEntityList();
-    }
-
-    @Override
-    public PositionEntity queryStructure(String teamId) {
-        PostContext<TeamBO> postContext = buildPostContext(teamId);
-        postContext = super.doPostProcessor(postContext, ViewStructurePostProcessor.class,
-                new AbstractPostProcessorOperation<TeamBO>() {
-                    @Override
-                    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
-                        TeamBO teamBO = postContext.getBizData();
                         List<PositionEntity> newPositionList = teamBO.getPositionEntityList();
                         List<PositionEntity> positionsToDelete = (List<PositionEntity>) postContext.getExtraData("positionsToDelete");
                         String teamId = (String) postContext.getExtraData("teamId");
@@ -194,6 +156,44 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         }
 
                         postContext.setBizData(TeamBO.builder().positionEntityList(positionsToAdd).build());
+                        return postContext;
+                    }
+                });
+        return postContext.getBizData().getPositionEntityList();
+    }
+
+    @Override
+    public PositionEntity queryStructure(String teamId) {
+        PostContext<TeamBO> postContext = buildPostContext(teamId);
+        postContext = super.doPostProcessor(postContext, ViewStructurePostProcessor.class,
+                new AbstractPostProcessorOperation<TeamBO>() {
+                    @Override
+                    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
+                        TeamBO teamBO = postContext.getBizData();
+                        PositionEntity positionEntity = teamBO.getPositionEntity();
+                        String teamId = positionEntity.getTeamId();
+
+                        // 判断团队是否存在
+                        if (!repository.isTeamExists(teamId)) {
+                            log.error("团队不存在！teamId：{}", teamId);
+                            throw new AppException(String.valueOf(TEAM_NOT_EXIST.getCode()),
+                                    TEAM_NOT_EXIST.getMessage());
+                        }
+
+                        // 查询团队组织架构
+                        positionEntity.setPositionId(teamId);
+                        Queue<PositionEntity> queue = new LinkedList<>();
+                        queue.add(positionEntity);
+                        while(!queue.isEmpty()) {
+                            PositionEntity tempPosition = queue.poll();
+                            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId(), teamId);
+                            tempPosition.setSubordinates(subordinates);
+                            if(!CollectionUtil.isEmpty(subordinates)) {
+                                queue.addAll(subordinates);
+                            }
+                        }
+
+                        postContext.setBizData(TeamBO.builder().positionEntity(positionEntity).build());
                         return postContext;
                     }
                 });
