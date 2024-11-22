@@ -16,6 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 public class PositionEntity {
     /**
+     * 父级职位/分组ID
+     */
+    private String parentPositionId;
+    /**
      * 职位/分组业务id
      */
     private String positionId;

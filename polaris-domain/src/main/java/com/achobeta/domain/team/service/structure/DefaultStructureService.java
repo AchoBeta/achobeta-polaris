@@ -187,6 +187,9 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         while(!queue.isEmpty()) {
                             PositionEntity tempPosition = queue.poll();
                             List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId(), teamId);
+                            for (PositionEntity position : subordinates) {
+                                position.setParentPositionId(tempPosition.getPositionId());
+                            }
                             tempPosition.setSubordinates(subordinates);
                             if(!CollectionUtil.isEmpty(subordinates)) {
                                 queue.addAll(subordinates);
