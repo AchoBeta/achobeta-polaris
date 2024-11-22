@@ -19,7 +19,7 @@ public interface ITokenRepository {
      * @param devicId 设备id
      * @param ip ip地址
      */
-    void storeAccessToken(String token, String userId, String phone, String devicId, String ip);
+    void storeAccessToken(String token, String userId, String phone, String devicId, String ip, String mac);
 
     /**
      * 存储Reflashtoken
@@ -30,7 +30,7 @@ public interface ITokenRepository {
      * @param ip ip地址
      * @param isAutoLogin 是否自动登录
      */
-    void storeReflashToken(String token, String userId, String phone, String devicId, String ip, Boolean isAutoLogin);
+    void storeReflashToken(String token, String userId, String phone, String devicId, String ip, Boolean isAutoLogin, String mac);
 
     /**
      * 根据accesstoken删除accesstoken

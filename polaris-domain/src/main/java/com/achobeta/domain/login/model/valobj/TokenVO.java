@@ -58,4 +58,9 @@ public class TokenVO {
      */
     private Boolean isAutoLogin;
 
+    /*
+     * 登录用户的mac
+     */
+    private String mac;
+
 }

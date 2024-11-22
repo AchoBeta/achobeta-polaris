@@ -30,8 +30,10 @@ public class TokenRepository implements ITokenRepository {
     //一天
     private long DAY = 24*60*60*1000;
 
+    private final String MAC = "mac";
+
     @Override
-    public void storeAccessToken(String token, String userId, String phone, String devicId, String ip) {
+    public void storeAccessToken(String token, String userId, String phone, String devicId, String ip, String mac) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         redissonService.addToMap(key, "user_id",userId);
         redissonService.addToMap(key, "phone",phone);
@@ -39,6 +41,7 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(key, "ip",ip);
         redissonService.addToMap(key, "type","AT");
         redissonService.addToMap(key, "is_deleted","0");
+        redissonService.addToMap(key, MAC,mac);
 
         // 存储设备id和token的关联关系
         redissonService.addToSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + devicId, token);
@@ -48,12 +51,13 @@ public class TokenRepository implements ITokenRepository {
     }
 
     @Override
-    public void storeReflashToken(String token, String userId, String phone, String devicId, String ip, Boolean isAutoLogin) {
+    public void storeReflashToken(String token, String userId, String phone, String devicId, String ip, Boolean isAutoLogin, String mac) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         redissonService.addToMap(key, "user_id",userId);
         redissonService.addToMap(key, "phone",phone);
         redissonService.addToMap(key, "device_id",devicId);
         redissonService.addToMap(key, "ip",ip);
+        redissonService.addToMap(key, MAC,mac);
         if(isAutoLogin){
             redissonService.addToMap(key, "type","RT30");
 
