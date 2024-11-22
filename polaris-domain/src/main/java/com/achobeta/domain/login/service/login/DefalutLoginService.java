@@ -31,8 +31,8 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
     private ITokenRepository tokenRepository;
 
     @Override
-    public LoginVO login(String phone, String code, String ip, Boolean isAutoLogin, String deviceName) {
-        PostContext<LoginBO> postContext = buildPostContext(phone, code, ip, isAutoLogin, deviceName);
+    public LoginVO login(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String mac) {
+        PostContext<LoginBO> postContext = buildPostContext(phone, code, ip, isAutoLogin, deviceName, mac);
         postContext = super.doPostProcessor(postContext, LoginPostProcessor.class);
         return LoginVO.builder()
                 .accessToken(postContext.getBizData().getTokenVO().getAccessToken())
@@ -65,17 +65,18 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         return postContext;
     }
 
-    public static PostContext<LoginBO> buildPostContext(String phone, String code, String ip, Boolean isAutoLogin, String deviceName){
+    public static PostContext<LoginBO> buildPostContext(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String mac) {
         return PostContext.<LoginBO>builder()
                 .bizName(BizModule.LOGIN.getName())
                 .bizData(LoginBO.builder()
                         .tokenVO(
                                 TokenVO.builder()
-                                    .phone(phone)
-                                    .code(code)
-                                    .ip(ip)
-                                    .isAutoLogin(isAutoLogin)
-                                    .build())
+                                        .phone(phone)
+                                        .code(code)
+                                        .ip(ip)
+                                        .isAutoLogin(isAutoLogin)
+                                        .mac(mac)
+                                        .build())
                         .deviceName(deviceName)
                         .build())
                 .build();

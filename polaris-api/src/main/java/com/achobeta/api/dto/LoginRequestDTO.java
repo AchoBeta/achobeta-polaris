@@ -48,4 +48,11 @@ public class LoginRequestDTO {
     @NotNull(message = "是否自动登录不能为空")
     private boolean autoLogin;
 
+    /*
+     * 登录用户的mac地址
+     */
+    @Pattern(regexp = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$", message = "mac地址格式错误")
+    @NotBlank(message = "mac不能为空")
+    private String mac;
+
 }
