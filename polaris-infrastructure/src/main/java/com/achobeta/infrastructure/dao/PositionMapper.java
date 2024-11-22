@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Mapper
 public interface PositionMapper {
+
     /**
      * 获取某个职位的所有下属职位
      * @param positionId
@@ -60,5 +61,26 @@ public interface PositionMapper {
      */
     List<String> listUserIdsByPositionIds(Collection<String> positionIds);
 
+    /**
+     * 在删除职位时将用户关联到根（父）节点
+     * @param positionId 根（父）节点
+     * @param userIds 需要更改职位的用户
+     */
     void addUsersToPosition(String positionId, List<String> userIds);
+  
+    /**
+     * 获取某个职位的上级职位
+     * 用以查询用户的个人职位
+     * @param positions
+     * @return
+     */
+    List<PositionPO> listParentPositionByPositions(Collection<PositionPO> positions);
+
+    /**
+     * 获取某个用户的所有最下级职位
+     * @param userId
+     * @return
+     */
+    List<PositionPO> listPositionByUserId(String userId);
+
 }

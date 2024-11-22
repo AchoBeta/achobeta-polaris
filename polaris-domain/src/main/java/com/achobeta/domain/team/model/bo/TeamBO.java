@@ -20,4 +20,5 @@ public class TeamBO {
 
     private PositionEntity positionEntity;
     private List<PositionEntity> positionEntityList;
+
 }

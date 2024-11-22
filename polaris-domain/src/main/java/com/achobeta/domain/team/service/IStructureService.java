@@ -22,4 +22,11 @@ public interface IStructureService {
      */
     List<PositionEntity> modifyStructure(List<PositionEntity> newPositionList, List<PositionEntity> positionsToDelete, String teamId);
 
+     /**
+    * @author yangzhiyao
+    * @description 查询团队组织架构接口
+    * @date 2024/11/7
+    */
+    PositionEntity queryStructure(String teamId);
+
 }

@@ -20,10 +20,14 @@ import java.util.stream.Collectors;
 import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_NOT_EXIST;
 import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 /**
  * @author yangzhiyao
- * @description 修改团队组织架构的默认实现
- * @date 2024/11/11
+ * @description 团队组织架构的实现类
+ * @date 2024/11/8
  */
 @Slf4j
 @Service
@@ -32,11 +36,48 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
 
     private final IPositionRepository repository;
 
-
     @Override
     public List<PositionEntity> modifyStructure(List<PositionEntity> newPositionList, List<PositionEntity> deletePositionList, String teamId) {
         PostContext<TeamBO> postContext = buildPostContext(newPositionList, deletePositionList, teamId);
         postContext = super.doPostProcessor(postContext, ModifyStructurePostProcessor.class,
+                new AbstractPostProcessorOperation<TeamBO>() {
+                    @Override
+                    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
+                        TeamBO teamBO = postContext.getBizData();
+                        PositionEntity positionEntity = teamBO.getPositionEntity();
+                        String teamId = positionEntity.getTeamId();
+
+                        // 判断团队是否存在
+                        if (!repository.isTeamExists(teamId)) {
+                            log.error("团队不存在！teamId：{}", teamId);
+                            throw new AppException(String.valueOf(GlobalServiceStatusCode.TEAM_NOT_EXIST.getCode()),
+                                    GlobalServiceStatusCode.TEAM_NOT_EXIST.getMessage());
+                        }
+
+                        // 查询团队组织架构
+                        positionEntity.setPositionId(teamId);
+                        Queue<PositionEntity> queue = new LinkedList<>();
+                        queue.add(positionEntity);
+                        while(!queue.isEmpty()) {
+                            PositionEntity tempPosition = queue.poll();
+                            List<PositionEntity> subordinates = repository.querySubordinatePosition(tempPosition.getPositionId(), teamId);
+                            tempPosition.setSubordinates(subordinates);
+                            if(!CollectionUtil.isEmpty(subordinates)) {
+                                queue.addAll(subordinates);
+                            }
+                        }
+
+                        postContext.setBizData(TeamBO.builder().positionEntity(positionEntity).build());
+                        return postContext;
+                    }
+                });
+        return postContext.getBizData().getPositionEntity();
+    }
+
+    @Override
+    public PositionEntity queryStructure(String teamId) {
+        PostContext<TeamBO> postContext = buildPostContext(teamId);
+        postContext = super.doPostProcessor(postContext, ViewStructurePostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
@@ -172,6 +213,15 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
         postContext.addExtraData("positionsToDelete", deletePositionList);
         postContext.addExtraData("teamId", teamId);
         return postContext;
+    }
+                        
+    private static PostContext<TeamBO> buildPostContext(String teamId) {
+        return PostContext.<TeamBO>builder()
+                .bizName(BizModule.TEAM.getName())
+                .bizData(TeamBO.builder()
+                        .positionEntity(PositionEntity.builder().teamId(teamId).build())
+                        .build())
+                .build();
     }
 
 }

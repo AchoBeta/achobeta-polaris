@@ -3,6 +3,7 @@ package com.achobeta.domain.team.adapter.repository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 
 import java.util.Collection;
+
 import java.util.List;
 
 /**
@@ -72,6 +73,5 @@ public interface IPositionRepository {
      * @return
      */
     void bindUsersToPosition(String positionId, List<String> userIds);
-
 
 }
