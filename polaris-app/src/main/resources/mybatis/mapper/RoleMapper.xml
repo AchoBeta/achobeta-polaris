@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.achobeta.infrastructure.dao.RoleMapper">
+
+    <resultMap id="roleResultMap" type="com.achobeta.infrastructure.dao.po.RolePO">
+        <id property="id" column="id" />
+        <result property="roleId" column="role_id" />
+        <result property="roleName" column="role_name" />
+        <result property="teamId" column="team_id" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <select id="listRole" resultMap="roleResultMap">
+        select t1.id, t1.role_id, t1.role_name, t1.team_id, t1.create_time, t1.update_time
+        from role as t1, user_role as t2
+        where t2.user_id = #{userId} and t1.role_id = t2.role_id
+        <if test="teamId!= null and teamId!= ''">and t1.team_id = #{teamId}</if>
+    </select>
+
+</mapper>
