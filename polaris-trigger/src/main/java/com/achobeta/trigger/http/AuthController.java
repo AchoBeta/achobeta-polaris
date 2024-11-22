@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @author yangzhiyao
  * @description AuthController 鉴权测试接口
@@ -24,9 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
+    /**
+     * 测试鉴权接口
+     * @param authRequestDTO
+     * @return
+     */
     @GetMapping("test")
-    @AuthVerify("super:member:structure:modify")
-    public Response test(AuthRequestDTO authRequestDTO) {
+    @AuthVerify("MEMBER:MEMBER_MODIFY")
+    public Response test(@Valid AuthRequestDTO authRequestDTO) {
         log.info("进入鉴权测试接口，参数：{}", authRequestDTO);
 
         return Response.SYSTEM_SUCCESS();
