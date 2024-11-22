@@ -30,42 +30,47 @@ public class OperateDevicePostProcessor implements LoginPostProcessor {
     @Resource
     private IDeviceRepository deviceRepository;
 
+    private static final int IS_CANCEL = 1;
+    private static final int NOT_CANCEL = 0;
+
     @Override
     public boolean handleBefore(PostContext<LoginBO> postContext) {
 
+        String mac = postContext.getBizData().getTokenVO().getMac();
         String ip = postContext.getBizData().getTokenVO().getIp();
         String userId = String.valueOf(postContext.getBizData().getTokenVO().getUserId());
         String deviceName = postContext.getBizData().getDeviceName();
         Boolean autoLogin = postContext.getBizData().getTokenVO().getIsAutoLogin();
 
         log.info("正在查询用户的设备信息,userId:{}", userId);
-        DeviceEntity deviceEntity = deviceRepository.getDeviceByIp(userId, ip);
+        DeviceEntity deviceEntity = deviceRepository.getDeviceByMac(userId, mac);
 
         if (null == deviceEntity) {
-            log.info("设备{}不存在，正在创建,userId:{}", ip, userId);
+            log.info("设备{}不存在，正在创建,userId:{}", mac, userId);
             deviceEntity = DeviceEntity.builder()
                     .deviceId(SnowflakeIdWorker.nextIdStr())
                     .deviceName(deviceName)
                     .userId(String.valueOf(postContext.getBizData().getTokenVO().getUserId()))
                     .IP(ip)
+                    .mac(mac)
                     .createTime(LocalDateTime.now())
                     .updateTime(LocalDateTime.now())
                     .isCancel(autoLogin? 1 : 0)
                     .build();
             deviceRepository.insertDevice(deviceEntity);
-            log.info("设备{}创建成功,userId:{}", ip, userId);
+            log.info("设备{}创建成功,userId:{}", mac, userId);
         }
         else{
-            log.info("用户的设备{}已存在,userId:{}", ip, userId);
+            log.info("用户的设备{}已存在,userId:{}", mac, userId);
             if(autoLogin) {
-                log.info("检测到用户开启了自动登录,正在更新设备{},userId:{}", ip, userId);
-                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), AUTO_LOGIN);
-                log.info("设备{}更新成功,userId:{}", ip, userId);
+                log.info("检测到用户开启了自动登录,正在更新设备{},userId:{}", mac, userId);
+                deviceRepository.updateDevice(deviceEntity.getDeviceId(),IS_CANCEL);
+                log.info("设备{}更新成功,userId:{}", mac, userId);
             }
             else{
                 log.info("用户没有开启自动登录,正在更新设备{}最近登录时间,userId:{}", ip, userId);
-                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), NOT_AUTO_LOGIN);
-                log.info("设备{}更新成功,userId:{}", ip, userId);
+                deviceRepository.updateDevice(deviceEntity.getDeviceId(),NOT_CANCEL);
+                log.info("设备{}更新成功,userId:{}", mac, userId);
             }
         }
 

@@ -65,7 +65,7 @@ public class LoginController implements ILoginService {
             String deviceName = DeviceNameUtil.getDeviceName(userAgent);
 
             // 调用登录服务进行登录
-            LoginVO loginVO = authorizationService.login(loginRequestDTO.getPhone(), loginRequestDTO.getCode(), loginRequestDTO.getIp(), loginRequestDTO.isAutoLogin(),deviceName);
+            LoginVO loginVO = authorizationService.login(loginRequestDTO.getPhone(), loginRequestDTO.getCode(), loginRequestDTO.getIp(), loginRequestDTO.isAutoLogin(), deviceName, loginRequestDTO.getMac());
 
             // 将access_token和refresh_token添加到Cookie中
             Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());

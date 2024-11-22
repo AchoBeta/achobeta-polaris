@@ -12,14 +12,14 @@ import com.achobeta.domain.login.model.valobj.TokenVO;
 public interface ITokenRepository {
 
     /**
-     * 存储Accesstoken 删除前一个Accesstoken
+     * 存储Accesstoken
      * @param token token的值
      * @param userId 用户id
      * @param phone 手机号
-     * @param deviceId 设备id
+     * @param devicId 设备id
      * @param ip ip地址
      */
-    void storeAccessToken(String token, String userId, String phone, String deviceId, String ip);
+    void storeAccessToken(String token, String userId, String phone, String devicId, String ip, String mac);
 
     /**
      * 存储Reflashtoken
@@ -30,7 +30,7 @@ public interface ITokenRepository {
      * @param ip ip地址
      * @param isAutoLogin 是否自动登录
      */
-    void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin);
+    void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin, String mac);
 
     /**
      * 根据accesstoken删除accesstoken

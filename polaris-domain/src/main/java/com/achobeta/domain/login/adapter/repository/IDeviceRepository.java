@@ -17,10 +17,10 @@ public interface IDeviceRepository {
     /**
      * 设备信息查询
      * @param userId 用户id
-     * @param ip ip地址
-     * @return 设备信息
+     * @param mac mac地址
+     * @return
      */
-    DeviceEntity getDeviceByIp(String userId,String ip);
+    DeviceEntity getDeviceByMac(String userId,String mac);
 
     /**
      * 插入设备
@@ -30,19 +30,16 @@ public interface IDeviceRepository {
 
     /**
      * 更新设备
-     * @param updateTime 更新时间
      * @param isCancel 是否登陆
      * @param deviceId 设备id
      */
-    void updateDevice(String deviceId, LocalDateTime updateTime, int isCancel);
+    void updateDevice(String deviceId, int isCancel);
 
     /**
      * 删除设备
      * @param deviceId 设备id
-     * @param updateTime 更新时间
-     * @param isDeleted 是否删除
      */
-    void deleteDevice(String deviceId, LocalDateTime updateTime, int isDeleted);
+    void deleteDevice(String deviceId);
 
     /**
      * 根据设备id查询用户id

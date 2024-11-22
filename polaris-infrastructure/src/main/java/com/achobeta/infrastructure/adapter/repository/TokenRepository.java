@@ -37,8 +37,10 @@ public class TokenRepository implements ITokenRepository {
     private final String UNDELETEDED= "0";
     private final String DELETEDED= "1";
 
+    private final String MAC = "mac";
+
     @Override
-    public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip) {
+    public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip, String mac) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         redissonService.addToMap(key, USER_ID, userId);
         redissonService.addToMap(key, PHONE, phone);
@@ -46,6 +48,7 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(key, IP, ip);
         redissonService.addToMap(key, TYPE, TokenUtil.ACCESS_TOKEN);
         redissonService.addToMap(key, IS_DELETED,UNDELETEDED);
+        redissonService.addToMap(key, MAC,mac);
 
         //找出前一个AT，如果有就删除
         String preAT = redissonService.getFromMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, ACCESS_TOKEN);
@@ -61,12 +64,13 @@ public class TokenRepository implements ITokenRepository {
     }
 
     @Override
-    public void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin) {
+    public void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin, String mac) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         redissonService.addToMap(key, USER_ID,userId);
         redissonService.addToMap(key, PHONE,phone);
         redissonService.addToMap(key, DEVICE_ID,deviceId);
         redissonService.addToMap(key, IP,ip);
+        redissonService.addToMap(key, MAC,mac);
 
         // 存储设备id和token的关联关系
         redissonService.addToMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, REFRESH_TOKEN, token);
@@ -97,13 +101,13 @@ public class TokenRepository implements ITokenRepository {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
 
         // 取出token对应的设备id
-        String deviceId = redissonService.getFromMap(key, DEVICE_ID);
+        String deviceId = redissonService.getFromMap(key, "device_id");
 
         // 删除token
-        redissonService.addToMap(key, IS_DELETED,DELETEDED);
+        redissonService.addToMap(key, "is_deleted","1");
 
         // 删除设备id和token的关联关系
-        redissonService.removeFromMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, ACCESS_TOKEN);
+        redissonService.removeFromSet(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, token);
     }
 
     @Override
@@ -111,10 +115,10 @@ public class TokenRepository implements ITokenRepository {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
 
         // 取出token对应的设备id
-        String deviceId = redissonService.getFromMap(key, DEVICE_ID);
+        String deviceId = redissonService.getFromMap(key, "device_id");
 
         // 删除token
-        redissonService.addToMap(key, IS_DELETED,DELETEDED);
+        redissonService.addToMap(key, "is_deleted","1");
 
         // 删除设备id和token的关联关系
         redissonService.removeFromMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, REFRESH_TOKEN);
@@ -142,25 +146,12 @@ public class TokenRepository implements ITokenRepository {
     @Override
     public Boolean checkToken(String token) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
-        String isDeleted = redissonService.getFromMap(key, IS_DELETED);
-        return "0".equals(isDeleted);
-    }
-
-    @Override
-    public int checkAccessToken(String token) {
-        String key = RedisKey.TOKEN.getKeyPrefix() + token;
-        String isDeleted = redissonService.getFromMap(key, IS_DELETED);
-        if(null==isDeleted){
-            //此时token不存在,已过期
-            return 0;
-        }
-        else if(isDeleted.equals(DELETEDED)){
-            //此时token已被删除
-            return -1;
+        String isDeleted = redissonService.getFromMap(key, "is_deleted");
+        if(null==isDeleted||isDeleted.equals("1")){
+            return false;
         }
         else{
-            //此时token有效
-            return 1;
+            return true;
         }
     }
 

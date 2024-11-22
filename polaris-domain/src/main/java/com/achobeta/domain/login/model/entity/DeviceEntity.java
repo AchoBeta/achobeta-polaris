@@ -45,4 +45,9 @@ public class DeviceEntity {
      * 是否自动登录
      */
     private int isCancel;
+
+    /**
+     * 设备mac地址
+     */
+    private String mac;
 }

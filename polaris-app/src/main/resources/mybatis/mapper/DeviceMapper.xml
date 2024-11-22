@@ -7,14 +7,15 @@
         <result column="device_name" property="deviceName" />
         <result column="user_id" property="userId"/>
         <result column="ip" property="ip"/>
+        <result column="mac" property="mac"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="is_cancel" property="isCancel"/>
     </resultMap>
 
     <insert id="insertDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
-        INSERT INTO device (device_id, device_name, user_id, ip, create_time, update_time ,is_cancel ,is_deleted)
-        VALUES (#{deviceId} ,#{deviceName}, #{userId}, #{ip}, #{createTime}, #{updateTime} , #{isCancel}, 0)
+        INSERT INTO device (device_id, device_name, user_id, ip, mac, create_time, update_time ,is_cancel ,is_deleted)
+        VALUES (#{deviceId} ,#{deviceName}, #{userId}, #{ip}, #{mac}, #{createTime}, #{updateTime} , #{isCancel}, 0)
     </insert>
 
     <update id="updateDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
@@ -37,10 +38,10 @@
           and is_deleted = 0
     </update>
 
-    <select id="getDeviceByIp" resultMap="DeviceResultMap">
+    <select id="getDeviceByMac" resultMap="DeviceResultMap">
         SELECT * FROM device
                  WHERE user_id = #{userId}
-                   and ip = #{ip}
+                   and mac = #{mac}
                    and is_deleted = 0
     </select>
 
