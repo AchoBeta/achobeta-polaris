@@ -20,10 +20,6 @@ import java.util.stream.Collectors;
 import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_NOT_EXIST;
 import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_STRUCTURE_ADD_INVALID;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
 /**
  * @author yangzhiyao
  * @description 团队组织架构的实现类
@@ -50,8 +46,8 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         // 判断团队是否存在
                         if (!repository.isTeamExists(teamId)) {
                             log.error("团队不存在！teamId：{}", teamId);
-                            throw new AppException(String.valueOf(GlobalServiceStatusCode.TEAM_NOT_EXIST.getCode()),
-                                    GlobalServiceStatusCode.TEAM_NOT_EXIST.getMessage());
+                            throw new AppException(String.valueOf(TEAM_NOT_EXIST.getCode()),
+                                    TEAM_NOT_EXIST.getMessage());
                         }
 
                         // 查询团队组织架构
@@ -71,7 +67,7 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         return postContext;
                     }
                 });
-        return postContext.getBizData().getPositionEntity();
+        return postContext.getBizData().getPositionEntityList();
     }
 
     @Override
@@ -201,7 +197,7 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         return postContext;
                     }
                 });
-        return postContext.getBizData().getPositionEntityList();
+        return postContext.getBizData().getPositionEntity();
     }
 
     private static PostContext<TeamBO> buildPostContext(List<PositionEntity> newPositionList, List<PositionEntity> deletePositionList, String teamId) {

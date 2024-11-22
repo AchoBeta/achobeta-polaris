@@ -103,7 +103,7 @@ public class TeamController implements ITeamService {
             log.info("用户访问团队管理系统查询团队组织架构开始，userId:{} teamId:{}",
                     querystructureRequestDTO.getUserId(), querystructureRequestDTO.getTeamId());
 
-            PositionEntity positionEntity = viewStructureService
+            PositionEntity positionEntity = StructureService
                     .queryStructure(querystructureRequestDTO.getTeamId());
 
             log.info("用户访问团队管理系统查询团队组织架构结束，userId:{} teamId:{}",
