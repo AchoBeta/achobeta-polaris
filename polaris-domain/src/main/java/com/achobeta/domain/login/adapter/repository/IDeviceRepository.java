@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 
 public interface IDeviceRepository {
 
-    /*
+    /**
      * 设备信息查询
      * @param userId 用户id
-     * @param ip ip地址
+     * @param mac ip地址
      * @return
      */
-    DeviceEntity getDeviceByIp(String userId,String ip);
+    DeviceEntity getDeviceByMac(String userId,String mac);
 
     /*
      * 插入设备

@@ -48,4 +48,10 @@ public class DevicePO {
      * 是否自动登录
      */
     private Integer isCancel;
+
+    /*
+     * 设备mac地址
+     */
+    private String mac;
+
 }

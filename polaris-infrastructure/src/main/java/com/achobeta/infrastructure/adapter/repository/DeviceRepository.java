@@ -29,14 +29,15 @@ public class DeviceRepository implements IDeviceRepository {
      * @return DeviceEntity 设备信息
      */
     @Override
-    public DeviceEntity getDeviceByIp(String userId, String ip) {
+    public DeviceEntity getDeviceByMac(String userId, String mac) {
 
-        DevicePO devicePO = deviceMapper.getDeviceByIp(userId, ip);
+        DevicePO devicePO = deviceMapper.getDeviceByMac(userId, mac);
         return DeviceEntity.builder()
                 .deviceId(devicePO.getDeviceId())
                 .deviceName(devicePO.getDeviceName())
                 .userId(devicePO.getUserId())
                 .IP(devicePO.getIp())
+                .mac(devicePO.getMac())
                 .createTime(devicePO.getCreateTime())
                 .updateTime(devicePO.getUpdateTime())
                 .build();
@@ -50,14 +51,15 @@ public class DeviceRepository implements IDeviceRepository {
     public void insertDevice(DeviceEntity deviceEntity) {
 
         DevicePO devicePO = DevicePO.builder()
-               .deviceId(deviceEntity.getDeviceId())
-               .deviceName(deviceEntity.getDeviceName())
-               .userId(deviceEntity.getUserId())
-               .ip(deviceEntity.getIP())
-               .createTime(deviceEntity.getCreateTime())
-               .updateTime(deviceEntity.getUpdateTime())
+                .deviceId(deviceEntity.getDeviceId())
+                .deviceName(deviceEntity.getDeviceName())
+                .userId(deviceEntity.getUserId())
+                .ip(deviceEntity.getIP())
+                .createTime(deviceEntity.getCreateTime())
+                .updateTime(deviceEntity.getUpdateTime())
                 .isCancel(deviceEntity.getIsCancel())
-               .build();
+                .mac(deviceEntity.getMac())
+                .build();
         deviceMapper.insertDevice(devicePO);
 
     }
@@ -69,7 +71,7 @@ public class DeviceRepository implements IDeviceRepository {
      * @param isCancel 是否自动登陆
      */
     @Override
-    public void updateDevice(String deviceId, LocalDateTime updateTime, int isCancel){
+    public void updateDevice(String deviceId, LocalDateTime updateTime, int isCancel) {
         deviceMapper.updateDevice(deviceId, updateTime, isCancel);
     }
 
