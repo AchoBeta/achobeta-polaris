@@ -93,6 +93,6 @@ public class DefaultLogoutService extends AbstractPostProcessor<LogoutBO> implem
         log.info("正在删除该设备的所有token,userId:{},deviceId:{}", userId, deviceId);
         tokenRepository.deleteTokenByDeviceId(deviceId);
         log.info("正在更新设备表,userId:{},deviceId:{}", userId, deviceId);
-        deviceRepository.updateDevice(deviceId, LocalDateTime.now(), 0);
+        deviceRepository.updateDevice(deviceId, 0);
     }
 }

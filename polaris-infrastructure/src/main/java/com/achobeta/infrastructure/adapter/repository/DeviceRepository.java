@@ -22,6 +22,8 @@ public class DeviceRepository implements IDeviceRepository {
     @Resource
     private DeviceMapper deviceMapper;
 
+    private static final int DELETED = 1;
+
     /*
      * 根据用户id和ip地址查询设备信息
      * @param userId 用户id
@@ -87,5 +89,14 @@ public class DeviceRepository implements IDeviceRepository {
     @Override
     public void deleteDevice(String deviceId) {
         deviceMapper.deleteDevice(deviceId, LocalDateTime.now(), DELETED);
+    }
+
+    @Override
+    public String getUserIdByDeviceId(String deviceId) {
+        DevicePO userPO = deviceMapper.getUserIdByDeviceId(deviceId);
+        if (userPO == null) {
+            return null;
+        }
+        return userPO.getUserId();
     }
 }
