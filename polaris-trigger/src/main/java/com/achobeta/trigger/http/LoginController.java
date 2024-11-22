@@ -40,6 +40,12 @@ public class LoginController implements ILoginService {
     @Resource
     private IRefreshTokenService reflashTokenService;
 
+
+    private final String ACCESS_TOKEN = "access_token";
+    private final String REFRESH_TOKEN = "refresh_token";
+    private final String ACCESS_TOKEN_PATH = "/achobeta/polaris/access_token";
+    private final String REFRESH_TOKEN_PATH = "/achobeta/polaris/refresh_token";
+
     @Override
     @PostMapping(value = "login")
     public Response<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest request, HttpServletResponse response) {
@@ -62,8 +68,8 @@ public class LoginController implements ILoginService {
             LoginVO loginVO = authorizationService.login(loginRequestDTO.getPhone(), loginRequestDTO.getCode(), loginRequestDTO.getIp(), loginRequestDTO.isAutoLogin(),deviceName);
 
             // 将access_token和refresh_token添加到Cookie中
-            Cookie accessTokenCookie = new Cookie("access_token", loginVO.getAccessToken());
-            Cookie refreshTokenCookie = new Cookie("refresh_token", loginVO.getRefreshToken());
+            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
+            Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN, loginVO.getRefreshToken());
 
 //            // 设置Cookie的过期时间（可选）
 //            accessTokenCookie.setMaxAge(60); // 1小时
@@ -74,16 +80,12 @@ public class LoginController implements ILoginService {
 //            refreshTokenCookie.setSecure(true);
 
             // 设置Cookie的路径（可选）
-            accessTokenCookie.setPath("/achobeta/polaris/access_token");
-            refreshTokenCookie.setPath("/achobeta/polaris/refresh_token");
+            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
+            refreshTokenCookie.setPath(REFRESH_TOKEN_PATH);
 
             // 将Cookie添加到响应中
             response.addCookie(accessTokenCookie);
             response.addCookie(refreshTokenCookie);
-
-            //todo
-//            RedirectView redirectView = new RedirectView();
-//            redirectView.setUrl("/achobeta/polaris/home");
 
             log.info("用户访问登录系统结束，phone:{}", loginRequestDTO.getPhone());
             return Response.SYSTEM_SUCCESS(
@@ -101,21 +103,21 @@ public class LoginController implements ILoginService {
     }
 
     @Override
-    @PostMapping(value = "reflash")
+    @PostMapping(value = "refresh")
     public Response<LoginResponseDTO> refresh(HttpServletRequest request, HttpServletResponse response) {
         try {
             // 从请求头中获取refreshToken
-            String reflashToken = request.getHeader("reflash_token");
+            String refrashToken = request.getHeader(REFRESH_TOKEN);
 
-            log.info("正在访问无感刷新接口,reflashToken:{}", reflashToken);
-            if(null == reflashToken || reflashToken.isEmpty()) {
+            log.info("正在访问无感刷新接口,reflashToken:{}", refrashToken);
+            if(null == refrashToken || refrashToken.isEmpty()) {
                 log.info("refreshToken缺失");
                 throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getCode()),GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getMessage());
             }
-            LoginVO loginVO = reflashTokenService.reflash( reflashToken);
+            LoginVO loginVO = reflashTokenService.reflash( refrashToken);
 
             // 将access_token和refresh_token添加到Cookie中
-            Cookie accessTokenCookie = new Cookie("access_token", loginVO.getAccessToken());
+            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
 
 //            // 设置Cookie的过期时间（可选）
 //            accessTokenCookie.setMaxAge(60); // 1小时
@@ -124,14 +126,10 @@ public class LoginController implements ILoginService {
 //            accessTokenCookie.setSecure(true);
 
             // 设置Cookie的路径（可选）
-            accessTokenCookie.setPath("/achobeta/polaris/access_token");
+            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
 
             // 将Cookie添加到响应中
             response.addCookie(accessTokenCookie);
-
-            //todo
-//            RedirectView redirectView = new RedirectView();
-//            redirectView.setUrl("/achobeta/polaris/home");
 
             return Response.SYSTEM_SUCCESS(
                     LoginResponseDTO.builder()
@@ -139,11 +137,11 @@ public class LoginController implements ILoginService {
                            .build()
             );
         } catch (AppException e) {
-            log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader("refresh_token"));
+            log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 
             return Response.SERVICE_ERROR(e.getInfo());
         }catch (Exception e) {
-            log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader("refresh_token"));
+            log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 
             return Response.SERVICE_ERROR(e.getMessage());
         }
