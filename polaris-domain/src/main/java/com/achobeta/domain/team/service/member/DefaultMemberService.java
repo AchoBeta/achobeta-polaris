@@ -28,7 +28,7 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     @Override
     public List<UserEntity> queryMembers(String teamId, String lastId, Integer limit) {
         PostContext<TeamBO> postContext = buildPostContext(teamId, lastId, limit);
-        postContext = super.doPostProcessor(postContext, MemberPostProcessor.class,
+        postContext = super.doPostProcessor(postContext, MemberListPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
