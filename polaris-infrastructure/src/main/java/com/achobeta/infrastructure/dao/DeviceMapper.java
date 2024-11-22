@@ -39,4 +39,10 @@ public interface DeviceMapper {
      */
     void deleteDevice(String deviceId, LocalDateTime updateTime, int isDeleted);
 
+    /*
+     * 根据deviceId获取userId
+     * @param deviceId
+     * @return userId
+     */
+    DevicePO getUserIdByDeviceId(String deviceId);
 }

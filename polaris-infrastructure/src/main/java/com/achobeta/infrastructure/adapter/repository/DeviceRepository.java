@@ -90,4 +90,13 @@ public class DeviceRepository implements IDeviceRepository {
     public void deleteDevice(String deviceId) {
         deviceMapper.deleteDevice(deviceId, LocalDateTime.now(), DELETED);
     }
+
+    @Override
+    public String getUserIdByDeviceId(String deviceId) {
+        DevicePO userPO = deviceMapper.getUserIdByDeviceId(deviceId);
+        if (userPO == null) {
+            return null;
+        }
+        return userPO.getUserId();
+    }
 }

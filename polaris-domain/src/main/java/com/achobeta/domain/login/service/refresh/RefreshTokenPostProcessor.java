@@ -1,4 +1,4 @@
-package com.achobeta.domain.login.service.reflash;
+package com.achobeta.domain.login.service.refresh;
 
 import com.achobeta.domain.login.model.bo.LoginBO;
 import com.achobeta.types.support.postprocessor.BasePostProcessor;
@@ -9,6 +9,6 @@ import com.achobeta.types.support.postprocessor.BasePostProcessor;
  * @Date: 2024/11/17 15:56
  * @Version: 1.0
  */
-public interface ReflshTokenPostProcessor extends BasePostProcessor<LoginBO> {
+public interface RefreshTokenPostProcessor extends BasePostProcessor<LoginBO> {
 
 }

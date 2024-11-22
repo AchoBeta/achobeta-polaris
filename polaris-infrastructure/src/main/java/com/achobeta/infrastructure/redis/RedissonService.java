@@ -107,6 +107,11 @@ public class RedissonService implements IRedisService {
         return set.contains(value);
     }
 
+    public void setSetExpired(String key, long expired) {
+        RSet<String> set = redissonClient.getSet(key);
+        set.expire(Duration.ofMillis(expired));
+    }
+
     public void addToList(String key, String value) {
         RList<String> list = redissonClient.getList(key);
         list.add(value);
@@ -145,6 +150,11 @@ public class RedissonService implements IRedisService {
     public Map<String,String> getMapToJavaMap(String key) {
         RMap<String, String> map = redissonClient.getMap(key);
         return map.readAllMap();
+    }
+
+    public void removeFromMap(String key, String field) {
+        RMap<String, String> map = redissonClient.getMap(key);
+        map.remove(field);
     }
 
     @Override

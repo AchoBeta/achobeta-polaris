@@ -57,6 +57,10 @@ public enum GlobalServiceStatusCode {
     LOGIN_ACCESS_TOKEN_EXPIRED(6007, "accessToken已过期"),
     LOGIN_ACCESS_TOKEN_INVALID(6008, "accessToken无效"),
     LOGIN_ACCESS_TOKEN_NEED_REFLAH(6009, "accessToken即将过期，需要刷新"),
+    LOGIN_FAILED_TO_FORCE_LOGOUT(6010, "强制下线失败"),
+    LOGIN_FAILED_TO_LOGOUT(6011, "登出失败"),
+    LOGIN_UNKNOWN_ERROR(6012, "登陆模块未知错误,请联系管理员"),
+    LOGIN_ACCESS_TOKEN_HAVE_REFRESHED(6013, "accessToken已被刷新,请重新发送请求"),
     ;
 
     private Integer code;
