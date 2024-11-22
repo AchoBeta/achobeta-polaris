@@ -14,8 +14,10 @@
     <select id="listRole" resultMap="roleResultMap">
         select t1.id, t1.role_id, t1.role_name, t1.team_id, t1.create_time, t1.update_time
         from role as t1, user_role as t2
-        where t2.user_id = #{userId} and t1.role_id = t2.role_id
-        <if test="teamId!= null and teamId!= ''">and t1.team_id = #{teamId}</if>
+        <where>
+            t2.user_id = #{userId} and t1.role_id = t2.role_id
+            <if test="teamId!= null and teamId!= ''">and t1.team_id = #{teamId}</if>
+        </where>
     </select>
 
 </mapper>
