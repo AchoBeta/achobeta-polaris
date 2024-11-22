@@ -46,7 +46,7 @@ public class AuthRepository implements IAuthRepository {
     }
 
     @Override
-    public List<String> queryPermissions(String userId, Collection<String> roleIds) {
+    public List<String> queryPermissions(String userId, List<String> roleIds) {
         if (roleIds == null || roleIds.isEmpty()) {
             return Collections.emptyList();
         }

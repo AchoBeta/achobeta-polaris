@@ -2,12 +2,12 @@ package com.achobeta.aop;
 
 import com.achobeta.domain.auth.adapter.repository.IAuthRepository;
 import com.achobeta.domain.auth.model.entity.RoleEntity;
+import com.achobeta.types.Response;
 import com.achobeta.types.annotation.AuthVerify;
-import com.achobeta.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -37,8 +37,8 @@ public class AuthVerifyAspect {
      * @return Object
      * @throws Throwable 异常
      */
-    @Before("@annotation(com.achobeta.types.annotation.AuthVerify)")
-    public void verify(JoinPoint point) throws Throwable {
+    @Around("@annotation(com.achobeta.types.annotation.AuthVerify)")
+    public Object verify(ProceedingJoinPoint point) throws Throwable {
         Object arg = point.getArgs()[0];
         MethodSignature signature = (MethodSignature) point.getSignature();
         Method method = signature.getMethod();
@@ -57,12 +57,11 @@ public class AuthVerifyAspect {
         // 判断用户是否有权限
         for (String neededPermission : needed) {
             if (userPermissions.contains(neededPermission)) {
-                return;
+                return point.proceed();
             }
         }
         log.error("用户 {} 无权限访问方法 {} ", userId, point.getSignature().getName());
-        throw new AppException(USER_NO_PERMISSION.getCode().toString(),
-                USER_NO_PERMISSION.getMessage());
+        return Response.CUSTOMIZE_ERROR(USER_NO_PERMISSION);
     }
 
 }

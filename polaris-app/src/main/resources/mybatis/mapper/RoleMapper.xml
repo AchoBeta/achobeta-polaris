@@ -15,8 +15,9 @@
         select t1.id, t1.role_id, t1.role_name, t1.team_id, t1.create_time, t1.update_time
         from role as t1, user_role as t2
         <where>
-            t2.user_id = #{userId} and t1.role_id = t2.role_id
-            <if test="teamId!= null and teamId!= ''">and t1.team_id = #{teamId}</if>
+            t2.user_id = #{userId} and t1.role_id = t2.role_id and
+            (<if test="teamId!= null and teamId!= ''">t1.team_id = #{teamId} or </if>
+            t1.team_id = '')
         </where>
     </select>
 

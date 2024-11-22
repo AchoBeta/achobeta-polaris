@@ -2,7 +2,6 @@ package com.achobeta.domain.auth.adapter.repository;
 
 import com.achobeta.domain.auth.model.entity.RoleEntity;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,6 +24,6 @@ public interface IAuthRepository {
      * @param roleIds 角色id集合
      * @return
      */
-    List<String> queryPermissions(String userId, Collection<String> roleIds);
+    List<String> queryPermissions(String userId, List<String> roleIds);
 
 }
