@@ -22,6 +22,8 @@ public class DeviceRepository implements IDeviceRepository {
     @Resource
     private DeviceMapper deviceMapper;
 
+    private static final int DELETED = 1;
+
     /*
      * 根据用户id和ip地址查询设备信息
      * @param userId 用户id
@@ -32,6 +34,9 @@ public class DeviceRepository implements IDeviceRepository {
     public DeviceEntity getDeviceByMac(String userId, String mac) {
 
         DevicePO devicePO = deviceMapper.getDeviceByMac(userId, mac);
+        if (devicePO == null) {
+            return null;
+        }
         return DeviceEntity.builder()
                 .deviceId(devicePO.getDeviceId())
                 .deviceName(devicePO.getDeviceName())
@@ -71,8 +76,8 @@ public class DeviceRepository implements IDeviceRepository {
      * @param isCancel 是否自动登陆
      */
     @Override
-    public void updateDevice(String deviceId, LocalDateTime updateTime, int isCancel) {
-        deviceMapper.updateDevice(deviceId, updateTime, isCancel);
+    public void updateDevice(String deviceId, int isCancel) {
+        deviceMapper.updateDevice(deviceId, LocalDateTime.now(), isCancel);
     }
 
     /*
@@ -82,7 +87,7 @@ public class DeviceRepository implements IDeviceRepository {
      * @param isDeleted
      */
     @Override
-    public void deleteDevice(String deviceId, LocalDateTime updateTime, int isDeleted) {
-        deviceMapper.deleteDevice(deviceId, updateTime, isDeleted);
+    public void deleteDevice(String deviceId) {
+        deviceMapper.deleteDevice(deviceId, LocalDateTime.now(), DELETED);
     }
 }

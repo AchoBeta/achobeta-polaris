@@ -26,6 +26,9 @@ public class OperateDevicePostProcessor implements LoginPostProcessor {
     @Resource
     private IDeviceRepository deviceRepository;
 
+    private static final int IS_CANCEL = 1;
+    private static final int NOT_CANCEL = 0;
+
     @Override
     public boolean handleBefore(PostContext<LoginBO> postContext) {
 
@@ -57,12 +60,12 @@ public class OperateDevicePostProcessor implements LoginPostProcessor {
             log.info("用户的设备{}已存在,userId:{}", mac, userId);
             if(autoLogin) {
                 log.info("检测到用户开启了自动登录,正在更新设备{},userId:{}", mac, userId);
-                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), 1);
+                deviceRepository.updateDevice(deviceEntity.getDeviceId(),IS_CANCEL);
                 log.info("设备{}更新成功,userId:{}", mac, userId);
             }
             else{
                 log.info("用户没有开启自动登录,正在更新设备{}最近登录时间,userId:{}", ip, userId);
-                deviceRepository.updateDevice(deviceEntity.getDeviceId(), LocalDateTime.now(), 0);
+                deviceRepository.updateDevice(deviceEntity.getDeviceId(),NOT_CANCEL);
                 log.info("设备{}更新成功,userId:{}", mac, userId);
             }
         }
