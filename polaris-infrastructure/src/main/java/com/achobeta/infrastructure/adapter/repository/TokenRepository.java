@@ -36,21 +36,21 @@ public class TokenRepository implements ITokenRepository {
     private final String REFRESH_TOKEN = "refresh_token";
     private final String UNDELETEDED= "0";
     private final String DELETEDED= "1";
-final
+
     @Override
     public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
-        redissonService.addToMap(key, USER_ID,userId);
-        redissonService.addToMap(key, PHONE,phone);
-        redissonService.addToMap(key, DEVICE_ID,deviceId);
-        redissonService.addToMap(key, IP,ip);
+        redissonService.addToMap(key, USER_ID, userId);
+        redissonService.addToMap(key, PHONE, phone);
+        redissonService.addToMap(key, DEVICE_ID, deviceId);
+        redissonService.addToMap(key, IP, ip);
         redissonService.addToMap(key, TYPE, TokenUtil.ACCESS_TOKEN);
         redissonService.addToMap(key, IS_DELETED,UNDELETEDED);
 
         //找出前一个AT，如果有就删除
         String preAT = redissonService.getFromMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, ACCESS_TOKEN);
         if(preAT != null){
-            redissonService.addToMap(preAT, IS_DELETED,DELETEDED);
+            redissonService.addToMap(RedisKey.TOKEN.getKeyPrefix() + preAT, IS_DELETED,DELETEDED);
         }
 
         // 存储设备id和token的关联关系
@@ -143,7 +143,7 @@ final
     public Boolean checkToken(String token) {
         String key = RedisKey.TOKEN.getKeyPrefix() + token;
         String isDeleted = redissonService.getFromMap(key, IS_DELETED);
-        return "1".equals(isDeleted);
+        return "0".equals(isDeleted);
     }
 
     @Override
