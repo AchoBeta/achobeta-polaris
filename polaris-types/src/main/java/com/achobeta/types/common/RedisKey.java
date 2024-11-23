@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
  * @Date: 2024/11/10 23:26
  * @Version: 1.0
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
+
 public class RedisKey {
 
     public static final String CODE = "ab:polaris:login:code:";
