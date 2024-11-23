@@ -1,0 +1,13 @@
+package com.achobeta.domain.device.service.get;
+
+import com.achobeta.domain.device.model.bo.DeviceBO;
+import com.achobeta.types.support.postprocessor.BasePostProcessor;
+
+/**
+ * @author huangwenxing
+ * @description 设备渲染拓展统一接口
+ * @date 2024/11/8
+ */
+public interface DevicePostProcessor extends BasePostProcessor<DeviceBO> {
+
+}

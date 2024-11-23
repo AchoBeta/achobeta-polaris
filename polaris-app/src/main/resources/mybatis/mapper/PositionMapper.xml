@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.achobeta.infrastructure.dao.PositionMapper">
+
+    <resultMap id="PositionResultMap" type="com.achobeta.infrastructure.dao.po.PositionPO">
+        <id property="id" column="id"/>
+        <result property="teamId" column="team_id"/>
+        <result property="positionName" column="position_name"/>
+        <result property="positionId" column="position_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="listSubordinateByPositionId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position
+        where position_id in (select subordinate
+                                from position
+                                where position_id = #{positionId}
+                                        and is_deleted = 0)
+                and subordinate = '' and is_deleted = 0
+    </select>
+
+    <select id="getPositionByPositionId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position
+        where position_id = #{positionId}
+                and subordinate = ''
+                and is_deleted = 0
+    </select>
+
+    <select id="getParentPositionByPositionId" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position
+        where subordinate = #{positionId}
+
+    <select id="listParentPositionByPositions" resultMap="PositionResultMap">
+        select id,position_id,position_name,level,subordinate,team_id,
+                create_by,create_time,update_by,update_time
+        from position
+        where subordinate in
+        <foreach collection="positions" item="position" separator="," open="(" close=")">
+                #{position.positionId}
+        </foreach>
+                and is_deleted = 0
+    </select>
+
+    <select id="listPositionByUserId" resultMap="PositionResultMap">
+        select t1.id,t1.position_id,t1.position_name,t1.level,t1.subordinate,t1.team_id,
+                t1.create_by,t1.create_time,t1.update_by,t1.update_time
+        from position as t1, user_position as t2
+        where t2.user_id = #{userId}
+                and t1.position_id = t2.position_id
+                and t1.is_deleted = 0
+                and t2.is_deleted = 0
+    </select>
+
+</mapper>
