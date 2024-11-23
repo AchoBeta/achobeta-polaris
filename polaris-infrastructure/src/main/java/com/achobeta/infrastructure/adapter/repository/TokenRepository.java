@@ -36,8 +36,12 @@ public class TokenRepository implements ITokenRepository {
     private final String REFRESH_TOKEN = "refresh_token";
     private final String UNDELETED = "0";
     private final String DELETED = "1";
-
     private final String MAC = "mac";
+    private final long MINUTE1 = TimeUnit.MINUTES.toMillis(1);
+    private final long MINUTE5 = TimeUnit.MINUTES.toMillis(5);
+    private final long HOUR12 = TimeUnit.HOURS.toMillis(12);
+    private final long DAY30 = TimeUnit.DAYS.toMillis(30);
+
 
     @Override
     public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip, String mac) {
@@ -60,7 +64,7 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, ACCESS_TOKEN, token);
 
         //设置该token的生存时间
-        redissonService.setMapExpired(key, TimeUnit.MINUTES.toMillis(5));
+        redissonService.setMapExpired(key,MINUTE5);
     }
 
     @Override
@@ -79,18 +83,18 @@ public class TokenRepository implements ITokenRepository {
             redissonService.addToMap(key, TYPE, TokenUtil.REFRESH_TOKEN_TYPE[0]);
 
             //设置该token的生存时间
-            redissonService.setMapExpired(key, TimeUnit.HOURS.toMillis(12));
+            redissonService.setMapExpired(key,HOUR12);
 
             //设置该关联关系的生存时间
-            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, TimeUnit.HOURS.toMillis(12) + TimeUnit.MINUTES.toMillis(6));
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, HOUR12 + MINUTE5 + MINUTE1);
         } else {
             redissonService.addToMap(key, TYPE, TokenUtil.REFRESH_TOKEN_TYPE[1]);
 
             //设置该token的生存时间
-            redissonService.setMapExpired(key, TimeUnit.DAYS.toMillis(30));
+            redissonService.setMapExpired(key,DAY30);
 
             //设置该关联关系的生存时间
-            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, TimeUnit.DAYS.toMillis(30) + TimeUnit.MINUTES.toMillis(6));
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, DAY30 + MINUTE5 + MINUTE1);
         }
 
         redissonService.addToMap(key, IS_DELETED, UNDELETED);
@@ -179,10 +183,10 @@ public class TokenRepository implements ITokenRepository {
         } else if (type.equals(TokenUtil.REFRESH_TOKEN_TYPE[0])) {
 
             //重置token的有效时间
-            redissonService.setMapExpired(key, TimeUnit.MINUTES.toMillis(5));
+            redissonService.setMapExpired(key, MINUTE5);
 
             //重置关联关系的有效时间
-            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, TimeUnit.HOURS.toMillis(12) + TimeUnit.MINUTES.toMillis(6));
+            redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN.getKeyPrefix() + deviceId, HOUR12 + MINUTE5 + MINUTE1);
         } else {
             //类型为access_token或者reflash_token30或者其他
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_REFRESH_TOKEN_INVALID.getMessage());
