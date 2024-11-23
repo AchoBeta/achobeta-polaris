@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -122,6 +123,23 @@ public class PositionRepository implements IPositionRepository {
     @Override
     public void bindUsersToPosition(String positionId, List<String> userIds) {
         positionMapper.addUsersToPosition(positionId, userIds);
+    }
+
+    @Override
+    public List<PositionEntity> queryTeamByUserId(String userId) {
+        List<PositionPO> positionPOList = positionMapper.listPositionByUserId(userId);
+        if (CollectionUtil.isEmpty(positionPOList)) {
+            return Collections.emptyList();
+        }
+        List<PositionEntity> positionEntityList = new ArrayList<>(positionPOList.size());
+        for (PositionPO positionPO : positionPOList) {
+            positionEntityList.add(PositionEntity.builder()
+                   .positionId(positionPO.getPositionId())
+                   .positionName(positionPO.getPositionName())
+                   .level(positionPO.getLevel())
+                   .build());
+        }
+        return positionEntityList;
     }
 
 }

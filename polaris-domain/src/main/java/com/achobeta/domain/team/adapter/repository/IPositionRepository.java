@@ -65,13 +65,19 @@ public interface IPositionRepository {
 
     /**
      * 给予成员多个职位/分组,绑定多个user到一个position
-     *      * 删除position要用
-     *      * @author yangzhiyao
-     *      * @date 2024/11/14
+     * 删除position要用
+     * @author yangzhiyao
+     * @date 2024/11/14
      * @param positionId
      * @param userIds
      * @return
      */
     void bindUsersToPosition(String positionId, List<String> userIds);
 
+    /**
+     * 查询某个用户的团队Id及名称
+     * @param userId
+     * @return
+     */
+    List<PositionEntity> queryTeamByUserId(String userId);
 }

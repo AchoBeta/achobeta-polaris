@@ -83,4 +83,10 @@ public interface PositionMapper {
      */
     List<PositionPO> listPositionByUserId(String userId);
 
+    /**
+     * 获取某个用户的团队Id和名称
+     * @param userId
+     * @return
+     */
+    List<PositionPO> listTeamByUserId(String userId);
 }
