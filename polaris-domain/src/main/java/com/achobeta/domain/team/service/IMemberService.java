@@ -11,6 +11,13 @@ import java.util.List;
  */
 public interface IMemberService {
 
+    /**
+     * 查看团队成员列表
+     * @param teamId 团队ID
+     * @param lastId 上次查询的最后一条记录ID
+     * @param limit 单次查询一页的记录数
+     * @return 成员列表
+     */
     List<UserEntity> queryMembers(String teamId,String lastId, Integer limit);
 
 }
