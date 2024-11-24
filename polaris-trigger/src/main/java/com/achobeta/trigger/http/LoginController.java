@@ -12,6 +12,7 @@ import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.util.DeviceNameUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +30,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController()
+@Validated
 @CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/auth/")
 @RequiredArgsConstructor
@@ -95,7 +97,7 @@ public class LoginController implements ILoginService {
             );
         } catch (AppException e) {
             log.error("用户访问登录系统失败,phone:{}", loginRequestDTO.getPhone(), e);
-            return Response.SERVICE_ERROR(e.getInfo());
+            return Response.APP_ECEPTION(e);
         }catch (Exception e) {
             log.error("用户访问登录系统失败,phone:{}", loginRequestDTO.getPhone(), e);
             return Response.SERVICE_ERROR(e.getMessage());
@@ -139,7 +141,7 @@ public class LoginController implements ILoginService {
         } catch (AppException e) {
             log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 
-            return Response.SERVICE_ERROR(e.getInfo());
+            return Response.APP_ECEPTION(e);
         }catch (Exception e) {
             log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 

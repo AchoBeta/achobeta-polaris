@@ -4,6 +4,9 @@ package com.achobeta.api;
 import com.achobeta.api.dto.GetCodeRequestDTO;
 import com.achobeta.api.dto.GetCodeResponseDTO;
 import com.achobeta.types.Response;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * @Author: 严豪哲
@@ -14,5 +17,5 @@ import com.achobeta.types.Response;
 
 public interface IGetCodeService {
 
-    Response<GetCodeResponseDTO> getCode(GetCodeRequestDTO getCodeRequestDTO);
+    Response<GetCodeResponseDTO> getCode(@Valid @RequestBody GetCodeRequestDTO getCodeRequestDTO);
 }

@@ -25,15 +25,14 @@ public class LoginRequestDTO {
     /*
      * 登录用户的手机号
      */
-    @Pattern(regexp = "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$", message = "手机号格式错误")
-    @NotBlank(message = "手机号不能为空")
+    @Pattern(regexp = "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$", message = "请检查手机号是否正确")
+    @NotBlank(message = "请检查手机号是否正确")
     private String phone;
 
     /*
      * 登录用户的验证码
      */
-    @Pattern(regexp = "^\\d{6}$", message = "验证码格式错误")
-    @NotBlank(message = "验证码不能为空")
+    @Pattern(regexp = "^\\d{6}$", message = "验证码错误,请重试")
     private String code;
 
     /*

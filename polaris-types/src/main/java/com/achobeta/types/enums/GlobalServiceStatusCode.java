@@ -37,7 +37,7 @@ public enum GlobalServiceStatusCode {
     USER_CREDENTIALS_EXPIRED(2004, "密码过期"),
     USER_ACCOUNT_DISABLE(2005, "账号不可用"),
     USER_ACCOUNT_LOCKED(2006, "账号被锁定"),
-    USER_ACCOUNT_NOT_EXIST(2007, "账号不存在"),
+    USER_ACCOUNT_NOT_EXIST(2007, "暂无此账号，请联系管理员"),
     USER_ACCOUNT_ALREADY_EXIST(2008, "账号已存在"),
     USER_ACCOUNT_USE_BY_OTHERS(2009, "账号下线"),
     USER_ACCOUNT_REGISTER_ERROR(2010, "账号注册错误"),
@@ -45,7 +45,7 @@ public enum GlobalServiceStatusCode {
     USER_TYPE_EXCEPTION(2101, "用户类别异常"),
 
     USER_NO_PERMISSION(2403, "用户无权限"),
-    USER_CAPTCHA_CODE_ERROR(2500, "验证码错误"),
+    USER_CAPTCHA_CODE_ERROR(2500, "验证码错误,请重试"),
 
     /* 登录模块错误 6001-7000*/
     LOGIN_CODE_EXIT(6001,"需要等待一段时间后才能再次尝试"),
