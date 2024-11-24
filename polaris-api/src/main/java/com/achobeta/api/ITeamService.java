@@ -13,6 +13,11 @@ import javax.validation.Valid;
  */
 public interface ITeamService {
 
+    /**
+     * 查询团队成员列表
+     * @param requestMemberListDTO 请求参数: userId, teamId, lastId, limit
+     * @return 团队成员列表
+     */
     Response<ResponseMemberListDTO> queryMemberList(@Valid RequestMemberListDTO requestMemberListDTO);
 
 }
