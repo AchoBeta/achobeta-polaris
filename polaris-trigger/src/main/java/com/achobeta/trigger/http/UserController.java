@@ -66,7 +66,15 @@ public class UserController implements IUserService {
         }  catch (AppException e) {
             log.error("用户访问修改个人信息系统失败！userId:{}",
                     modifyUserInfoRequestDTO.getUserId(), e);
-            return Response.<ModifyUserInfoResponseDTO>builder();
+            return Response.<ModifyUserInfoResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+        } catch (Exception e) {
+            log.error("用户访问个人信息系统失败！userId:{}",
+                    modifyUserInfoRequestDTO.getUserId(), e);
+            return Response.SERVICE_ERROR();
         }
     }
 

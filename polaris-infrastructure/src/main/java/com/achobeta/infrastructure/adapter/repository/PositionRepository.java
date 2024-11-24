@@ -9,9 +9,12 @@ import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.RedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,6 +69,79 @@ public class PositionRepository implements IPositionRepository {
     @Override
     public Boolean isTeamExists(String teamId) {
         return positionMapper.getPositionByPositionId(teamId) != null;
+    }
+
+    @Override
+    public void savePosition(List<PositionEntity> positionEntityList, String teamId) {
+
+        // 封装到PositionPO对象中
+        List<PositionPO> positionPOList = new ArrayList<>();
+        for (PositionEntity positionEntity : positionEntityList) {
+            PositionPO positionPO = PositionPO.builder()
+                            .positionId(positionEntity.getPositionId())
+                            .positionName(positionEntity.getPositionName())
+                            .subordinate(positionEntity.getSubordinateId())
+                            .teamId(positionEntity.getTeamId())
+                            .level(positionEntity.getLevel())
+                            .build();
+            positionPOList.add(positionPO);
+        }
+
+        // 保存到数据库中
+        positionMapper.addPosition(positionPOList);
+
+        redisService.remove(RedisKey.TEAM_STRUCTURE + teamId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deletePosition(Collection<String> positionsToDelete, String teamId) {
+        // 数据库逻辑删除
+        positionMapper.deletePositionInPosition(positionsToDelete);
+        positionMapper.deletePositionInUserPosition(positionsToDelete);
+
+        redisService.remove(RedisKey.TEAM_STRUCTURE + teamId);
+    }
+
+    @Override
+    public PositionEntity queryParentPosition(String positionId) {
+        PositionPO positionPO = positionMapper.getParentPositionByPositionId(positionId);
+        if (positionPO == null) {
+            return null;
+        }
+        return PositionEntity.builder()
+               .positionId(positionPO.getPositionId())
+               .positionName(positionPO.getPositionName())
+               .level(positionPO.getLevel())
+               .teamId(positionPO.getTeamId())
+               .build();
+    }
+
+    @Override
+    public List<String> queryUserIdsByPositionIds(Collection<String> positionIds) {
+        return positionMapper.listUserIdsByPositionIds(positionIds);
+    }
+
+    @Override
+    public void bindUsersToPosition(String positionId, List<String> userIds) {
+        positionMapper.addUsersToPosition(positionId, userIds);
+    }
+
+    @Override
+    public List<PositionEntity> queryTeamByUserId(String userId) {
+        List<PositionPO> positionPOList = positionMapper.listPositionByUserId(userId);
+        if (CollectionUtil.isEmpty(positionPOList)) {
+            return Collections.emptyList();
+        }
+        List<PositionEntity> positionEntityList = new ArrayList<>(positionPOList.size());
+        for (PositionPO positionPO : positionPOList) {
+            positionEntityList.add(PositionEntity.builder()
+                   .positionId(positionPO.getPositionId())
+                   .positionName(positionPO.getPositionName())
+                   .level(positionPO.getLevel())
+                   .build());
+        }
+        return positionEntityList;
     }
 
 }
