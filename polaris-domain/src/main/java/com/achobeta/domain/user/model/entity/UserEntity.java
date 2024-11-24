@@ -89,4 +89,5 @@ public class UserEntity {
      * 和上面的positions差不多，只是为了方便前端显示和逻辑处理多做一个
      */
     private List<String> positionList;
+
 }

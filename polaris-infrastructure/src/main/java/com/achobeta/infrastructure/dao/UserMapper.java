@@ -17,4 +17,17 @@ public interface UserMapper {
 
     Long getIdByUserId(String userId);
 
+    /**
+     * 根据userId获取用户信息
+     * @param userId 用户业务id
+     * @return 用户实体
+     */
+    UserPO getUserByUserId(String userId);
+
+    /**
+     * 更新用户信息
+     * @param userPO 用户实体
+     */
+    void updateUserInfo(UserPO userPO);
+
 }

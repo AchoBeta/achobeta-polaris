@@ -43,4 +43,5 @@ public class PositionEntity {
      * 添加新节点时用到，子节点名称，用来找新生成的它的ID
      */
     private String subordinateName;
+
 }

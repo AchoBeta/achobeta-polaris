@@ -47,6 +47,7 @@ public enum GlobalServiceStatusCode {
     USER_NO_PERMISSION(2403, "用户无权限"),
     USER_CAPTCHA_CODE_ERROR(2500, "验证码错误"),
 
+    /* 团队异常 3001-4000 */
     TEAM_NOT_EXIST(3001, "团队不存在"),
     TEAM_NOT_JOIN(3002, "团队未加入"),
     TEAM_NOT_NUMBER(3003, "团队成员不存在"),
