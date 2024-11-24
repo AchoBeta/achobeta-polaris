@@ -9,6 +9,7 @@ import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.RedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -93,6 +94,7 @@ public class PositionRepository implements IPositionRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deletePosition(Collection<String> positionsToDelete, String teamId) {
         // 数据库逻辑删除
         positionMapper.deletePositionInPosition(positionsToDelete);
