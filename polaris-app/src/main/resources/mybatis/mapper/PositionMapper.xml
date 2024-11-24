@@ -58,6 +58,7 @@
                                 where position_id = #{positionId}
                                         and is_deleted = 0)
                 and subordinate = '' and is_deleted = 0
+        order by id
     </select>
 
     <select id="getPositionByPositionId" resultMap="PositionResultMap">
