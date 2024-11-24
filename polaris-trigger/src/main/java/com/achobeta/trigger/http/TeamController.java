@@ -37,9 +37,10 @@ public class TeamController implements ITeamService {
     private final IMemberService memberService;
 
     private final IStructureService viewStructureService;
-  
+
     /**
      * 查询团队成员列表
+     *
      * @param requestMemberListDTO
      * @return
      */
@@ -47,17 +48,17 @@ public class TeamController implements ITeamService {
     @GetMapping("/member/list")
     public Response<ResponseMemberListDTO> queryMemberList(@Valid RequestMemberListDTO requestMemberListDTO) {
         try {
-            log.info("用户访问查询团队成员列表开始，{}",requestMemberListDTO);
+            log.info("用户访问查询团队成员列表开始，{}", requestMemberListDTO);
 
             List<UserEntity> members = memberService
-                .queryMembers(requestMemberListDTO.getTeamId(),
-                        requestMemberListDTO.getLastId(),
-                        requestMemberListDTO.getLimit());
+                    .queryMembers(requestMemberListDTO.getTeamId(),
+                            requestMemberListDTO.getLastId(),
+                            requestMemberListDTO.getLimit());
 
-            log.info("用户访问查询团队成员列表结束，{}",requestMemberListDTO);
+            log.info("用户访问查询团队成员列表结束，{}", requestMemberListDTO);
             return Response.SYSTEM_SUCCESS(ResponseMemberListDTO.builder()
-                .members(members)
-                .build());
+                    .members(members)
+                    .build());
         } catch (AppException e) {
             log.error("用户访问查询团队成员列表失败！{}, error:{}",
                     requestMemberListDTO, e.toString(), e);
@@ -66,7 +67,7 @@ public class TeamController implements ITeamService {
                     .code(Integer.valueOf(e.getCode()))
                     .info(e.getInfo())
                     .build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("用户访问查询团队成员列表失败！{}, 未知异常error:{}",
                     requestMemberListDTO, e.toString(), e);
             return Response.SERVICE_ERROR();
@@ -76,6 +77,7 @@ public class TeamController implements ITeamService {
 
     /**
      * 查询团队组织架构
+     *
      * @param querystructureRequestDTO 入参包括用户id和团队id
      * @return
      */
@@ -107,9 +109,10 @@ public class TeamController implements ITeamService {
                     .code(Integer.valueOf(e.getCode()))
                     .info(e.getInfo())
                     .build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("用户访问团队管理系统失败！userId:{}, teamId:{}, 未知异常error:{}",
                     querystructureRequestDTO.getUserId(), querystructureRequestDTO.getTeamId(), e.toString(), e);
             return Response.SERVICE_ERROR();
         }
     }
+}
