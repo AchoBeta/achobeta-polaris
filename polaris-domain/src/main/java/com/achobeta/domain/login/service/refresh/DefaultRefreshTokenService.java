@@ -57,7 +57,7 @@ public class DefaultRefreshTokenService extends AbstractPostProcessor<LoginBO> i
 
         TokenVO tokenVO = postContext.getBizData().getTokenVO();
         log.info("正在生成的AT,userId:{}", tokenVO.getUserId());
-        String accessToken = TokenUtil.getAccessToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getMac());
+        String accessToken = TokenUtil.getAccessToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getFingerPrinting());
         tokenVO.setAccessToken(accessToken);
         log.info("AT生成成功,userId:{}", tokenVO.getUserId());
 
@@ -65,7 +65,7 @@ public class DefaultRefreshTokenService extends AbstractPostProcessor<LoginBO> i
 
         // 调用RedisService的storeAccessToken将accessToken存入Redis
         // 同时也会将前一个AT删除
-        tokenRepository.storeAccessToken(accessToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getMac());
+        tokenRepository.storeAccessToken(accessToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getFingerPrinting());
 
         log.info("AT存入redis成功,userId:{}", tokenVO.getUserId());
 
