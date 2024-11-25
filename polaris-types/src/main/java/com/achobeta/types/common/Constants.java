@@ -8,6 +8,5 @@ public class Constants {
 
     public final static String NEXT_PAGE = "nextPage";
 
-    public final static String AFFECT_LENGTH = "length";
 
 }
