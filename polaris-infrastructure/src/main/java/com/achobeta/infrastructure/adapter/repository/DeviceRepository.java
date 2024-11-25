@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @Version: 1.0
  */
 @Repository
-public class DeviceRepository implements IDeviceRepository {
+public class DeviceRepository implements com.achobeta.domain.login.adapter.repository.IDeviceRepository , com.achobeta.domain.device.adapter.repository.IDeviceRepository {
 
     @Resource
     private DeviceMapper deviceMapper;
@@ -46,7 +46,7 @@ public class DeviceRepository implements IDeviceRepository {
                 .deviceId(devicePO.getDeviceId())
                 .deviceName(devicePO.getDeviceName())
                 .userId(devicePO.getUserId())
-                .IP(devicePO.getIP())
+                .IP(devicePO.getIp())
                 .mac(devicePO.getMac())
                 .createTime(devicePO.getCreateTime())
                 .updateTime(devicePO.getUpdateTime())
@@ -110,7 +110,7 @@ public class DeviceRepository implements IDeviceRepository {
                 .map(devicePO -> DeviceEntity.builder()
                         .deviceId(devicePO.getDeviceId())
                         .deviceName(devicePO.getDeviceName())
-                        .IP(devicePO.getIP())
+                        .IP(devicePO.getIp())
                         .lastLoginTime(devicePO.getUpdateTime())
                         .build())
                 .collect(Collectors.toList());

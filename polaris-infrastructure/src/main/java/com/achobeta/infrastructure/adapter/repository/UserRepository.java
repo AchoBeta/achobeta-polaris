@@ -1,12 +1,6 @@
 package com.achobeta.infrastructure.adapter.repository;
 
-import com.achobeta.domain.login.adapter.repository.IUserRepository;
-import com.achobeta.domain.login.model.entity.UserEntity;
-import com.achobeta.infrastructure.dao.DeviceMapper;
-import com.achobeta.infrastructure.dao.UserMapper;
-import com.achobeta.infrastructure.dao.po.UserPO;
 import cn.hutool.core.collection.CollectionUtil;
-import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
@@ -19,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +25,7 @@ import static com.achobeta.types.enums.GlobalServiceStatusCode.USER_ACCOUNT_NOT_
  */
 @Slf4j
 @Repository
-public class UserRepository implements IUserRepository {
+public class UserRepository implements com.achobeta.domain.user.adapter.repository.IUserRepository , com.achobeta.domain.login.adapter.repository.IUserRepository {
 
     @Resource
     private UserMapper userMapper;
