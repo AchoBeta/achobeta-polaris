@@ -32,7 +32,7 @@ public class LoginRequestDTO {
     /*
      * 登录用户的验证码
      */
-    @Pattern(regexp = "^\\d{6}$", message = "验证码错误,请重试")
+    @Pattern(regexp = "^\\d{6}$", message = "验证码格式错误")
     private String code;
 
     /*
@@ -55,7 +55,7 @@ public class LoginRequestDTO {
     /*
      * 登录用户的设备指纹
      */
-    @Size(max = 46, message = "设备指纹长度不能超过46")
+    @Size(max = 128, message = "设备指纹长度不能超过128")
     private String fingerPrinting;
 
 }
