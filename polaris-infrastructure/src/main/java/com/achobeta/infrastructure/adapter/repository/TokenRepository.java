@@ -36,7 +36,7 @@ public class TokenRepository implements ITokenRepository {
     private final String REFRESH_TOKEN = "refresh_token";
     private final String UNDELETED = "0";
     private final String DELETED = "1";
-    private final String MAC = "mac";
+    private final String FINGERPRINTING = "fingerPrinting";
     private final long MINUTE1 = TimeUnit.MINUTES.toMillis(1);
     private final long MINUTE5 = TimeUnit.MINUTES.toMillis(5);
     private final long HOUR12 = TimeUnit.HOURS.toMillis(12);
@@ -44,7 +44,7 @@ public class TokenRepository implements ITokenRepository {
 
 
     @Override
-    public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip, String mac) {
+    public void storeAccessToken(String token, String userId, String phone, String deviceId, String ip, String fingerPrinting) {
         String key = RedisKey.TOKEN + token;
         redissonService.addToMap(key, USER_ID, userId);
         redissonService.addToMap(key, PHONE, phone);
@@ -52,7 +52,7 @@ public class TokenRepository implements ITokenRepository {
         redissonService.addToMap(key, IP, ip);
         redissonService.addToMap(key, TYPE, TokenUtil.ACCESS_TOKEN);
         redissonService.addToMap(key, IS_DELETED, UNDELETED);
-        redissonService.addToMap(key, MAC, mac);
+        redissonService.addToMap(key, FINGERPRINTING, fingerPrinting);
 
         //找出前一个AT，如果有就删除
         String preAT = redissonService.getFromMap(RedisKey.DEVICE_TO_TOKEN + deviceId, ACCESS_TOKEN);
@@ -68,13 +68,13 @@ public class TokenRepository implements ITokenRepository {
     }
 
     @Override
-    public void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin, String mac) {
+    public void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin, String fingerPrinting) {
         String key = RedisKey.TOKEN + token;
         redissonService.addToMap(key, USER_ID, userId);
         redissonService.addToMap(key, PHONE, phone);
         redissonService.addToMap(key, DEVICE_ID, deviceId);
         redissonService.addToMap(key, IP, ip);
-        redissonService.addToMap(key, MAC, mac);
+        redissonService.addToMap(key, FINGERPRINTING, fingerPrinting);
 
         // 存储设备id和token的关联关系
         redissonService.addToMap(RedisKey.DEVICE_TO_TOKEN + deviceId, REFRESH_TOKEN, token);
@@ -212,7 +212,7 @@ public class TokenRepository implements ITokenRepository {
                 .deviceId(javaMap.get(DEVICE_ID))
                 .ip(javaMap.get(IP))
                 .isAutoLogin(isAutoLogin)
-                .mac(javaMap.get(MAC))
+                .fingerPrinting(javaMap.get(FINGERPRINTING))
                 .build();
     }
 
@@ -231,7 +231,7 @@ public class TokenRepository implements ITokenRepository {
                 .phone(javaMap.get(PHONE))
                 .deviceId(javaMap.get(DEVICE_ID))
                 .ip(javaMap.get(IP))
-                .mac(javaMap.get(MAC))
+                .fingerPrinting(javaMap.get(FINGERPRINTING))
                 .build();
     }
 
