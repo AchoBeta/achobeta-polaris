@@ -5,35 +5,18 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
-import com.achobeta.infrastructure.dao.po.PositionPO;
-import com.achobeta.infrastructure.redis.RedissonService;
-import com.achobeta.types.common.Constants;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
-
-import com.achobeta.domain.team.adapter.repository.IPositionRepository;
-import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
-import cn.hutool.core.collection.CollectionUtil;
-import com.achobeta.domain.team.model.entity.PositionEntity;
-import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.RedisKey;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
 import java.util.List;
 
 /**
@@ -151,7 +134,7 @@ public class PositionRepository implements IPositionRepository {
 
     @Override
     public List<PositionEntity> queryTeamByUserId(String userId) {
-        List<PositionPO> positionPOList = positionMapper.listPositionByUserId(userId);
+        List<PositionPO> positionPOList = positionMapper.listTeamByUserId(userId);
         if (CollectionUtil.isEmpty(positionPOList)) {
             return Collections.emptyList();
         }

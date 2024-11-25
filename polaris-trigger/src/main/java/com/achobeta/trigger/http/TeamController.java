@@ -1,20 +1,13 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.ITeamService;
-import com.achobeta.api.dto.QueryMemberInfoRequestDTO;
-import com.achobeta.api.dto.QueryMemberInfoResponseDTO;
-import com.achobeta.domain.team.service.IMemberService;
-import com.achobeta.domain.user.model.entity.UserEntity;
+import com.achobeta.api.dto.*;
 import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
-import com.achobeta.domain.team.service.IMemberService;
-import com.achobeta.domain.user.model.entity.UserEntity;
-import com.achobeta.api.dto.ModifyStructureRequestDTO;
-import com.achobeta.api.dto.ModifyStructureResponseDTO;
-import com.achobeta.api.dto.QueryStructureRequestDTO;
-import com.achobeta.api.dto.QueryStructureResponseDTO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
+import com.achobeta.domain.team.service.IMemberService;
 import com.achobeta.domain.team.service.IStructureService;
+import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.types.Response;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
@@ -25,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
