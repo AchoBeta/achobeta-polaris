@@ -101,7 +101,6 @@ public class TeamController implements ITeamService {
 
     /**
      * 查询团队成员列表
-     *
      * @param requestMemberListDTO
      * @return
      */
@@ -138,7 +137,6 @@ public class TeamController implements ITeamService {
 
     /**
      * 查询团队组织架构
-     *
      * @param querystructureRequestDTO 入参包括用户id和团队id
      * @return
      */
@@ -149,7 +147,7 @@ public class TeamController implements ITeamService {
             log.info("用户访问团队管理系统查询团队组织架构开始，userId:{} teamId:{}",
                     querystructureRequestDTO.getUserId(), querystructureRequestDTO.getTeamId());
 
-            PositionEntity positionEntity = StructureService
+            PositionEntity positionEntity = viewStructureService
                     .queryStructure(querystructureRequestDTO.getTeamId());
 
             log.info("用户访问团队管理系统查询团队组织架构结束，userId:{} teamId:{}",
