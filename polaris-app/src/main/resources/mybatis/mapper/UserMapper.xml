@@ -16,6 +16,24 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <select id="listMemberByTeamId" resultMap="UserResultMap">
+        select t1.id,t1.user_id,t1.user_name,t1.id_card,t1.student_id,t1.current_status,
+                t1.entry_time,like_count,t1.create_by,t1.create_time,t1.update_by,
+                t1.update_time,t1.phone,t1.gender,t1.email,t1.grade,t1.major,t1.experience
+        from user as t1, member as t2
+        where t1.user_id=t2.user_id
+                and t2.team_id = #{teamId}
+                and t1.id > #{lastId}
+                and t1.is_deleted = 0
+                and t2.is_deleted = 0
+        order by t1.id
+        limit #{limit}
+    </select>
+
+    <select id="getIdByUserId" resultType="java.lang.Long">
+        select id from user where user_id = #{userId}
+    </select>
+
     <update id="updateUserInfo" parameterType="com.achobeta.infrastructure.dao.po.UserPO">
         update user
         <set>

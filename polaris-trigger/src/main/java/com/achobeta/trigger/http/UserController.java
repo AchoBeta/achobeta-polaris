@@ -47,7 +47,7 @@ public class UserController implements IUserService {
     @Override
     public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Valid @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
         try {
-            log.info("用户访问修改个人信息系统开始，userId:{}", modifyUserInfoRequestDTO.getUserId());
+            log.info("用户访问修改个人信息服务开始，userId:{}", modifyUserInfoRequestDTO.getUserId());
              UserEntity userEntity = UserEntity.builder()
                           .userId(modifyUserInfoRequestDTO.getUserId())
                           .userName(modifyUserInfoRequestDTO.getUserName())
@@ -61,10 +61,10 @@ public class UserController implements IUserService {
                           .currentStatus(modifyUserInfoRequestDTO.getCurrentStatus())
                           .build();
             modifyUserInfoService.modifyUserInfo(userEntity);
-            log.info("用户访问修改个人信息系统结束，userId:{}", modifyUserInfoRequestDTO.getUserId());
+            log.info("用户访问修改个人信息服务结束，userId:{}", modifyUserInfoRequestDTO.getUserId());
             return Response.SYSTEM_SUCCESS();
         }  catch (AppException e) {
-            log.error("用户访问修改个人信息系统失败！userId:{}",
+            log.error("用户访问修改个人信息服务失败！userId:{}",
                     modifyUserInfoRequestDTO.getUserId(), e);
             return Response.<ModifyUserInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
@@ -72,7 +72,7 @@ public class UserController implements IUserService {
                     .info(e.getInfo())
                     .build();
         } catch (Exception e) {
-            log.error("用户访问个人信息系统失败！userId:{}",
+            log.error("用户访问修改个人信息服务失败！userId:{}",
                     modifyUserInfoRequestDTO.getUserId(), e);
             return Response.SERVICE_ERROR();
         }
