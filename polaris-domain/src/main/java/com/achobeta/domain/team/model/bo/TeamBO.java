@@ -3,6 +3,7 @@ package com.achobeta.domain.team.model.bo;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.types.annotation.FieldDesc;
+
 import lombok.*;
 
 import java.util.List;
@@ -27,5 +28,8 @@ public class TeamBO {
     private String userId;
     private UserEntity userEntity;
     private PositionEntity positionEntity;
+    private List<UserEntity> members;
     private List<PositionEntity> positionEntityList;
+
+
 }

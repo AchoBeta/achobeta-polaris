@@ -1,24 +1,26 @@
-package com.achobeta.domain.team.model.entity;
+package com.achobeta.api.dto;
 
 import lombok.*;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * @author yangzhiyao
- * @description 职位实体类
- * @date 2024/11/7
+ * @description 修改团队组织架构响应数据对象
+ * @date 2024/11/12
  */
-@Setter
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PositionEntity {
+public class ModifyStructureResponseDTO implements Serializable {
+
     /**
-     * 父级职位/分组ID
+     * 真正的添加节点数据
+     * 实际为List<PositionEntity>，PositionEntity包括该该类中的其他字段
      */
-    private String parentPositionId;
+    Object addPositions;
     /**
      * 职位/分组业务id
      */
@@ -36,10 +38,6 @@ public class PositionEntity {
      */
     private Integer level;
     /**
-     * 层级关系的子节点/下级分组
-     */
-    private List<PositionEntity> subordinates;
-    /**
      * 添加新节点时用到，子节点ID
      */
     private String subordinateId;
@@ -47,4 +45,5 @@ public class PositionEntity {
      * 添加新节点时用到，子节点名称，用来找新生成的它的ID
      */
     private String subordinateName;
+
 }
