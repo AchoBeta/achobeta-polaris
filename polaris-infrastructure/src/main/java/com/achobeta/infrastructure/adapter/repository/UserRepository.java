@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +31,47 @@ public class UserRepository implements IUserRepository {
 
     @Resource
     private UserMapper userMapper;
-
+    
     @Resource
     private PositionMapper positionMapper;
-
+  
     @Resource
     private IRedisService redisService;
+
+    @Override
+    public void updateUserInfo(UserEntity userEntity) {
+        log.info("查询用户是否存在，userId: {}",userEntity.getUserId());
+        // 这里保证用户存在，不能查缓存的得直接查数据库的
+        UserPO userPO = userMapper.getUserByUserId(userEntity.getUserId());
+        if (userPO == null) {
+            log.error("用户不存在！userId：{}",userEntity.getUserId());
+            throw new AppException(String.valueOf(USER_ACCOUNT_NOT_EXIST.getCode()),
+                    USER_ACCOUNT_NOT_EXIST.getMessage());
+        }
+
+        log.info("清除用户缓存信息，userId: {}",userEntity.getUserId());
+        redisService.remove(RedisKey.USER_INFO + userEntity.getUserId());
+
+        log.info("更新用户信息：{}",userEntity.getUserId());
+         userMapper.updateUserInfo(UserPO.builder()
+                 .userId(userEntity.getUserId())
+                 .userName(userEntity.getUserName())
+                 .phone(userEntity.getPhone())
+                 .gender(userEntity.getGender())
+                 .idCard(userEntity.getIdCard())
+                 .email(userEntity.getEmail())
+                 .grade(userEntity.getGrade())
+                 .major(userEntity.getMajor())
+                 .studentId(userEntity.getStudentId())
+                 .experience(userEntity.getExperience())
+                 .currentStatus(userEntity.getCurrentStatus())
+                 .entryTime(userEntity.getEntryTime())
+                 .likeCount(userEntity.getLikeCount())
+                 .updateBy(userEntity.getUserId())
+                 .build());
+        log.info("更新用户信息成功，userId: {}",userEntity.getUserId());
+    }
+
 
     @Override
     public UserEntity queryUserInfo(String userId) {

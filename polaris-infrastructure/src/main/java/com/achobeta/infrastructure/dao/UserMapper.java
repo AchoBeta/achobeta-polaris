@@ -3,6 +3,8 @@ package com.achobeta.infrastructure.dao;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author yangzhiyao
  * @description UserDao接口
@@ -10,6 +12,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserMapper {
+
+    List<UserPO> listMemberByTeamId(String teamId,Long lastId, Integer limit);
+
+    Long getIdByUserId(String userId);
+
     /**
      * 根据userId获取用户信息
      * @param userId 用户业务id
@@ -17,5 +24,10 @@ public interface UserMapper {
      */
     UserPO getUserByUserId(String userId);
 
+    /**
+     * 更新用户信息
+     * @param userPO 用户实体
+     */
+    void updateUserInfo(UserPO userPO);
 
 }

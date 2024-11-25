@@ -9,6 +9,14 @@ import com.achobeta.domain.user.model.entity.UserEntity;
  */
 public interface IUserRepository {
 
+    /**
+     * 修改个人信息
+     */
+    void updateUserInfo(UserEntity userEntity);
+    
+    /**
+     * 查询个人信息
+     */
     UserEntity queryUserInfo(String userId);
 
 

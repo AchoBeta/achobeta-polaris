@@ -84,4 +84,10 @@ public class UserEntity {
      * 用户所属职位/分组
      */
     private List<List<String>> positions;
+    /**
+     * 用户所属职位列表
+     * 和上面的positions差不多，只是为了方便前端显示和逻辑处理多做一个
+     */
+    private List<String> positionList;
+
 }
