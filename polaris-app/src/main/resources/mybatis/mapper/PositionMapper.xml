@@ -113,7 +113,7 @@
     <select id="listTeamByUserId" resultMap="PositionResultMap">
         select t1.id,t1.position_id,t1.position_name,t1.level,t1.subordinate,
                 t1.create_by,t1.create_time,t1.update_by,t1.update_time
-        from position as t1, member as t2;
+        from position as t1, member as t2
         where t2.user_id = #{userId}
                 and t1.position_id = t2.team_id
                 and t1.is_deleted = 0

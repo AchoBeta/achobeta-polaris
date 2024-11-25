@@ -1,5 +1,7 @@
 package com.achobeta.api;
 
+import com.achobeta.api.dto.QueryMemberInfoRequestDTO;
+import com.achobeta.api.dto.QueryMemberInfoResponseDTO;
 import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
 import com.achobeta.api.dto.ModifyStructureRequestDTO;
@@ -18,6 +20,13 @@ import javax.validation.Valid;
  */
 public interface ITeamService {
 
+    /**
+     * 查询团队成员信息详情接口
+     * @param requestDTO 查询请求参数，包含用户ID、团队ID，成员ID
+     * @return 成员个人信息
+     */
+    Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid QueryMemberInfoRequestDTO requestDTO);
+  
     /**
      * 查询团队成员列表
      * @param requestMemberListDTO 请求参数: userId, teamId, lastId, limit
