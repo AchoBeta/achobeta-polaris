@@ -87,11 +87,11 @@ public class DefaultRefreshTokenService extends AbstractPostProcessor<LoginBO> i
 
         log.info("正在查询用户团队信息,userId:{}", tokenVO.getUserId());
         List<PositionEntity> positionEntities = teamInfoPort.queryTeamByUserId(String.valueOf(tokenVO.getUserId()));
-        postContext.getBizData().setPositionList(positionEntities);
         log.info("用户团队信息查询成功,userId:{}", tokenVO.getUserId());
 
         postContext.setBizData(LoginBO.builder()
                 .tokenVO(tokenVO)
+                .positionList(positionEntities)
                 .build());
         return postContext;
     }
