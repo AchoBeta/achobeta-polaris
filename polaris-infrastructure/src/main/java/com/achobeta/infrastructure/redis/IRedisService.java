@@ -225,15 +225,6 @@ public interface IRedisService {
     Long getMapExpired(String key);
 
     /**
-     * 获取哈希表中指定字段的值
-     *
-     * @param key   键
-     * @param field 字段
-     * @return 值
-     */
-    String getFromMap(String key, String field);
-
-    /**
      * 获取Map并转换为Java Map
      * @param key 键
      * @return
