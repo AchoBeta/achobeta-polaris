@@ -52,10 +52,10 @@ public class LoginController implements ILoginService {
         try {
             log.info("用户访问登录系统开始,phone:{}", loginRequestDTO.getPhone());
 
-            if(loginRequestDTO.getIsAutoLogin().equals("true")){
+            if (loginRequestDTO.getIsAutoLogin().equals("true")) {
                 log.info("用户选择自动登录,phone:{}", loginRequestDTO.getPhone());
                 loginRequestDTO.setAutoLogin(true);
-            }else{
+            } else {
                 log.info("用户选择非自动登录,phone:{}", loginRequestDTO.getPhone());
                 loginRequestDTO.setAutoLogin(false);
             }
@@ -112,11 +112,11 @@ public class LoginController implements ILoginService {
             String refrashToken = request.getHeader(REFRESH_TOKEN);
 
             log.info("正在访问无感刷新接口,reflashToken:{}", refrashToken);
-            if(null == refrashToken || refrashToken.isEmpty()) {
+            if (null == refrashToken || refrashToken.isEmpty()) {
                 log.info("refreshToken缺失");
-                throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getCode()),GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getMessage());
+                throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getCode()), GlobalServiceStatusCode.LOGIN_REFLASH_TOKEN_MISSING.getMessage());
             }
-            LoginVO loginVO = reflashTokenService.reflash( refrashToken);
+            LoginVO loginVO = reflashTokenService.reflash(refrashToken);
 
             // 将access_token和refresh_token添加到Cookie中
             Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
@@ -135,14 +135,16 @@ public class LoginController implements ILoginService {
 
             return Response.SYSTEM_SUCCESS(
                     LoginResponseDTO.builder()
-                           .phone(loginVO.getPhone())
-                           .build()
+                            .phone(loginVO.getPhone())
+                            .userId(loginVO.getUserId())
+                            .positionList(loginVO.getPositionList())
+                            .build()
             );
         } catch (AppException e) {
             log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 
             return Response.SERVICE_ERROR(e.getInfo());
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 
             return Response.SERVICE_ERROR(e.getMessage());
