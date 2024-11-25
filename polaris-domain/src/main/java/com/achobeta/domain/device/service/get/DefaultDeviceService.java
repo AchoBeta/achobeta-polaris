@@ -36,7 +36,7 @@ public class DefaultDeviceService extends AbstractPostProcessor<DeviceBO> implem
         UserCommonDevicesEntities userEntities = postContext.getBizData().getUserCommonDevicesEntities();
         PageResult pageResult = postContext.getBizData().getPageResult();
         Integer deviceCount = repository.queryCommonUserDeviceCountById(userEntities.getUserId(), pageResult.getLimit() + 1, pageResult.getLastDeviceId());
-        //判断参数是否正确
+        /**判断参数是否正确,直接用devices是只有自动登录设备，无法保证是参数错误还是设备没开启自动登录*/
         if(deviceCount==null||deviceCount==0){
             log.error("设备不存在！userId：{},limit:{},lastDeviceId:{}",userEntities.getUserId(),pageResult.getLimit(),pageResult.getLastDeviceId());
             throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
