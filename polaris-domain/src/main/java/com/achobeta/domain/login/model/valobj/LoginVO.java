@@ -1,6 +1,9 @@
 package com.achobeta.domain.login.model.valobj;
 
+import com.achobeta.domain.team.model.entity.PositionEntity;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @Author: 严豪哲
@@ -19,5 +22,7 @@ public class LoginVO {
 
     private String accessToken;
     private String refreshToken;
+    private String userId;
+    private List<PositionEntity> positionList;
     private String phone;
 }

@@ -1,7 +1,10 @@
 package com.achobeta.domain.login.model.bo;
 
 import com.achobeta.domain.login.model.valobj.TokenVO;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @Author: 严豪哲
@@ -27,5 +30,10 @@ public class LoginBO {
      * 设备名称
      */
     String deviceName;
+
+    /*
+     * 职位列表
+     */
+    List<PositionEntity> positionList;
 
 }

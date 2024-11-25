@@ -50,4 +50,14 @@ public class DeviceEntity {
      * 设备mac地址
      */
     private String mac;
+
+    /**
+     * 更新时间
+     * */
+    private LocalDateTime lastLoginTime;
+
+    /**
+     * 是否为本机
+     */
+    private boolean me;
 }

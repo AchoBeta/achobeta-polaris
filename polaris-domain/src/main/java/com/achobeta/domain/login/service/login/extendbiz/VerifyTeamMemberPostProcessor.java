@@ -2,8 +2,8 @@ package com.achobeta.domain.login.service.login.extendbiz;
 
 import com.achobeta.domain.login.adapter.repository.IUserRepository;
 import com.achobeta.domain.login.model.bo.LoginBO;
-import com.achobeta.domain.login.model.entity.UserEntity;
 import com.achobeta.domain.login.service.login.LoginPostProcessor;
+import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.postprocessor.PostContext;
