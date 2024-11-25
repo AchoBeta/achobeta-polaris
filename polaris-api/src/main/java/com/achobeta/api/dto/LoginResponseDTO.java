@@ -20,8 +20,21 @@ public class LoginResponseDTO {
      * 登录用户的手机号
      */
     private String phone;
+
     /**
      * 登录用户的角色
      */
     private String role;
+
+    /**
+     * 登录用户的id
+     */
+    private String userId;
+
+    /**
+     * 登录用户的职位列表
+     * 实际为List<PositionEntity>，PositionEntity包括该该类中的其他字段
+     */
+    private Object positionList;
+
 }

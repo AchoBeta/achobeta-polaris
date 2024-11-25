@@ -71,13 +71,15 @@ public class LoginController implements ILoginService {
             log.info("用户访问登录系统结束，phone:{}", loginRequestDTO.getPhone());
             return Response.SYSTEM_SUCCESS(
                     LoginResponseDTO.builder()
-                    .phone(loginVO.getPhone())
-                    .build()
+                            .phone(loginVO.getPhone())
+                            .userId(loginVO.getUserId())
+                            .positionList(loginVO.getPositionList())
+                            .build()
             );
         } catch (AppException e) {
             log.error("用户访问登录系统失败,phone:{}", loginRequestDTO.getPhone(), e);
             return Response.SERVICE_ERROR(e.getInfo());
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("用户访问登录系统失败,phone:{}", loginRequestDTO.getPhone(), e);
             return Response.SERVICE_ERROR(e.getMessage());
         }
