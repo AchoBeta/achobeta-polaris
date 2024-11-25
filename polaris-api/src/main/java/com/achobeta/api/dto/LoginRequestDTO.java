@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * @Author: 严豪哲
@@ -54,7 +55,7 @@ public class LoginRequestDTO {
     /*
      * 登录用户的设备指纹
      */
-    @Pattern(regexp = "", message = "设备指纹格式错误")
+    @Size(max = 46, message = "设备指纹长度不能超过46")
     private String fingerPrinting;
 
 }
