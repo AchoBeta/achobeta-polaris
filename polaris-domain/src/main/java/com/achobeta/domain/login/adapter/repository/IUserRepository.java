@@ -1,6 +1,6 @@
 package com.achobeta.domain.login.adapter.repository;
 
-import com.achobeta.domain.login.model.entity.UserEntity;
+import com.achobeta.domain.user.model.entity.UserEntity;
 
 /**
  * @Author: 严豪哲

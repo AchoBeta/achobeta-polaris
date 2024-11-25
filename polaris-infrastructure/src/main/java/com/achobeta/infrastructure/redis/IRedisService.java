@@ -196,6 +196,15 @@ public interface IRedisService {
      * @param field 字段
      * @param value 值
      */
+    <T> void addToMap(String key, String field, T value);
+
+    /**
+     * 将指定的键值对添加到哈希表中
+     *
+     * @param key   键
+     * @param field 字段
+     * @param value 值
+     */
     void addToMap(String key, String field, String value);
 
     /**
