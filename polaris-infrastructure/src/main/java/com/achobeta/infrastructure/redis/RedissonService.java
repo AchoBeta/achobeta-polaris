@@ -121,9 +121,14 @@ public class RedissonService implements IRedisService {
         return redissonClient.getMap(key);
     }
 
-    @Override
+
     public <T> void addToMap(String key, String field, T value) {
         RMap<String, T> map = redissonClient.getMap(key);
+        map.put(field, value);
+    }
+
+    public void addToMap(String key, String field, String value) {
+        RMap<String, String> map = redissonClient.getMap(key);
         map.put(field, value);
     }
 
