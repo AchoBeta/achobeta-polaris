@@ -6,6 +6,7 @@ import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
  * @description 查询用户团队信息的外部接口
  * @date 2024/11/23
  */
-@RequiredArgsConstructor
+@Component
 public class TeamInfoPort implements ITeamInfoPort {
 
     @Resource
