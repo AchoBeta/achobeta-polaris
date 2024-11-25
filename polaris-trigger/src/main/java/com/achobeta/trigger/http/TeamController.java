@@ -5,6 +5,8 @@ import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
 import com.achobeta.domain.team.service.IMemberService;
 import com.achobeta.domain.user.model.entity.UserEntity;
+import com.achobeta.api.dto.ModifyStructureRequestDTO;
+import com.achobeta.api.dto.ModifyStructureResponseDTO;
 import com.achobeta.api.dto.QueryStructureRequestDTO;
 import com.achobeta.api.dto.QueryStructureResponseDTO;
 import com.achobeta.domain.team.model.entity.PositionEntity;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -37,6 +41,63 @@ public class TeamController implements ITeamService {
     private final IMemberService memberService;
 
     private final IStructureService viewStructureService;
+
+    private final IStructureService modifyStructureService;
+
+    /**
+     * 修改团队组织架构
+     * @param modifyStructureRequestDTO
+     * @return
+     */
+    @PutMapping("structure")
+    @Override
+    public Response<ModifyStructureResponseDTO> modifyStructure(@Valid @RequestBody ModifyStructureRequestDTO modifyStructureRequestDTO) {
+        try {
+            log.info("用户访问团队管理系统修改团队组织架构开始，userId:{} teamId:{}",
+                    modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId());
+
+            List<LinkedHashMap<String, Object>> tempAddPositions = (List<LinkedHashMap<String, Object>>) modifyStructureRequestDTO.getAddPositions();
+            List<LinkedHashMap<String, Object>> tempDeletePositions = (List<LinkedHashMap<String, Object>>) modifyStructureRequestDTO.getDeletePositions();
+            List<PositionEntity> addPositions = new ArrayList<>();
+            List<PositionEntity> deletePositions = new ArrayList<>();
+            for (LinkedHashMap<String, Object> obj : tempAddPositions) {
+                PositionEntity positionEntity = PositionEntity.builder()
+                        .positionId((String) obj.get("parentPositionId"))
+                        .positionName((String) obj.get("parentPositionName"))
+                        .level((Integer) obj.get("parentPositionLevel"))
+                        .subordinateName((String) obj.get("newPositionName"))
+                        .build();
+                addPositions.add(positionEntity);
+            }
+            for (LinkedHashMap<String, Object> obj: tempDeletePositions) {
+                PositionEntity positionEntity = PositionEntity.builder()
+                        .positionId((String) obj.get("positionId"))
+                        .level((Integer) obj.get("level"))
+                        .build();
+                deletePositions.add(positionEntity);
+            }
+
+            List<PositionEntity> resultPositions = modifyStructureService.modifyStructure(addPositions, deletePositions, modifyStructureRequestDTO.getTeamId());
+
+            log.info("用户访问团队管理系统修改团队组织架构结束，userId:{} teamId:{}",
+                    modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId());
+            return Response.SYSTEM_SUCCESS(ModifyStructureResponseDTO.builder()
+                    .addPositions(resultPositions)
+                    .build());
+        } catch (AppException e) {
+            log.error("修改团队组织架构失败！userId:{}, teamId:{}, 可知原因error:{}",
+                    modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId(), e.toString(), e);
+            return Response.<ModifyStructureResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+        } catch (Exception e) {
+            log.error("修改团队组织架构失败！userId:{}, teamId:{}, 未知异常error:{}",
+                    modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId(), e.toString(), e);
+            return Response.SERVICE_ERROR();
+        }
+    }
 
     /**
      * 查询团队成员列表
@@ -88,7 +149,7 @@ public class TeamController implements ITeamService {
             log.info("用户访问团队管理系统查询团队组织架构开始，userId:{} teamId:{}",
                     querystructureRequestDTO.getUserId(), querystructureRequestDTO.getTeamId());
 
-            PositionEntity positionEntity = viewStructureService
+            PositionEntity positionEntity = StructureService
                     .queryStructure(querystructureRequestDTO.getTeamId());
 
             log.info("用户访问团队管理系统查询团队组织架构结束，userId:{} teamId:{}",

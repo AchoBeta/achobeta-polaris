@@ -2,6 +2,8 @@ package com.achobeta.api;
 
 import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
+import com.achobeta.api.dto.ModifyStructureRequestDTO;
+import com.achobeta.api.dto.ModifyStructureResponseDTO;
 import com.achobeta.api.dto.QueryStructureRequestDTO;
 import com.achobeta.api.dto.QueryStructureResponseDTO;
 import com.achobeta.types.Response;
@@ -24,6 +26,15 @@ public interface ITeamService {
     Response<ResponseMemberListDTO> queryMemberList(@Valid RequestMemberListDTO requestMemberListDTO);
   
    /**
+     * 修改团队组织架构接口
+     * @param modifyStructureRequestDTO
+     * @return
+     * @author yangzhiyao
+     * @date 2024/11/12
+     */
+    Response<ModifyStructureResponseDTO> modifyStructure(@Valid @RequestBody ModifyStructureRequestDTO modifyStructureRequestDTO);
+  
+    /**
      * 查看团队组织架构接口
      * @param structureRequestDTO 入参包括用户id和团队id
      * @return 团队组织架构信息
