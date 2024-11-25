@@ -1,6 +1,10 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.ITeamService;
+import com.achobeta.api.dto.team.RequestMemberListDTO;
+import com.achobeta.api.dto.team.ResponseMemberListDTO;
+import com.achobeta.domain.team.service.IMemberService;
+import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.api.dto.ModifyStructureRequestDTO;
 import com.achobeta.api.dto.ModifyStructureResponseDTO;
 import com.achobeta.api.dto.QueryStructureRequestDTO;
@@ -34,7 +38,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamController implements ITeamService {
 
-    private final IStructureService StructureService;
+    private final IMemberService memberService;
+
+    private final IStructureService viewStructureService;
+
+    private final IStructureService modifyStructureService;
 
     /**
      * 修改团队组织架构
@@ -69,7 +77,7 @@ public class TeamController implements ITeamService {
                 deletePositions.add(positionEntity);
             }
 
-            List<PositionEntity> resultPositions = StructureService.modifyStructure(addPositions, deletePositions, modifyStructureRequestDTO.getTeamId());
+            List<PositionEntity> resultPositions = modifyStructureService.modifyStructure(addPositions, deletePositions, modifyStructureRequestDTO.getTeamId());
 
             log.info("用户访问团队管理系统修改团队组织架构结束，userId:{} teamId:{}",
                     modifyStructureRequestDTO.getUserId(), modifyStructureRequestDTO.getTeamId());
@@ -92,6 +100,42 @@ public class TeamController implements ITeamService {
     }
 
     /**
+     * 查询团队成员列表
+     * @param requestMemberListDTO
+     * @return
+     */
+    @Override
+    @GetMapping("/member/list")
+    public Response<ResponseMemberListDTO> queryMemberList(@Valid RequestMemberListDTO requestMemberListDTO) {
+        try {
+            log.info("用户访问查询团队成员列表开始，{}", requestMemberListDTO);
+
+            List<UserEntity> members = memberService
+                    .queryMembers(requestMemberListDTO.getTeamId(),
+                            requestMemberListDTO.getLastId(),
+                            requestMemberListDTO.getLimit());
+
+            log.info("用户访问查询团队成员列表结束，{}", requestMemberListDTO);
+            return Response.SYSTEM_SUCCESS(ResponseMemberListDTO.builder()
+                    .members(members)
+                    .build());
+        } catch (AppException e) {
+            log.error("用户访问查询团队成员列表失败！{}, error:{}",
+                    requestMemberListDTO, e.toString(), e);
+            return Response.<ResponseMemberListDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+        } catch (Exception e) {
+            log.error("用户访问查询团队成员列表失败！{}, 未知异常error:{}",
+                    requestMemberListDTO, e.toString(), e);
+            return Response.SERVICE_ERROR();
+        }
+    }
+
+
+    /**
      * 查询团队组织架构
      * @param querystructureRequestDTO 入参包括用户id和团队id
      * @return
@@ -103,7 +147,7 @@ public class TeamController implements ITeamService {
             log.info("用户访问团队管理系统查询团队组织架构开始，userId:{} teamId:{}",
                     querystructureRequestDTO.getUserId(), querystructureRequestDTO.getTeamId());
 
-            PositionEntity positionEntity = StructureService
+            PositionEntity positionEntity = viewStructureService
                     .queryStructure(querystructureRequestDTO.getTeamId());
 
             log.info("用户访问团队管理系统查询团队组织架构结束，userId:{} teamId:{}",
@@ -124,7 +168,7 @@ public class TeamController implements ITeamService {
                     .code(Integer.valueOf(e.getCode()))
                     .info(e.getInfo())
                     .build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("用户访问团队管理系统失败！userId:{}, teamId:{}, 未知异常error:{}",
                     querystructureRequestDTO.getUserId(), querystructureRequestDTO.getTeamId(), e.toString(), e);
             return Response.SERVICE_ERROR();
