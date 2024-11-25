@@ -9,6 +9,7 @@ import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.RedissonService;
 import com.achobeta.types.common.RedisKey;
+import jodd.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -38,14 +39,13 @@ public class MemberRepository implements IMemberRepository {
     public List<UserEntity> queryMemberList(String teamId, String lastUserId, Integer limit) {
         List<UserEntity> members = new ArrayList<>();
 
-        Long lastId = lastUserId==null || lastUserId.isEmpty() ? 0 : userMapper.getIdByUserId(lastUserId);
+        Long lastId = StringUtil.isEmpty(lastUserId) ? 0 : userMapper.getIdByUserId(lastUserId);
         List<UserPO> userPOList = userMapper.listMemberByTeamId(teamId, lastId, limit);
         for (UserPO userPO : userPOList) {
             String userId = userPO.getUserId();
             // 从redis中获取用户信息
             UserEntity userEntity = redisService.getValue(RedisKey.USER_INFO + userId);
             if (userEntity!= null) {
-                // 转换positionNames格式，便于前端选择显示
                 userEntity = convertToMemberListPositionNames(userEntity);
                 members.add(userEntity);
                 continue;
@@ -75,11 +75,13 @@ public class MemberRepository implements IMemberRepository {
                 }
                 listPositions = positionMapper.listParentPositionByPositions(listPositions);
             }
-            // 单取职位名称
+            // 单取职位名称，包括团队名称
             List<List<String>> positionNames = new ArrayList<>();
             for(List<PositionPO> positionList : positionPOList) {
                 List<String> tempList = new ArrayList<>();
-                for(int i = positionList.size() - 2; i >= 0; i--) {
+                // 第一个元素为positionId，便于在修改时定位到该职位发送请求
+                tempList.add(positionList.get(0).getPositionId());
+                for(int i = positionList.size() - 1; i >= 0; i--) {
                     tempList.add(positionList.get(i).getPositionName());
                 }
                 positionNames.add(tempList);
@@ -116,6 +118,7 @@ public class MemberRepository implements IMemberRepository {
         List<String> resultNameList = new ArrayList<>();
         for (List<String> positionList : positionNames) {
             List<String> tempList = new ArrayList<>();
+            // 前两个元素为positionId和团队名称，这里要转换成成员列表的职位显示格式，所以下标从2开始
             for (int i = 2; i < positionList.size(); i++) {
                 tempList.add(positionList.get(i));
             }
