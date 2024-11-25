@@ -3,9 +3,42 @@
 <mapper namespace="com.achobeta.infrastructure.dao.UserMapper">
 
     <resultMap id="UserResultMap" type="com.achobeta.infrastructure.dao.po.UserPO">
-        <id column="user_id" property="userId"/>
-        <id column="phone" property="phone"/>
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="id_card" property="idCard"/>
+        <result column="student_id" property="studentId"/>
+        <result column="current_status" property="currentStatus"/>
+        <result column="entry_time" property="entryTime"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
+
+    <update id="updateUserInfo" parameterType="com.achobeta.infrastructure.dao.po.UserPO">
+        update user
+        <set>
+            <if test="userName!=null">user_name = #{userName},</if>
+            <if test="gender!=null">gender = #{gender},</if>
+            <if test="idCard!=null">id_card = #{idCard},</if>
+            <if test="major!=null">major = #{major},</if>
+            <if test="grade!=null">grade = #{grade},</if>
+            <if test="email!=null">email = #{email},</if>
+            <if test="studentId!=null">student_id = #{studentId},</if>
+            <if test="experience!=null">experience = #{experience},</if>
+            <if test="currentStatus!=null">current_status = #{currentStatus},</if>
+        </set>
+        where user_id=#{userId} and is_deleted = 0
+    </update>
+
+    <select id="getUserByUserId" resultMap="UserResultMap">
+        SELECT id,user_id,user_name,id_card,student_id,current_status,
+               entry_time,like_count,create_by,create_time,update_by,
+               update_time ,phone,gender,email,grade,major,experience
+        FROM user
+        WHERE user_id = #{userId} and is_deleted = 0
+    </select>
 
     <select id="getUserByPhone" resultMap="UserResultMap">
         SELECT user_id FROM user WHERE phone = #{phone}
