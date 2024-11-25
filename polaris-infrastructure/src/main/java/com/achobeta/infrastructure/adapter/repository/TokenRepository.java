@@ -56,7 +56,7 @@ public class TokenRepository implements ITokenRepository {
 
         //找出前一个AT，如果有就删除
         String preAT = redissonService.getFromMap(RedisKey.DEVICE_TO_TOKEN + deviceId, ACCESS_TOKEN);
-        if (preAT != null) {
+        if (preAT != null && checkToken(preAT)) {
             redissonService.addToMap(RedisKey.TOKEN + preAT, IS_DELETED, DELETED);
         }
 
