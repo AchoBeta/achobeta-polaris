@@ -22,6 +22,16 @@ public class LoginResponseDTO {
     private String phone;
 
     /**
+     * 登录用户的accessToken
+     */
+    private String accessToken;
+
+    /**
+     * 登录用户的refreshToken
+     */
+    private String refreshToken;
+
+    /**
      * 登录用户的角色
      */
     private String role;

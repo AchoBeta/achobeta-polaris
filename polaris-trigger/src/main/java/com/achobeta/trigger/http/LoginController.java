@@ -69,31 +69,35 @@ public class LoginController implements ILoginService {
             // 调用登录服务进行登录
             LoginVO loginVO = authorizationService.login(loginRequestDTO.getPhone(), loginRequestDTO.getCode(), loginRequestDTO.getIp(), loginRequestDTO.isAutoLogin(), deviceName, loginRequestDTO.getFingerPrinting());
 
-            // 将access_token和refresh_token添加到Cookie中
-            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
-            Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN, loginVO.getRefreshToken());
 
-//            // 设置Cookie的过期时间（可选）
-//            accessTokenCookie.setMaxAge(60); // 1小时
-//            refreshTokenCookie.setMaxAge(60); // 7天86400 * 7
-
-//            //设置Cookie只能以https的形式发送
-//            accessTokenCookie.setSecure(true);
-//            refreshTokenCookie.setSecure(true);
-
-            // 设置Cookie的路径（可选）
-            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
-            refreshTokenCookie.setPath(REFRESH_TOKEN_PATH);
-
-            // 将Cookie添加到响应中
-            response.addCookie(accessTokenCookie);
-            response.addCookie(refreshTokenCookie);
+            //把token放在响应体中
+//            // 将access_token和refresh_token添加到Cookie中
+//            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
+//            Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN, loginVO.getRefreshToken());
+//
+////            // 设置Cookie的过期时间（可选）
+////            accessTokenCookie.setMaxAge(60); // 1小时
+////            refreshTokenCookie.setMaxAge(60); // 7天86400 * 7
+//
+////            //设置Cookie只能以https的形式发送
+////            accessTokenCookie.setSecure(true);
+////            refreshTokenCookie.setSecure(true);
+//
+//            // 设置Cookie的路径（可选）
+//            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
+//            refreshTokenCookie.setPath(REFRESH_TOKEN_PATH);
+//
+//            // 将Cookie添加到响应中
+//            response.addCookie(accessTokenCookie);
+//            response.addCookie(refreshTokenCookie);
 
             log.info("用户访问登录系统结束，phone:{}", loginRequestDTO.getPhone());
             return Response.SYSTEM_SUCCESS(
                     LoginResponseDTO.builder()
                             .phone(loginVO.getPhone())
                             .userId(loginVO.getUserId())
+                            .accessToken(loginVO.getAccessToken())
+                            .refreshToken(loginVO.getRefreshToken())
                             .positionList(loginVO.getPositionList())
                             .build()
             );
@@ -120,25 +124,27 @@ public class LoginController implements ILoginService {
             }
             LoginVO loginVO = reflashTokenService.reflash(refrashToken);
 
-            // 将access_token和refresh_token添加到Cookie中
-            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
-
-//            // 设置Cookie的过期时间（可选）
-//            accessTokenCookie.setMaxAge(60); // 1小时
-
-//            //设置Cookie只能以https的形式发送
-//            accessTokenCookie.setSecure(true);
-
-            // 设置Cookie的路径（可选）
-            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
-
-            // 将Cookie添加到响应中
-            response.addCookie(accessTokenCookie);
+            // 把token放在响应体中
+//            // 将access_token添加到Cookie中
+//            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
+//
+////            // 设置Cookie的过期时间（可选）
+////            accessTokenCookie.setMaxAge(60); // 1小时
+//
+////            //设置Cookie只能以https的形式发送
+////            accessTokenCookie.setSecure(true);
+//
+//            // 设置Cookie的路径（可选）
+//            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
+//
+//            // 将Cookie添加到响应中
+//            response.addCookie(accessTokenCookie);
 
             return Response.SYSTEM_SUCCESS(
                     LoginResponseDTO.builder()
                             .phone(loginVO.getPhone())
                             .userId(loginVO.getUserId())
+                            .accessToken(loginVO.getAccessToken())
                             .positionList(loginVO.getPositionList())
                             .build()
             );
