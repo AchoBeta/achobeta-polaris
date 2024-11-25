@@ -23,10 +23,6 @@ import java.time.LocalDateTime;
 @Component
 public class OperateDevicePostProcessor implements LoginPostProcessor {
 
-    private final int AUTO_LOGIN = 1;
-
-    private final int NOT_AUTO_LOGIN = 0;
-
     @Resource
     private IDeviceRepository deviceRepository;
 
@@ -36,41 +32,41 @@ public class OperateDevicePostProcessor implements LoginPostProcessor {
     @Override
     public boolean handleBefore(PostContext<LoginBO> postContext) {
 
-        String mac = postContext.getBizData().getTokenVO().getMac();
+        String fingerPrinting = postContext.getBizData().getTokenVO().getFingerPrinting();
         String ip = postContext.getBizData().getTokenVO().getIp();
         String userId = String.valueOf(postContext.getBizData().getTokenVO().getUserId());
         String deviceName = postContext.getBizData().getDeviceName();
         Boolean autoLogin = postContext.getBizData().getTokenVO().getIsAutoLogin();
 
         log.info("正在查询用户的设备信息,userId:{}", userId);
-        DeviceEntity deviceEntity = deviceRepository.getDeviceByMac(userId, mac);
+        DeviceEntity deviceEntity = deviceRepository.getDeviceByFingerPrinting(userId, fingerPrinting);
 
         if (null == deviceEntity) {
-            log.info("设备{}不存在，正在创建,userId:{}", mac, userId);
+            log.info("设备{}不存在，正在创建,userId:{}", fingerPrinting, userId);
             deviceEntity = DeviceEntity.builder()
                     .deviceId(SnowflakeIdWorker.nextIdStr())
                     .deviceName(deviceName)
                     .userId(String.valueOf(postContext.getBizData().getTokenVO().getUserId()))
                     .IP(ip)
-                    .mac(mac)
+                    .fingerPrinting(fingerPrinting)
                     .createTime(LocalDateTime.now())
                     .updateTime(LocalDateTime.now())
-                    .isCancel(autoLogin? 1 : 0)
+                    .isCancel(autoLogin? IS_CANCEL : NOT_CANCEL)
                     .build();
             deviceRepository.insertDevice(deviceEntity);
-            log.info("设备{}创建成功,userId:{}", mac, userId);
+            log.info("设备{}创建成功,userId:{}", fingerPrinting, userId);
         }
         else{
-            log.info("用户的设备{}已存在,userId:{}", mac, userId);
+            log.info("用户的设备{}已存在,userId:{}", fingerPrinting, userId);
             if(autoLogin) {
-                log.info("检测到用户开启了自动登录,正在更新设备{},userId:{}", mac, userId);
+                log.info("检测到用户开启了自动登录,正在更新设备{},userId:{}", fingerPrinting, userId);
                 deviceRepository.updateDevice(deviceEntity.getDeviceId(),IS_CANCEL);
-                log.info("设备{}更新成功,userId:{}", mac, userId);
+                log.info("设备{}更新成功,userId:{}", fingerPrinting, userId);
             }
             else{
                 log.info("用户没有开启自动登录,正在更新设备{}最近登录时间,userId:{}", ip, userId);
                 deviceRepository.updateDevice(deviceEntity.getDeviceId(),NOT_CANCEL);
-                log.info("设备{}更新成功,userId:{}", mac, userId);
+                log.info("设备{}更新成功,userId:{}", fingerPrinting, userId);
             }
         }
 

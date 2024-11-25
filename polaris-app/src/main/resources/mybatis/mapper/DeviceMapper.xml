@@ -6,8 +6,7 @@
         <result column="device_id" property="deviceId" />
         <result column="device_name" property="deviceName" />
         <result column="user_id" property="userId"/>
-        <result column="ip" property="ip"/>
-        <result column="mac" property="mac"/>
+        <result column="finger_printing" property="fingerPrinting"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="is_cancel" property="isCancel"/>
@@ -38,10 +37,10 @@
           and is_deleted = 0
     </update>
 
-    <select id="getDeviceByMac" resultMap="DeviceResultMap">
+    <select id="getDeviceByFingerPrinting" resultMap="DeviceResultMap">
         SELECT * FROM device
                  WHERE user_id = #{userId}
-                   and mac = #{mac}
+                   and finger_printing = #{fingerPrinting}
                    and is_deleted = 0
     </select>
 

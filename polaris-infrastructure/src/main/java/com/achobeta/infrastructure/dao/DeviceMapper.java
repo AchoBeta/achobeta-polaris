@@ -21,7 +21,7 @@ public interface DeviceMapper {
      * @param mac
      * @return DevicePO
      */
-    DevicePO getDeviceByMac(String userId, String mac);
+    DevicePO getDeviceByFingerPrinting(String userId, String fingerPrinting);
 
     /*
      * 根据deviceId更新设备

@@ -55,6 +55,6 @@ public class LoginRequestDTO {
      * 登录用户的设备指纹
      */
     @Pattern(regexp = "", message = "设备指纹格式错误")
-    private String fingerprinting;
+    private String fingerPrinting;
 
 }

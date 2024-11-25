@@ -31,8 +31,8 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
     private ITokenRepository tokenRepository;
 
     @Override
-    public LoginVO login(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String mac) {
-        PostContext<LoginBO> postContext = buildPostContext(phone, code, ip, isAutoLogin, deviceName, mac);
+    public LoginVO login(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String fingerPrinting) {
+        PostContext<LoginBO> postContext = buildPostContext(phone, code, ip, isAutoLogin, deviceName, fingerPrinting);
         postContext = super.doPostProcessor(postContext, LoginPostProcessor.class);
         return LoginVO.builder()
                 .accessToken(postContext.getBizData().getTokenVO().getAccessToken())
@@ -44,8 +44,8 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
     public PostContext<LoginBO> doMainProcessor(PostContext<LoginBO> postContext) {
         TokenVO tokenVO = postContext.getBizData().getTokenVO();
         log.info("正在生成新的AT和RT,userId:{}", tokenVO.getUserId());
-        String accessToken = TokenUtil.getAccessToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getMac());
-        String refreshToken = TokenUtil.getRefreshToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getIsAutoLogin(), tokenVO.getMac());
+        String accessToken = TokenUtil.getAccessToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getFingerPrinting());
+        String refreshToken = TokenUtil.getRefreshToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getIsAutoLogin(), tokenVO.getFingerPrinting());
         tokenVO.setAccessToken(accessToken);
         tokenVO.setRefreshToken(refreshToken);
         log.info("AT和RT生成成功,userId:{}", tokenVO.getUserId());
@@ -53,8 +53,8 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         log.info("正在将AT和RT存入redis,userId:{}", tokenVO.getUserId());
 
         // 调用RedisService的storeAccessToken和storeReflashToken方法将accessToken和refreshToken存入Redis
-        tokenRepository.storeAccessToken(accessToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getMac());
-        tokenRepository.storeReflashToken(refreshToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getIsAutoLogin(), tokenVO.getMac());
+        tokenRepository.storeAccessToken(accessToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getFingerPrinting());
+        tokenRepository.storeReflashToken(refreshToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getIsAutoLogin(), tokenVO.getFingerPrinting());
 
         log.info("AT和RT存入redis成功,userId:{}", tokenVO.getUserId());
 
@@ -65,7 +65,7 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         return postContext;
     }
 
-    public static PostContext<LoginBO> buildPostContext(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String mac) {
+    public static PostContext<LoginBO> buildPostContext(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String fingerPrinting) {
         return PostContext.<LoginBO>builder()
                 .bizName(BizModule.LOGIN.getName())
                 .bizData(LoginBO.builder()
@@ -75,7 +75,7 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
                                         .code(code)
                                         .ip(ip)
                                         .isAutoLogin(isAutoLogin)
-                                        .mac(mac)
+                                        .fingerPrinting(fingerPrinting)
                                         .build())
                         .deviceName(deviceName)
                         .build())

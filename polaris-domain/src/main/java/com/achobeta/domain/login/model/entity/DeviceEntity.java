@@ -47,7 +47,7 @@ public class DeviceEntity {
     private int isCancel;
 
     /**
-     * 设备mac地址
+     * 设备的指纹信息
      */
-    private String mac;
+    private String fingerPrinting;
 }
