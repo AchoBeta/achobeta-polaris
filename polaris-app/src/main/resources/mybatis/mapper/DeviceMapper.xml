@@ -49,4 +49,26 @@
                  WHERE device_id = #{deviceId}
                    and is_deleted = 0
     </select>
+
+    <select id="queryCommonUseAutoLoginDevicesById" resultMap="DeviceResultMap">
+        select device_id,device_name,update_time,ip,create_time from device
+        where user_id = #{userId} and is_deleted = 0
+        <if test="lastDeviceId != null">
+            and  device_id > #{lastDeviceId}
+        </if>
+        and is_cancel = 1
+        order by device_id
+        limit #{limit}
+    </select>
+
+    <select id="queryCommonUserDeviceCountById" resultType="int">
+        select count(1) from device
+        where user_id = #{userId} and is_deleted = 0
+        <if test="lastDeviceId != null">
+            and  device_id > #{lastDeviceId}
+        </if>
+        order by device_id
+        limit #{limit}
+    </select>
+
 </mapper>

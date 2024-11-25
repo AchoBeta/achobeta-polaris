@@ -1,10 +1,12 @@
 package com.achobeta.domain.login.service.login;
 
+import com.achobeta.domain.login.adapter.port.ITeamInfoPort;
 import com.achobeta.domain.login.adapter.repository.ITokenRepository;
 import com.achobeta.domain.login.model.bo.LoginBO;
 import com.achobeta.domain.login.model.valobj.LoginVO;
 import com.achobeta.domain.login.model.valobj.TokenVO;
 import com.achobeta.domain.login.service.IAuthorizationService;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author: 严豪哲
@@ -28,6 +31,9 @@ import javax.annotation.Resource;
 public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implements IAuthorizationService {
 
     @Resource
+    private ITeamInfoPort teamInfoPort;
+
+    @Resource
     private ITokenRepository tokenRepository;
 
     @Override
@@ -35,6 +41,8 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         PostContext<LoginBO> postContext = buildPostContext(phone, code, ip, isAutoLogin, deviceName, fingerPrinting);
         postContext = super.doPostProcessor(postContext, LoginPostProcessor.class);
         return LoginVO.builder()
+                .userId(String.valueOf(postContext.getBizData().getTokenVO().getUserId()))
+                .positionList(postContext.getBizData().getPositionList())
                 .accessToken(postContext.getBizData().getTokenVO().getAccessToken())
                 .refreshToken(postContext.getBizData().getTokenVO().getRefreshToken())
                 .build();
@@ -57,6 +65,11 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         tokenRepository.storeReflashToken(refreshToken, String.valueOf(tokenVO.getUserId()), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getIsAutoLogin(), tokenVO.getFingerPrinting());
 
         log.info("AT和RT存入redis成功,userId:{}", tokenVO.getUserId());
+
+        log.info("正在查询用户团队信息,userId:{}", tokenVO.getUserId());
+        List<PositionEntity> positionEntities = teamInfoPort.queryTeamByUserId(String.valueOf(tokenVO.getUserId()));
+        postContext.getBizData().setPositionList(positionEntities);
+        log.info("用户团队信息查询成功,userId:{}", tokenVO.getUserId());
 
         postContext.setBizData(LoginBO.builder()
                 .tokenVO(tokenVO)
