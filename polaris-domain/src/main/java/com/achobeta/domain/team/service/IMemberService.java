@@ -12,6 +12,15 @@ import java.util.List;
 public interface IMemberService {
 
     /**
+     * 添加成员方法接口
+     * @param userEntity
+     * @param userId
+     * @param teamId
+     * @param positionIds
+     */
+    UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
+
+    /**
      * 修改团队成员信息
      * @param teamId 团队id
      * @param userEntity 用户实体

@@ -29,6 +29,7 @@ public class TeamBO {
     private String userId;
     private UserEntity userEntity;
     private PositionEntity positionEntity;
+    private List<String> positionIds;
     private List<UserEntity> members;
     private List<PositionEntity> positionEntityList;
 

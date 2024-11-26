@@ -5,7 +5,6 @@ import com.achobeta.domain.login.adapter.port.ITeamInfoPort;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -24,6 +23,7 @@ public class TeamInfoPort implements ITeamInfoPort {
     @Resource
     private PositionMapper positionMapper;
 
+    @Override
     public List<PositionEntity> queryTeamByUserId(String userId) {
         List<PositionPO> positionPOList = positionMapper.listPositionByUserId(userId);
         if (CollectionUtil.isEmpty(positionPOList)) {

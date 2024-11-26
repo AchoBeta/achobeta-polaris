@@ -1,9 +1,10 @@
 package com.achobeta.domain.team.service.member;
 
 /**
- * @author yangzhiyao
- * @description 新增成员过程处理器
+ * @author yangzhiayo
+ * @description 添加团队成员处理器
  * @date 2024/11/19
  */
-public class AddMemberPostProcessor implements MemberPostProcessor {
+public class AddMemberPostProcessor implements MemberPostProcessor{
+
 }
