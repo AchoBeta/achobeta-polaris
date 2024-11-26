@@ -183,7 +183,7 @@ public class TokenRepository implements ITokenRepository {
         } else if (type.equals(TokenUtil.REFRESH_TOKEN_TYPE[0])) {
 
             //重置token的有效时间
-            redissonService.setMapExpired(key, MINUTE5);
+            redissonService.setMapExpired(key, HOUR12);
 
             //重置关联关系的有效时间
             redissonService.setMapExpired(RedisKey.DEVICE_TO_TOKEN + deviceId, HOUR12 + MINUTE5 + MINUTE1);
