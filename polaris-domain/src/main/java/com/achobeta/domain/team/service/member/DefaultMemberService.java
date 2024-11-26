@@ -63,19 +63,6 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
                         TeamBO teamBO = postContext.getBizData();
-                        UserEntity userEntity = teamBO.getUserEntity();
-
-                        log.info("判断手机号所属用户是否已存在，phone:{}, teamId:{}",userEntity.getPhone(), teamId);
-                        UserEntity user = memberRepository.queryMemberByPhone(userEntity.getPhone());
-                        if (user!= null) {
-                            log.warn("手机号所属用户已存在，phone:{}, teamId:{}",userEntity.getPhone(), teamId);
-                            postContext.setBizData(TeamBO.builder().userEntity(user).build());
-                            return postContext;
-                        }
-
-                        userEntity.setUserId(UUID.randomUUID().toString());
-                        memberRepository.addMember(userEntity, teamBO.getUserId(), teamBO.getTeamId(), teamBO.getPositionIds());
-
                         String teamId = teamBO.getTeamId();
                         UserEntity userEntity = teamBO.getUserEntity();
                         log.info("访问修改团队成员功能，开始处理，teamId: {}, userId: {}",teamId, userEntity.getUserId());
@@ -85,12 +72,13 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                                 (List<String>)postContext.getExtraData("deletePositions"));
 
                         log.info("访问修改团队成员功能，处理结束，teamId: {}, userId: {}",teamId, userEntity.getUserId());
-                      return postContext;
+                        return postContext;
                     }
                 });
         return postContext.getBizData().getUserEntity();
     }
 
+    @Override
     public UserEntity queryMemberInfo(String memberId) {
         PostContext<TeamBO> postContext = buildPostContext(memberId);
         postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
