@@ -21,7 +21,7 @@ public class GetUserAnnounceRequestDTO {
     private String userId;
     @NotNull(message = "获取公告必须指定单页长度")
     @FieldDesc(name = "单页长度")
-    private int limit;
+    private Integer limit;
     @FieldDesc(name = "单页最后一个公告id")
     private String lastAnnounceId;
 }
