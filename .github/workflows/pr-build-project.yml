@@ -22,12 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: .
+        working-directory: ./polaris-app
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4
       - name: run tag script job
-        run: ./tag-polaris.sh
+        run: ./polaris-app/tag-polaris.sh
   build:
     runs-on: ubuntu-latest
     if: (github.repository == 'AchoBeta/achobeta-polaris')
@@ -60,8 +60,8 @@ jobs:
       - name: Build and push (ghcr.io)
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./polaris-app
+          file: ./polaris-app/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
