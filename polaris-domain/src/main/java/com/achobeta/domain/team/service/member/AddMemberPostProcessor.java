@@ -6,4 +6,5 @@ package com.achobeta.domain.team.service.member;
  * @date 2024/11/19
  */
 public class AddMemberPostProcessor implements MemberPostProcessor{
+
 }
