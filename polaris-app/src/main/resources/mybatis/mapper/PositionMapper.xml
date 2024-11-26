@@ -20,17 +20,6 @@
         </foreach>
     </insert>
 
-    <select id="listParentPositionByPositions" resultMap="PositionResultMap">
-        select id,position_id,position_name,level,subordinate,team_id,
-        create_by,create_time,update_by,update_time
-        from position
-        where subordinate in
-        <foreach collection="positions" item="position" separator="," open="(" close=")">
-            #{position.positionId}
-        </foreach>
-        and is_deleted = 0
-    </select>
-
     <insert id="addPositionToUser">
         insert into user_position (user_id, position_id, team_id) values
         <foreach collection="positionList" item="positionId" separator=",">
