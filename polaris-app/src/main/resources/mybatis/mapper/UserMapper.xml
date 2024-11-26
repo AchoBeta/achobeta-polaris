@@ -3,14 +3,14 @@
 <mapper namespace="com.achobeta.infrastructure.dao.UserMapper">
 
     <update id="deleteMember">
-        update user
+        update member
         set is_deleted = 1, update_by = #{userId}
         where user_id = #{memberId}
               and team_id = #{teamId}
     </update>
 
     <update id="deleteUserPosition">
-        update user
+        update user_position
         set is_deleted = 1, update_by = #{userId}
         where user_id = #{memberId}
               and team_id = #{teamId}

@@ -35,8 +35,8 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
                         TeamBO teamBO = postContext.getBizData();
-                      String userId = teamBO.getUserEntity().getUserId();
-                        String memberId = teamBO.getUserId();
+                      String userId = teamBO.getUserId();
+                        String memberId = teamBO.getUserEntity().getUserId();
                         String teamId = teamBO.getTeamId();
 
                         log.info("删除成员信息, userId:{}, memberId:{}, teamId:{}", userId, memberId, teamId);
