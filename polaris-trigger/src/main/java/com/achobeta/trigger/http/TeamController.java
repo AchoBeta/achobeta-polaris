@@ -1,13 +1,6 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.ITeamService;
-import com.achobeta.api.dto.ModifyMemberInfoRequestDTO;
-import com.achobeta.api.dto.ModifyMemberInfoResponseDTO;
-import com.achobeta.domain.team.service.IMemberService;
-import com.achobeta.domain.user.model.entity.UserEntity;
-import com.achobeta.types.Response;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import com.achobeta.api.dto.*;
 import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
@@ -25,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,7 +45,7 @@ public class TeamController implements ITeamService {
      * @return 修改信息
      */
     @Override
-    @PutMapping("member")
+    @PutMapping("member/detail")
     public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequestDTO requestDTO) {
         String teamId = requestDTO.getTeamId();
         String memberId = requestDTO.getMemberId();
