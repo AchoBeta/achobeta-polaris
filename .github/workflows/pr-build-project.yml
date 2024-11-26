@@ -8,7 +8,7 @@ on:
       - '**.md'
       # - '**/resources/static/'
   check_suite:
-    types: [ completed ]
+    types: [ "completed" ]
 
 env:
   REGISTRY: ghcr.io
