@@ -53,6 +53,11 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
     @Override
     public PostContext<LoginBO> doMainProcessor(PostContext<LoginBO> postContext) {
         TokenVO tokenVO = postContext.getBizData().getTokenVO();
+
+        log.info("正在删除该设备之前的所有token,userId:{},deviceId:{}", tokenVO.getUserId(), tokenVO.getDeviceId());
+        tokenRepository.deleteTokenByDeviceId(tokenVO.getDeviceId());
+        log.info("token删除成功,userId:{},deviceId:{}", tokenVO.getUserId(), tokenVO.getDeviceId());
+
         log.info("正在生成新的AT和RT,userId:{}", tokenVO.getUserId());
         String accessToken = TokenUtil.getAccessToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getFingerPrinting());
         String refreshToken = TokenUtil.getRefreshToken(tokenVO.getUserId(), tokenVO.getPhone(), tokenVO.getDeviceId(), tokenVO.getIp(), tokenVO.getIsAutoLogin(), tokenVO.getFingerPrinting());
