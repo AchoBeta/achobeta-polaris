@@ -29,6 +29,7 @@ import javax.validation.Valid;
 public class GetCodeController implements IGetCodeService {
 
     private final ISendCodeService sendCodeService;
+
     @PostMapping(value = "getcode")
     @Override
     public Response<GetCodeResponseDTO> getCode(@Valid @RequestBody GetCodeRequestDTO getCodeRequestDTO) {

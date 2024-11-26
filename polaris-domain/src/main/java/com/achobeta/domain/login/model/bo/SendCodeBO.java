@@ -21,6 +21,6 @@ public class SendCodeBO {
     /*
      * 验证码值对象
      */
-    CodeVO codeVO;
+    private CodeVO codeVO;
 
 }

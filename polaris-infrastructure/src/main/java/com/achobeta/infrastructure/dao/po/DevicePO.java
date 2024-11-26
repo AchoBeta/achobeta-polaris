@@ -15,18 +15,39 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class DevicePO {
-    /**主键id*/
-    private long id;
-    /**设备业务id*/
+
+    /**
+     * 设备业务id
+     */
     private String deviceId;
-    /**设备名*/
+    /**
+     * 设备名称
+     */
     private String deviceName;
-    /**用户业务id*/
+    /**
+     * 用户业务id
+     */
     private String userId;
-    /**设备ip*/
-    private String IP;
-    /**创建时间*/
+    /**
+     * 设备ip地址
+     */
+    private String ip;
+    /**
+     * 创建时间
+     */
     private LocalDateTime createTime;
-    /**更新时间*/
+    /**
+     *更新时间
+     */
     private LocalDateTime updateTime;
+    /**
+     * 是否自动登录
+     */
+    private Integer isCancel;
+
+    /**
+     * 设备mac地址
+     */
+    private String mac;
+
 }

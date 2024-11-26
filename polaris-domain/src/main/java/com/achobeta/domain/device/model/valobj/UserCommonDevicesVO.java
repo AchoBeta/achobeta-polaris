@@ -1,6 +1,6 @@
 package com.achobeta.domain.device.model.valobj;
 
-import com.achobeta.domain.device.model.entity.DeviceEntity;
+import com.achobeta.domain.login.model.entity.DeviceEntity;
 import lombok.*;
 
 import java.util.List;

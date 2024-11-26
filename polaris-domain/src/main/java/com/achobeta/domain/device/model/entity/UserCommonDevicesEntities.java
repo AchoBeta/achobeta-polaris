@@ -1,5 +1,6 @@
 package com.achobeta.domain.device.model.entity;
 
+import com.achobeta.domain.login.model.entity.DeviceEntity;
 import lombok.*;
 
 import java.util.List;
