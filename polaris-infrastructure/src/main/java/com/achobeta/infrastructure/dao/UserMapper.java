@@ -26,6 +26,12 @@ public interface UserMapper {
     UserPO getUserByUserId(String userId);
 
     /**
+     * 更新修改团队成员信息
+     * @param userPO
+     */
+    void updateMemberInfo(UserPO userPO);
+
+    /**
      * 更新用户信息
      * @param userPO 用户实体
      */

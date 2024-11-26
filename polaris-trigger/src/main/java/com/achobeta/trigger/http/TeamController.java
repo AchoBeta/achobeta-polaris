@@ -36,9 +36,39 @@ import java.util.List;
 public class TeamController implements ITeamService {
 
     private final IMemberService memberService;
-  
+
     private final IStructureService structureService;
 
+    /**
+     * 修改团队成员信息
+     * @param requestDTO
+     * @return 修改信息
+     */
+    @Override
+    @PutMapping("member/detail")
+    public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequestDTO requestDTO) {
+        String teamId = requestDTO.getTeamId();
+        String memberId = requestDTO.getMemberId();
+        log.info("用户访问修改团队成员信息接口，userId：{}, memberId：{}, teamId:{}", requestDTO.getUserId(), memberId, teamId);
+
+        memberService.modifyMember(teamId, UserEntity.builder()
+                        .phone(requestDTO.getPhone())
+                        .entryTime(requestDTO.getEntryTime())
+                        .userId(memberId)
+                        .userName(requestDTO.getUserName())
+                        .gender(requestDTO.getGender())
+                        .idCard(requestDTO.getIdCard())
+                        .email(requestDTO.getEmail())
+                        .grade(requestDTO.getGrade())
+                        .major(requestDTO.getMajor())
+                        .studentId(requestDTO.getStudentId())
+                        .experience(requestDTO.getExperience())
+                        .currentStatus(requestDTO.getCurrentStatus())
+                        .build(), requestDTO.getAddPositions(), requestDTO.getDeletePositions());
+
+        return Response.SYSTEM_SUCCESS(ModifyMemberInfoResponseDTO.builder().userInfo(requestDTO).build());
+    }
+  
     /**
      * 查看团队成员信息详情接口
      */
@@ -211,4 +241,5 @@ public class TeamController implements ITeamService {
             return Response.SERVICE_ERROR();
         }
     }
+
 }
