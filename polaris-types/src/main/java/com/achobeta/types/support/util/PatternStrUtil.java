@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author chensongmin
- * @description
+ * @description 仅作为案例代码
  * @create 2024/11/3
  */
 public class PatternStrUtil {
