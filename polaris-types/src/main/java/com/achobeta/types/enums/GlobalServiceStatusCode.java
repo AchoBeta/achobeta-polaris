@@ -69,6 +69,7 @@ public enum GlobalServiceStatusCode {
     LOGIN_FAILED_TO_LOGOUT(6011, "登出失败"),
     LOGIN_UNKNOWN_ERROR(6012, "登陆模块未知错误,请联系管理员"),
     LOGIN_ACCESS_TOKEN_HAVE_REFRESHED(6013, "accessToken已被刷新,请重新发送请求"),
+
     ;
 
     private Integer code;

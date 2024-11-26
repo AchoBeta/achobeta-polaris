@@ -26,6 +26,73 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     private final IMemberRepository memberRepository;
 
     @Override
+    public UserEntity modifyMember(String teamId, UserEntity userEntity, List<String> addPositions, List<String> deletePositions) {
+        PostContext<TeamBO> postContext = buildPostContext(teamId, userEntity);
+        postContext.addExtraData("addPositions", addPositions);
+        postContext.addExtraData("deletePositions", deletePositions);
+        postContext = super.doPostProcessor(postContext, ModifyMemberInfoPostProcessor.class,
+                new AbstractPostProcessorOperation<TeamBO>() {
+                    @Override
+                    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
+                        TeamBO teamBO = postContext.getBizData();
+                        String teamId = teamBO.getTeamId();
+                        UserEntity userEntity = teamBO.getUserEntity();
+                        log.info("访问修改团队成员功能，开始处理，teamId: {}, userId: {}",teamId, userEntity.getUserId());
+
+                        memberRepository.modifyMemberInfo(userEntity, teamId,
+                                (List<String>)postContext.getExtraData("addPositions"),
+                                (List<String>)postContext.getExtraData("deletePositions"));
+
+                        log.info("访问修改团队成员功能，处理结束，teamId: {}, userId: {}",teamId, userEntity.getUserId());
+                      return postContext;
+                    }
+                });
+        return postContext.getBizData().getUserEntity();
+    }
+
+    public UserEntity queryMemberInfo(String memberId) {
+        PostContext<TeamBO> postContext = buildPostContext(memberId);
+        postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
+                new AbstractPostProcessorOperation<TeamBO>() {
+                    @Override
+                    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
+                        TeamBO userBO = postContext.getBizData();
+                        log.info("开始查询团队成员信息，userId:{}，memberId:{}, teamId:{}",
+                                userBO.getUserId(),
+                                userBO.getUserEntity().getUserId(),
+                                userBO.getTeamId());
+
+                        UserEntity userEntity = memberRepository.queryMemberInfo(userBO.getUserEntity().getUserId());
+
+                        log.info("查询团队成员信息成功，userId:{}，memberId:{}, teamId:{}",
+                                userBO.getUserId(),
+                                userBO.getUserEntity().getUserId(),
+                                userBO.getTeamId());
+                        postContext.setBizData(TeamBO.builder().userEntity(userEntity).build());
+                        return postContext;
+                    }
+                });
+        return postContext.getBizData().getUserEntity();
+    }
+
+    private static PostContext<TeamBO> buildPostContext(String teamId, UserEntity userEntity) {
+        return PostContext.<TeamBO>builder()
+                .bizName(BizModule.TEAM.getName())
+                .bizId(BizModule.TEAM.getCode())
+                .bizData(TeamBO.builder().teamId(teamId).userEntity(userEntity).build())
+                .build();
+    }
+
+    private static PostContext<TeamBO> buildPostContext(String memberId) {
+        return PostContext.<TeamBO>builder()
+                .bizName(BizModule.TEAM.getName())
+                .bizData(TeamBO.builder()
+                        .userEntity(UserEntity.builder().userId(memberId).build())
+                        .build())
+                .build();
+    }
+
+    @Override
     public List<UserEntity> queryMembers(String teamId, String lastId, Integer limit) {
         PostContext<TeamBO> postContext = buildPostContext(teamId, lastId, limit);
         postContext = super.doPostProcessor(postContext, MemberListPostProcessor.class,

@@ -13,6 +13,21 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <insert id="addPositionToUser">
+        insert into user_position (user_id, position_id, team_id) values
+        <foreach collection="positionList" item="positionId" separator=",">
+        (#{userId}, #{positionId}, #{teamId})
+        </foreach>
+    </insert>
+
+    <update id="deletePositionWithUser">
+        update user_position set is_deleted = 1, update_by = #{userId}
+        where user_id = #{userId} and position_id in
+        <foreach collection="deletePositions" item="positionId" separator="," open="(" close=")">
+        #{positionId}
+        </foreach>
+    </update>
+
     <insert id="addPosition" parameterType="com.achobeta.infrastructure.dao.po.PositionPO">
         insert into `position` (position_id,position_name,level,subordinate,team_id) values
         <foreach collection="positionPOList" item="position" separator=",">
