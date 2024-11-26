@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
 
 /**
  * @author yangzhiyao
@@ -24,6 +26,32 @@ import java.util.List;
 public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> implements IMemberService {
 
     private final IMemberRepository memberRepository;
+
+    @Override
+    public UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds) {
+        PostContext<TeamBO> postContext = buildPostContext(userEntity, userId, teamId, positionIds);
+        postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
+                new AbstractPostProcessorOperation<TeamBO>() {
+                    @Override
+                    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
+                        TeamBO teamBO = postContext.getBizData();
+                        UserEntity userEntity = teamBO.getUserEntity();
+
+                        log.info("判断手机号所属用户是否已存在，phone:{}, teamId:{}",userEntity.getPhone(), teamId);
+                        UserEntity user = memberRepository.queryMemberByPhone(userEntity.getPhone());
+                        if (user!= null) {
+                            log.warn("手机号所属用户已存在，phone:{}, teamId:{}",userEntity.getPhone(), teamId);
+                            postContext.setBizData(TeamBO.builder().userEntity(user).build());
+                            return postContext;
+                        }
+
+                        userEntity.setUserId(UUID.randomUUID().toString());
+                        memberRepository.addMember(userEntity, teamBO.getUserId(), teamBO.getTeamId(), teamBO.getPositionIds());
+                      return postContext;
+                    }
+                });
+        return postContext.getBizData().getUserEntity();
+    }
 
     @Override
     public UserEntity modifyMember(String teamId, UserEntity userEntity, List<String> addPositions, List<String> deletePositions) {
@@ -44,12 +72,13 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                                 (List<String>)postContext.getExtraData("deletePositions"));
 
                         log.info("访问修改团队成员功能，处理结束，teamId: {}, userId: {}",teamId, userEntity.getUserId());
-                      return postContext;
+                        return postContext;
                     }
                 });
         return postContext.getBizData().getUserEntity();
     }
 
+    @Override
     public UserEntity queryMemberInfo(String memberId) {
         PostContext<TeamBO> postContext = buildPostContext(memberId);
         postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
@@ -73,6 +102,19 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                     }
                 });
         return postContext.getBizData().getUserEntity();
+    }
+
+    private static PostContext<TeamBO> buildPostContext(UserEntity userEntity, String userId, String teamId, List<String> positionIds) {
+        return PostContext.<TeamBO>builder()
+                .bizId(BizModule.TEAM.getCode())
+                .bizName(BizModule.TEAM.getName())
+                .bizData(TeamBO.builder()
+                        .userEntity(userEntity)
+                        .userId(userId)
+                        .teamId(teamId)
+                        .positionIds(positionIds)
+                         .build())
+                .build();
     }
 
     private static PostContext<TeamBO> buildPostContext(String teamId, UserEntity userEntity) {

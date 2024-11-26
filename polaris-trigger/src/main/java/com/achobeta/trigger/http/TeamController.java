@@ -1,6 +1,9 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.ITeamService;
+import com.achobeta.api.dto.AddMemberRequestDTO;
+import com.achobeta.api.dto.AddMemberResponseDTO;
+import com.achobeta.domain.team.service.IMemberService;
 import com.achobeta.api.dto.*;
 import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
@@ -38,6 +41,57 @@ public class TeamController implements ITeamService {
     private final IMemberService memberService;
 
     private final IStructureService structureService;
+  
+    /**
+     * 添加团队成员接口
+     * @author yangzhiyao
+     * @date 2024/11/19
+     * @param requestDTO AddMemberRequestDTO
+     * @return 用户实体，状态码 0-成功，1-已存在用户
+     */
+    @Override
+    @PostMapping("member")
+    public Response<AddMemberResponseDTO> addMember(@Valid @RequestBody AddMemberRequestDTO requestDTO) {
+        try {
+            log.info("访问添加团队成员接口开始, userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
+
+            UserEntity userEntity = UserEntity.builder()
+                        .userName(requestDTO.getUserName())
+                        .phone(requestDTO.getPhone())
+                        .gender(requestDTO.getGender())
+                        .idCard(requestDTO.getIdCard())
+                        .email(requestDTO.getEmail())
+                        .grade(requestDTO.getGrade())
+                        .major(requestDTO.getMajor())
+                        .studentId(requestDTO.getStudentId())
+                        .experience(requestDTO.getExperience())
+                        .currentStatus(requestDTO.getCurrentStatus())
+                        .entryTime(requestDTO.getEntryTime())
+                        .build();
+            userEntity = memberService.addMember(userEntity,
+                    requestDTO.getUserId(),
+                    requestDTO.getTeamId(),
+                    requestDTO.getPositions());
+            Integer statusCode = userEntity.getLikeCount() == null ? 0 : 1;
+
+            log.info("访问添加团队成员接口结束userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
+            return Response.SYSTEM_SUCCESS(AddMemberResponseDTO.builder()
+                                        .userInfo(userEntity)
+                                        .statusCode(statusCode)
+                                        .build());
+        } catch (AppException e) {
+            log.error("用户访问添加团队成员接口失败！{}, error:{}",
+                    requestDTO, e.toString(), e);
+            return Response.<AddMemberResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+          }catch (Exception e) {
+            log.error("访问添加团队成员接口失败！",e);
+            return Response.SYSTEM_FAIL();
+        }
+    }
 
     /**
      * 修改团队成员信息

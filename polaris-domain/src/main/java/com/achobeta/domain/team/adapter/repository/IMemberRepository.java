@@ -12,6 +12,22 @@ import java.util.List;
 public interface IMemberRepository {
 
     /**
+     * 添加成员
+     * @param userEntity
+     * @param userId
+     * @param teamId
+     * @param positionIds
+     */
+    void addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
+
+    /**
+     * 根据手机号查询对应用户
+     * @param phone 添加的团队成员的手机号
+     * @return
+     */
+    UserEntity queryMemberByPhone(String phone);
+
+    /**
      * 修改团队成员信息
      * @param teamId
      * @return

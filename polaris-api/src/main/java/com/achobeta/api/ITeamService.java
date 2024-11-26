@@ -1,5 +1,7 @@
 package com.achobeta.api;
 
+import com.achobeta.api.dto.AddMemberRequestDTO;
+import com.achobeta.api.dto.AddMemberResponseDTO;
 import com.achobeta.api.dto.ModifyMemberInfoRequestDTO;
 import com.achobeta.api.dto.ModifyMemberInfoResponseDTO;
 import com.achobeta.api.dto.QueryMemberInfoRequestDTO;
@@ -22,6 +24,15 @@ import javax.validation.Valid;
  */
 public interface ITeamService {
 
+    /**
+     * 添加团队成员接口
+     * @author yangzhiyao
+     * @date 2024/11/19
+     * @param requestDTO AddMemberRequestDTO
+     * @return Response<AddMemberResponseDTO>
+     */
+    Response<AddMemberResponseDTO> addMember(@Valid @RequestBody AddMemberRequestDTO requestDTO);
+  
     /**
      * 修改成员信息
      * @param requestDTO

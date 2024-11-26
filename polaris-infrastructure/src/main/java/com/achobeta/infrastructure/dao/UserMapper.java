@@ -14,6 +14,12 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
+    UserPO getMemberByPhone(String phone);
+
+    void addMember(String userId, String teamId);
+
+    void addUser(UserPO userPO);
+
     List<UserPO> listMemberByTeamId(String teamId,Long lastId, Integer limit);
 
     Long getIdByUserId(String userId);
