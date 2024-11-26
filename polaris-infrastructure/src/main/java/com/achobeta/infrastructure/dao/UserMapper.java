@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+
 /**
  * @author yangzhiyao
  * @description UserDao接口
@@ -23,6 +24,12 @@ public interface UserMapper {
      * @return 用户实体
      */
     UserPO getUserByUserId(String userId);
+
+    /**
+     * 更新修改团队成员信息
+     * @param userPO
+     */
+    void updateMemberInfo(UserPO userPO);
 
     /**
      * 更新用户信息

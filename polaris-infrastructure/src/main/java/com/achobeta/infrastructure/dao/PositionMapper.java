@@ -1,5 +1,6 @@
 package com.achobeta.infrastructure.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +14,10 @@ import java.util.List;
  */
 @Mapper
 public interface PositionMapper {
+
+    void addPositionToUser(List<String> positionList, String userId, String teamId);
+
+    void deletePositionWithUser(List<String> deletePositions, String userId);
 
     /**
      * 获取某个职位的所有下属职位
