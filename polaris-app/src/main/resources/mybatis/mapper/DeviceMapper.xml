@@ -50,12 +50,6 @@
                    and is_deleted = 0
     </select>
 
-    <select id="getUserIdByDeviceId" resultMap="DeviceResultMap">
-        SELECT user_id FROM device
-                 WHERE device_id = #{deviceId}
-                   and is_deleted = 0
-    </select>
-
     <select id="queryCommonUseAutoLoginDevicesById" resultMap="DeviceResultMap">
         select device_id,device_name,update_time,ip,create_time from device
         where user_id = #{userId} and is_deleted = 0
