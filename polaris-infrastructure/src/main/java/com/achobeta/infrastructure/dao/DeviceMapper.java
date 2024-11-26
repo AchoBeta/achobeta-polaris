@@ -6,6 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * @author huangwenxing
+ * @description 设备Dao接口
+ * @data 2024/11/7
+ * */
 @Mapper
 public interface DeviceMapper {
 
@@ -55,4 +60,5 @@ public interface DeviceMapper {
      * @return userId
      */
     DevicePO getUserIdByDeviceId(String deviceId);
+
 }
