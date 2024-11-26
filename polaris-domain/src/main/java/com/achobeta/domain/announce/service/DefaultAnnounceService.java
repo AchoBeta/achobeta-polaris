@@ -75,15 +75,10 @@ public class DefaultAnnounceService extends AbstractFunctionPostProcessor implem
         postContext = super.doPostProcessor(postContext, ReadAnnouncePostProcessor.class, new AbstractPostProcessorOperation<ReadAnnounceEntity>() {
             @Override
             public PostContext<ReadAnnounceEntity> doMainProcessor(PostContext<ReadAnnounceEntity> postContext) {
-                Integer i = repository.readAnnounce(postContext.getBizData().getUserId(), postContext.getBizData().getAnnounceId());
-                postContext.addExtraData(Constants.AFFECT_LENGTH,i);
+                repository.readAnnounce(postContext.getBizData().getUserId(), postContext.getBizData().getAnnounceId());
                 return postContext;
             }
         });
-        Integer i = (Integer)postContext.getExtra().get(Constants.AFFECT_LENGTH);
-        if(i==0){
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
-        }
     }
 
     @Override
@@ -106,15 +101,10 @@ public class DefaultAnnounceService extends AbstractFunctionPostProcessor implem
         super.doPostProcessor(postContext, ReadAllAnnouncePostProcessor.class, new AbstractPostProcessorOperation<ReadAnnounceEntity>() {
             @Override
             public PostContext<ReadAnnounceEntity> doMainProcessor(PostContext<ReadAnnounceEntity> postContext) {
-                Integer row = repository.ReadAllAnnounce(postContext.getBizData().getUserId());
-                postContext.addExtraData(Constants.AFFECT_LENGTH,row);
+                repository.ReadAllAnnounce(postContext.getBizData().getUserId());
                 return postContext;
             }
         });
-        Integer row = (Integer)postContext.getExtra().get(Constants.AFFECT_LENGTH);
-        if(row==0){
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.PARAM_NOT_VALID.getCode()),GlobalServiceStatusCode.PARAM_NOT_VALID.getMessage());
-        }
     }
 
     private static PostContext<AnnounceCountEntity> buildPostContext(String userId) {

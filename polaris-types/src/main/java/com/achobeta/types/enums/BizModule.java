@@ -14,9 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum BizModule {
     RENDER("biz_001", "文本渲染模块"),
-    DEVICE("biz004","设备渲染模块"),
-    ANNOUNCE("biz_005","公告渲染模块"),
-    READANNOUNCE("biz_006","读公告模块"),
+    TEAM("biz_003" , "团队模块"),
+    DEVICE("biz010","设备渲染模块"),
+    ANNOUNCE("biz_011","公告渲染模块"),
+    READANNOUNCE("biz_012","读公告模块"),
+    USER("biz_002", "用户模块"),
+    LOGIN("biz_006", "用户登陆模块"),
     LIKE("biz_013","点赞模块")
     ;
 

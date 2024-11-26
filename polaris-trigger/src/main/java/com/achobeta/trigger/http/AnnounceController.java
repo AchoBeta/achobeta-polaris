@@ -31,9 +31,9 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
      * @param getUserAnnounceRequestDTO
      * @return
      */
-    @PostMapping("/getUserAnnounce")
+    @GetMapping("/getUserAnnounce")
     @Override
-    public Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid @RequestBody GetUserAnnounceRequestDTO getUserAnnounceRequestDTO) {
+    public Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid GetUserAnnounceRequestDTO getUserAnnounceRequestDTO) {
         try {
             log.info("用户访问公告渲染系统开始，userId:{} limit:{} lastAnnounceId:{}",
                     getUserAnnounceRequestDTO.getUserId(), getUserAnnounceRequestDTO.getLimit(), getUserAnnounceRequestDTO.getLastAnnounceId());
@@ -76,8 +76,8 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
     }
 
     @Override
-    @PostMapping("/getAnnounceCount")
-    public Response<GetUserAnnounceCountResponseDTO> getUserAnnounceCount(@Valid @RequestBody GetUserAnnounceCountRequestDTO getUserAnnounceCountRequestDTO) {
+    @GetMapping("/getAnnounceCount")
+    public Response<GetUserAnnounceCountResponseDTO> getUserAnnounceCount(@Valid GetUserAnnounceCountRequestDTO getUserAnnounceCountRequestDTO) {
         try {
             log.info("用户获取公告数量开始，userId:{}",
                     getUserAnnounceCountRequestDTO.getUserId());
