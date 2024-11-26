@@ -18,6 +18,7 @@ public enum RedisKey {
     RATE_LIMIT("ab:polaris:login:rateLimit:","发送验证码频率限制"),
     TOKEN("ab:polaris:login:token:","token"),
     DEVICE_TO_TOKEN("ab:polaris:login:device_to_token:","设备id关联token"),
+    CODE_LOCK("ab:polaris:login:code_lock:","验证码加锁"),
     ;
 
     private String keyPrefix;

@@ -76,4 +76,9 @@
         FROM user
         WHERE user_id = #{userId} and is_deleted = 0
     </select>
+
+    <select id="getUserByPhone" resultMap="UserResultMap">
+        SELECT user_id FROM user WHERE phone = #{phone}
+    </select>
+
 </mapper>

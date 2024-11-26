@@ -37,4 +37,10 @@ public interface UserMapper {
      */
     void updateUserInfo(UserPO userPO);
 
+    /**
+     * 根据手机号查询用户
+     * @param phone
+     * @return 用户PO
+     */
+    UserPO getUserByPhone(String phone);
 }

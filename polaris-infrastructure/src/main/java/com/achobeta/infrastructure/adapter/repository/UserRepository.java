@@ -1,7 +1,6 @@
 package com.achobeta.infrastructure.adapter.repository;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.achobeta.domain.user.adapter.repository.IUserRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,16 +25,32 @@ import static com.achobeta.types.enums.GlobalServiceStatusCode.USER_ACCOUNT_NOT_
  */
 @Slf4j
 @Repository
-public class UserRepository implements IUserRepository {
+public class UserRepository implements com.achobeta.domain.user.adapter.repository.IUserRepository , com.achobeta.domain.login.adapter.repository.IUserRepository {
 
     @Resource
     private UserMapper userMapper;
-    
+
     @Resource
     private PositionMapper positionMapper;
-  
+
     @Resource
     private IRedisService redisService;
+
+    /*
+     * 根据手机号查询用户
+     * @param phone 手机号
+     * @return UserEntity 用户实体
+     */
+    @Override
+    public UserEntity getUserByPhone(String phone){
+        UserPO userPO = userMapper.getUserByPhone(phone);
+        if(null == userPO){
+            return null;
+        }
+        return UserEntity.builder()
+                            .userId(userPO.getUserId())
+                            .build();
+    }
 
     @Override
     public void updateUserInfo(UserEntity userEntity) {

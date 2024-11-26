@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 @Repository
 public class OperateCodeRepository implements IOperateCodeRepository {
 
+    private final long EXPIRED = 55*1000;
+
     @Resource
     private RedissonService redissonService;
 
@@ -40,6 +42,47 @@ public class OperateCodeRepository implements IOperateCodeRepository {
     public void setCode(String phone, String code, long expired) {
         String key=RedisKey.CODE.getKeyPrefix()+phone;
         redissonService.setValue(key,code,expired);
+    }
+
+    @Override
+    public void setRateLimit(String phone) {
+        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+        redissonService.setValue(key,1,EXPIRED);
+    }
+
+    @Override
+    public Boolean checkRateLimit(String phone) {
+        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+
+        if(null == redissonService.getValue(key)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    @Override
+    public void deleteCode(String phone, String code) {
+        String key=RedisKey.CODE.getKeyPrefix()+phone;
+
+        try {
+            redissonService.remove(key);
+        } catch (Exception e) {
+            //删除失败则不做处理
+        }
+    }
+
+    @Override
+    public void lockCheckCode(String phone, String code) {
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone"+phone+"code"+code;
+        redissonService.getLock(key);
+    }
+
+    @Override
+    public void unlockCheckCode(String phone, String code) {
+        String key=RedisKey.CODE_LOCK.getKeyPrefix()+"phone"+phone+"code"+code;
+        redissonService.unLock(key);
     }
 
 }

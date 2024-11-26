@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.Duration;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -90,6 +91,16 @@ public class RedissonService implements IRedisService {
         set.add(value);
     }
 
+    public void removeFromSet(String key, String value) {
+        RSet<String> set = redissonClient.getSet(key);
+        set.remove(value);
+    }
+
+    public Set<String> getSetMembers(String key) {
+        RSet<String> set = redissonClient.getSet(key);
+        return set.readAll();
+    }
+
     public boolean isSetMember(String key, String value) {
         RSet<String> set = redissonClient.getSet(key);
         return set.contains(value);
@@ -110,10 +121,20 @@ public class RedissonService implements IRedisService {
         return redissonClient.getMap(key);
     }
 
-    @Override
+
     public <T> void addToMap(String key, String field, T value) {
         RMap<String, T> map = redissonClient.getMap(key);
         map.put(field, value);
+    }
+
+    public void addToMap(String key, String field, String value) {
+        RMap<String, String> map = redissonClient.getMap(key);
+        map.put(field, value);
+    }
+
+    public void setMapExpired(String key, long expired) {
+        RMap<String, String> map = redissonClient.getMap(key);
+        map.expire(Duration.ofMillis(expired));
     }
 
     public String getFromMap(String key, String field) {
@@ -134,6 +155,11 @@ public class RedissonService implements IRedisService {
     @Override
     public RLock getLock(String key) {
         return redissonClient.getLock(key);
+    }
+
+    @Override
+    public void unLock(String key) {
+        redissonClient.getLock(key).unlock();
     }
 
     @Override
