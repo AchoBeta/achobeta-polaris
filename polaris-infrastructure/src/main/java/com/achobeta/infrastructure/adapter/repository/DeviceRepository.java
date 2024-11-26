@@ -128,4 +128,13 @@ public class DeviceRepository implements com.achobeta.domain.login.adapter.repos
         return deviceMapper.queryCommonUserDeviceCountById(userId, limit, lastDeviceId);
     }
 
+
+    @Override
+    public String getUserIdByDeviceId(String deviceId) {
+        DevicePO userPO = deviceMapper.getUserIdByDeviceId(deviceId);
+        if (userPO == null) {
+            return null;
+        }
+        return userPO.getUserId();
+    }
 }

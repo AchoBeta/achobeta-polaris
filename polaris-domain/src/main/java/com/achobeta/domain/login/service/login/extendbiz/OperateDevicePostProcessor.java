@@ -23,6 +23,10 @@ import java.time.LocalDateTime;
 @Component
 public class OperateDevicePostProcessor implements LoginPostProcessor {
 
+    private final int AUTO_LOGIN = 1;
+
+    private final int NOT_AUTO_LOGIN = 0;
+
     @Resource
     private IDeviceRepository deviceRepository;
 

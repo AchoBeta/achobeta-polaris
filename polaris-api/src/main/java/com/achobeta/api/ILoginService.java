@@ -22,4 +22,10 @@ public interface ILoginService {
      * @return 登录响应DTO
      */
     Response<LoginResponseDTO> login(LoginRequestDTO loginRequestDTO, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 刷新 (携带refresh_token)
+     * @return 登录响应DTO
+     */
+    Response<LoginResponseDTO> refresh(HttpServletRequest request, HttpServletResponse response);
 }

@@ -2,6 +2,8 @@ package com.achobeta.infrastructure.redis;
 
 import org.redisson.api.*;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -158,6 +160,12 @@ public interface IRedisService {
     boolean isSetMember(String key, String value);
 
     /**
+     * 设置set的过期时间
+     *
+     */
+    void setSetExpired(String key, long expired);
+
+    /**
      * 将指定的值添加到列表中
      *
      * @param key   键
@@ -208,6 +216,29 @@ public interface IRedisService {
      */
     void setMapExpired(String key, long expired);
 
+
+    /**
+     * 获取Map的过期时间
+     *
+     * @param key 键
+     * @return 值
+     */
+    Long getMapExpired(String key);
+
+    /**
+     * 获取Map并转换为Java Map
+     * @param key 键
+     * @return
+     */
+    Map<String,String> getMapToJavaMap(String key);
+
+    /**
+     * 移除哈希表中指定字段的值
+     *
+     * @param key   键
+     * @param field 字段
+     */
+    void removeFromMap(String key, String field);
 
     /**
      * 获取哈希表中指定字段的值
