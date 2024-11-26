@@ -45,6 +45,8 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
                 .positionList(postContext.getBizData().getPositionList())
                 .accessToken(postContext.getBizData().getTokenVO().getAccessToken())
                 .refreshToken(postContext.getBizData().getTokenVO().getRefreshToken())
+                .phone(postContext.getBizData().getTokenVO().getPhone())
+                .deviceId(postContext.getBizData().getTokenVO().getDeviceId())
                 .build();
     }
 

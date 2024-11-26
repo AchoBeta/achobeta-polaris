@@ -57,6 +57,7 @@ public class DefaultRefreshTokenService extends AbstractPostProcessor<LoginBO> i
                 .accessToken(postContext.getBizData().getTokenVO().getAccessToken())
                 .refreshToken(postContext.getBizData().getTokenVO().getRefreshToken())
                 .phone(postContext.getBizData().getTokenVO().getPhone())
+                .deviceId(postContext.getBizData().getTokenVO().getDeviceId())
                 .build();
     }
 

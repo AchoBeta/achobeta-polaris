@@ -47,4 +47,9 @@ public class LoginResponseDTO {
      */
     private Object positionList;
 
+    /**
+     * 登录用户的设备id
+     */
+    private String deviceId;
+
 }

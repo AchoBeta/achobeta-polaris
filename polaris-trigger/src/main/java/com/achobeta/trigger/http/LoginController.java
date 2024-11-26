@@ -99,6 +99,7 @@ public class LoginController implements ILoginService {
                             .accessToken(loginVO.getAccessToken())
                             .refreshToken(loginVO.getRefreshToken())
                             .positionList(loginVO.getPositionList())
+                            .deviceId(loginVO.getDeviceId())
                             .build()
             );
         } catch (AppException e) {
@@ -146,6 +147,7 @@ public class LoginController implements ILoginService {
                             .userId(loginVO.getUserId())
                             .accessToken(loginVO.getAccessToken())
                             .positionList(loginVO.getPositionList())
+                            .deviceId(loginVO.getDeviceId())
                             .build()
             );
         } catch (AppException e) {
