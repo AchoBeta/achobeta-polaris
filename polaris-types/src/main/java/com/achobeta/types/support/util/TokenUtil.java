@@ -26,7 +26,7 @@ public class TokenUtil {
     public static final String IP = "ip";
     public static final String TYPE = "type";
     public static final String IS_AUTO_LOGIN = "isAutoLogin";
-    public static final String MAC = "mac";
+    public static final String FINGERPRINTING = "fingerPrinting";
     public static final String ID = "id";
 
     /**
@@ -37,7 +37,7 @@ public class TokenUtil {
      * @param ip    用户的ip地址
      * @return 返回生成的AccessToken
      */
-    public static String getAccessToken(Long userId, String phone, String deviceId, String ip, String mac) {
+    public static String getAccessToken(Long userId, String phone, String deviceId, String ip, String fingerPrinting) {
         //存储数据
         Map<String,Object> claims = new HashMap<>();
         claims.put(USER_ID,userId);
@@ -46,7 +46,7 @@ public class TokenUtil {
         claims.put(IP,ip);
         claims.put(TYPE,ACCESS_TOKEN);
         claims.put(ID, SnowflakeIdWorker.nextId());
-        claims.put(MAC,mac);
+        claims.put(FINGERPRINTING,fingerPrinting);
 
         // 生成JWT令牌
         String jwt = Jwts.builder()
@@ -67,7 +67,7 @@ public class TokenUtil {
      * @return 返回生成的RefreshToken
      *
      */
-    public static String getRefreshToken(Long userId, String phone, String deviceId, String ip, Boolean autoLogin, String mac) {
+    public static String getRefreshToken(Long userId, String phone, String deviceId, String ip, Boolean autoLogin, String fingerPrinting) {
         //存储数据
         Map<String,Object> claims = new HashMap<>();
         claims.put(USER_ID,userId);
@@ -76,7 +76,7 @@ public class TokenUtil {
         claims.put(IP,ip);
         claims.put(TYPE,REFRESH_TOKEN_TYPE[autoLogin?1:0]);
         claims.put(ID, SnowflakeIdWorker.nextId());
-        claims.put(MAC,mac);
+        claims.put(FINGERPRINTING,fingerPrinting);
 
         // 生成JWT令牌
         String jwt = Jwts.builder()

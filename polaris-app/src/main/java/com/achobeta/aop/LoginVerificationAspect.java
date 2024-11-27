@@ -34,6 +34,8 @@ public class LoginVerificationAspect {
 
     private final String ACCESS_TOKEN_NEED_REFRESH = "access_token_need_refresh";
 
+    private final String TOKENINFO = "tokenInfo";
+
     @Resource
     private ITokenRepository tokenRepository;
 
@@ -71,16 +73,16 @@ public class LoginVerificationAspect {
         // token校验
         switch(tokenRepository.checkAccessToken(token)){
             case 0:
-                log.info("accessToken:{}已过期", token);
+                log.info("accessToken已过期,accessToken:{}", token);
                 throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_INVALID.getCode()), GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_INVALID.getMessage());
             case -1:
-                log.info("accessToken:{}已刷新", token);
+                log.info("accessToken已刷新,accessToken:{}", token);
                 throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_HAVE_REFRESHED.getCode()), GlobalServiceStatusCode.LOGIN_ACCESS_TOKEN_HAVE_REFRESHED.getMessage());
             case 1:
-                log.info("accessToken:{}校验通过", token);
+                log.info("accessToken校验通过,accessToken:{}", token);
                 break;
             default:
-                log.info("accessToken:{}未知错误", token);
+                log.info("登录校验未知错误,accessToken:{}", token);
                 throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getCode()), GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getMessage());
         }
 
@@ -90,7 +92,7 @@ public class LoginVerificationAspect {
         }
 
         //将token信息并将其放在请求头
-        request.setAttribute("tokenInfo", tokenVO);
+        request.setAttribute(TOKENINFO, tokenVO);
 
         //执行目标接口
         return joinPoint.proceed();

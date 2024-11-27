@@ -5,11 +5,10 @@ import com.achobeta.api.dto.GetCodeRequestDTO;
 import com.achobeta.api.dto.GetCodeResponseDTO;
 import com.achobeta.domain.login.service.ISendCodeService;
 import com.achobeta.types.Response;
-import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,6 +22,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController()
+@Validated
 @CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/auth/")
 @RequiredArgsConstructor
@@ -42,8 +42,8 @@ public class GetCodeController implements IGetCodeService {
             return Response.SYSTEM_SUCCESS();
         } catch (AppException e) {
             log.error("用户访问获取验证码系统失败,phone:{}", getCodeRequestDTO.getPhone(), e);
-            return Response.SERVICE_ERROR(e.getInfo());
-        }catch (Exception e) {
+            return Response.APP_ECEPTION(e);
+        } catch (Exception e) {
             log.error("用户访问获取验证码系统失败,phone:{}", getCodeRequestDTO.getPhone(), e);
             return Response.SERVICE_ERROR(e.getMessage());
         }

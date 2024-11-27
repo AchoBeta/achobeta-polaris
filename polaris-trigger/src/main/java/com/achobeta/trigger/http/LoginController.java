@@ -12,6 +12,7 @@ import com.achobeta.types.exception.AppException;
 import com.achobeta.types.support.util.DeviceNameUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +30,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController()
+@Validated
 @CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/auth/")
 @RequiredArgsConstructor
@@ -52,7 +54,7 @@ public class LoginController implements ILoginService {
         try {
             log.info("用户访问登录系统开始,phone:{}", loginRequestDTO.getPhone());
 
-            if (loginRequestDTO.getIsAutoLogin().equals("true")) {
+            if(loginRequestDTO.getIsAutoLogin().equals("true")){
                 log.info("用户选择自动登录,phone:{}", loginRequestDTO.getPhone());
                 loginRequestDTO.setAutoLogin(true);
             } else {
@@ -65,40 +67,45 @@ public class LoginController implements ILoginService {
             String deviceName = DeviceNameUtil.getDeviceName(userAgent);
 
             // 调用登录服务进行登录
-            LoginVO loginVO = authorizationService.login(loginRequestDTO.getPhone(), loginRequestDTO.getCode(), loginRequestDTO.getIp(), loginRequestDTO.isAutoLogin(), deviceName, loginRequestDTO.getMac());
+            LoginVO loginVO = authorizationService.login(loginRequestDTO.getPhone(), loginRequestDTO.getCode(), loginRequestDTO.getIp(), loginRequestDTO.isAutoLogin(), deviceName, loginRequestDTO.getFingerPrinting());
 
-            // 将access_token和refresh_token添加到Cookie中
-            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
-            Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN, loginVO.getRefreshToken());
 
-//            // 设置Cookie的过期时间（可选）
-//            accessTokenCookie.setMaxAge(60); // 1小时
-//            refreshTokenCookie.setMaxAge(60); // 7天86400 * 7
-
-//            //设置Cookie只能以https的形式发送
-//            accessTokenCookie.setSecure(true);
-//            refreshTokenCookie.setSecure(true);
-
-            // 设置Cookie的路径（可选）
-            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
-            refreshTokenCookie.setPath(REFRESH_TOKEN_PATH);
-
-            // 将Cookie添加到响应中
-            response.addCookie(accessTokenCookie);
-            response.addCookie(refreshTokenCookie);
+            //把token放在响应体中
+//            // 将access_token和refresh_token添加到Cookie中
+//            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
+//            Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN, loginVO.getRefreshToken());
+//
+////            // 设置Cookie的过期时间（可选）
+////            accessTokenCookie.setMaxAge(60); // 1小时
+////            refreshTokenCookie.setMaxAge(60); // 7天86400 * 7
+//
+////            //设置Cookie只能以https的形式发送
+////            accessTokenCookie.setSecure(true);
+////            refreshTokenCookie.setSecure(true);
+//
+//            // 设置Cookie的路径（可选）
+//            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
+//            refreshTokenCookie.setPath(REFRESH_TOKEN_PATH);
+//
+//            // 将Cookie添加到响应中
+//            response.addCookie(accessTokenCookie);
+//            response.addCookie(refreshTokenCookie);
 
             log.info("用户访问登录系统结束，phone:{}", loginRequestDTO.getPhone());
             return Response.SYSTEM_SUCCESS(
                     LoginResponseDTO.builder()
                             .phone(loginVO.getPhone())
                             .userId(loginVO.getUserId())
+                            .accessToken(loginVO.getAccessToken())
+                            .refreshToken(loginVO.getRefreshToken())
                             .positionList(loginVO.getPositionList())
+                            .deviceId(loginVO.getDeviceId())
                             .build()
             );
         } catch (AppException e) {
             log.error("用户访问登录系统失败,phone:{}", loginRequestDTO.getPhone(), e);
-            return Response.SERVICE_ERROR(e.getInfo());
-        } catch (Exception e) {
+            return Response.APP_ECEPTION(e);
+        }catch (Exception e) {
             log.error("用户访问登录系统失败,phone:{}", loginRequestDTO.getPhone(), e);
             return Response.SERVICE_ERROR(e.getMessage());
         }
@@ -118,33 +125,36 @@ public class LoginController implements ILoginService {
             }
             LoginVO loginVO = reflashTokenService.reflash(refrashToken);
 
-            // 将access_token和refresh_token添加到Cookie中
-            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
-
-//            // 设置Cookie的过期时间（可选）
-//            accessTokenCookie.setMaxAge(60); // 1小时
-
-//            //设置Cookie只能以https的形式发送
-//            accessTokenCookie.setSecure(true);
-
-            // 设置Cookie的路径（可选）
-            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
-
-            // 将Cookie添加到响应中
-            response.addCookie(accessTokenCookie);
+            // 把token放在响应体中
+//            // 将access_token添加到Cookie中
+//            Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, loginVO.getAccessToken());
+//
+////            // 设置Cookie的过期时间（可选）
+////            accessTokenCookie.setMaxAge(60); // 1小时
+//
+////            //设置Cookie只能以https的形式发送
+////            accessTokenCookie.setSecure(true);
+//
+//            // 设置Cookie的路径（可选）
+//            accessTokenCookie.setPath(ACCESS_TOKEN_PATH);
+//
+//            // 将Cookie添加到响应中
+//            response.addCookie(accessTokenCookie);
 
             return Response.SYSTEM_SUCCESS(
                     LoginResponseDTO.builder()
                             .phone(loginVO.getPhone())
                             .userId(loginVO.getUserId())
+                            .accessToken(loginVO.getAccessToken())
                             .positionList(loginVO.getPositionList())
+                            .deviceId(loginVO.getDeviceId())
                             .build()
             );
         } catch (AppException e) {
             log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 
-            return Response.SERVICE_ERROR(e.getInfo());
-        } catch (Exception e) {
+            return Response.APP_ECEPTION(e);
+        }catch (Exception e) {
             log.info("访问无感刷新接口失败,reflashToken:{}", request.getHeader(REFRESH_TOKEN));
 
             return Response.SERVICE_ERROR(e.getMessage());

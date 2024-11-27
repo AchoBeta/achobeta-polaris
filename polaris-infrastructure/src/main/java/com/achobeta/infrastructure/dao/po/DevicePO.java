@@ -5,10 +5,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 /**
- * @author huangwenxing
- * @description 设备持久化对象
- * @data 2024/11/7
- * */
+ * @Author: 严豪哲
+ * @Description:
+ * @Date: 2024/11/11 20:10
+ * @Version: 1.0
+ */
 @Setter
 @Getter
 @AllArgsConstructor
@@ -46,8 +47,8 @@ public class DevicePO {
     private Integer isCancel;
 
     /**
-     * 设备mac地址
+     * 设备的指纹信息
      */
-    private String mac;
+    private String fingerPrinting;
 
 }

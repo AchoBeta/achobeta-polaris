@@ -18,8 +18,9 @@ public interface ITokenRepository {
      * @param phone 手机号
      * @param devicId 设备id
      * @param ip ip地址
+     * @param fingerPrinting 设备指纹
      */
-    void storeAccessToken(String token, String userId, String phone, String devicId, String ip, String mac);
+    void storeAccessToken(String token, String userId, String phone, String devicId, String ip, String fingerPrinting);
 
     /**
      * 存储Reflashtoken
@@ -28,9 +29,10 @@ public interface ITokenRepository {
      * @param phone 手机号
      * @param deviceId 设备id
      * @param ip ip地址
+     * @param fingerPrinting 设备指纹
      * @param isAutoLogin 是否自动登录
      */
-    void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin, String mac);
+    void storeReflashToken(String token, String userId, String phone, String deviceId, String ip, Boolean isAutoLogin, String fingerPrinting);
 
     /**
      * 根据accesstoken删除accesstoken
