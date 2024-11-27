@@ -12,7 +12,7 @@ services:
     ports:
       - "13306:3306"
     volumes:
-      - ./mysql/sql:/docker-entrypoint-initdb.d
+      - ./mysql/sql/:/docker-entrypoint-initdb.d
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 5s
