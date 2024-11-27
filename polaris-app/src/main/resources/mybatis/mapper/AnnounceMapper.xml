@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.achobeta.infrastructure.dao.AnnounceMapper">
+
+    <resultMap id="AnnounceResultMap" type="com.achobeta.infrastructure.dao.po.AnnouncePO">
+        <id column="id" property="id"/>
+        <result column="announce_id" property="announceId" />
+        <result column="title" property="title" />
+        <result column="body" property="body"/>
+        <result column="target_id" property="targetId"/>
+        <result column="type" property="type"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <resultMap id="AnnounceRevicer" type="com.achobeta.infrastructure.dao.po.AnnounceReciverPO">
+        <id column="id" property="id"/>
+        <result column="announce_id" property="announceId" />
+        <result column="user_id" property="userId" />
+        <result column="is_read" property="read"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="queryAnnouncesByAnnounceId" resultMap="AnnounceResultMap">
+        select title,body,type,announce_Id,target_id,create_time,update_time from announce
+        where announce_id in
+        <foreach collection="announceIds" item="announceId" open="(" separator="," close=")">
+            #{announceId}
+        </foreach>
+        and is_deleted = 0
+    </select>
+
+    <select id="queryReadByUserIdAnnounceId" resultMap="AnnounceRevicer">
+        select announce_id,is_read from user_announce
+        where user_id = #{userId}
+        <if test="announceId != null">
+            and announce_id > #{announceId}
+        </if>
+        and is_deleted = 0
+        order by announce_id
+        limit #{limit}
+    </select>
+
+    <select id="getAnnounceCount" resultType="int">
+        select count(1) from user_announce
+        where user_id = #{userId} and is_deleted = 0
+    </select>
+
+    <update id="readAnnounce">
+        update  user_announce set is_read = 1
+        where user_id = #{userId} and announce_id = #{announceId}
+    </update>
+
+    <update id="readAllAnnounce">
+        update user_announce set is_read = 1
+        where user_id = #{userId}
+    </update>
+
+
+</mapper>

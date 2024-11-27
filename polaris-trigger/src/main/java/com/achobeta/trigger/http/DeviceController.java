@@ -31,9 +31,9 @@ public class DeviceController implements com.achobeta.api.IDeviceService {
      * @param getUserDeviceRequestDTO
      * @return
      */
-    @PostMapping("/getDevices")
+    @GetMapping("/getDevices")
     @Override
-    public Response<GetUserDeviceResponseDTO> getDevices(@Valid @RequestBody  GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
+    public Response<GetUserDeviceResponseDTO> getDevices(@Valid  GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
         try {
             log.info("用户访问设备渲染页面系统开始，userId:{} deviceId:{} limit:{} lastDeviceId:{}",
                     getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(), getUserDeviceRequestDTO.getLastDeviceId());
