@@ -2,11 +2,11 @@ package com.achobeta.domain.device.service.get;
 
 import com.achobeta.domain.device.adapter.repository.IDeviceRepository;
 import com.achobeta.domain.device.model.bo.DeviceBO;
-import com.achobeta.domain.device.model.entity.DeviceEntity;
 import com.achobeta.domain.device.model.entity.PageResult;
 import com.achobeta.domain.device.model.entity.UserCommonDevicesEntities;
 import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
+import com.achobeta.domain.login.model.entity.DeviceEntity;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
