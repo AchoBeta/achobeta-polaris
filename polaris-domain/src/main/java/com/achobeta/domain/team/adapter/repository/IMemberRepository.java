@@ -47,10 +47,11 @@ public interface IMemberRepository {
      * 查询团队成员信息详情
      * @author yangzhiyao
      * @date 2024/11/19
+     * @param userId 用户ID
      * @param memberId 成员ID
      * @return 查询到的成员信息
      */
-    UserEntity queryMemberInfo(String memberId);
+    UserEntity queryMemberInfo(String userId, String memberId);
   
     /**
      * 查询团队成员列表

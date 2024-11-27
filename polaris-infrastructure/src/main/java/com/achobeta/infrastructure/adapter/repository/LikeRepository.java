@@ -53,7 +53,11 @@ public class LikeRepository implements ILikeRepository {
 
     @Override
     public boolean queryLikedById(String fromId, String toId) {
-        return mapper.queryLikedById(fromId, toId);
+        Integer liked = mapper.queryLikedById(fromId, toId);
+        if(liked==null){
+            return false;
+        }
+        return liked == 1;
     }
 
     @Override

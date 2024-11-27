@@ -2,6 +2,7 @@ package com.achobeta.infrastructure.adapter.repository;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.user.model.entity.UserEntity;
+import com.achobeta.infrastructure.dao.LikeMapper;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
@@ -32,6 +33,9 @@ public class UserRepository implements com.achobeta.domain.user.adapter.reposito
 
     @Resource
     private PositionMapper positionMapper;
+
+    @Resource
+    private LikeMapper likeMapper;
 
     @Resource
     private IRedisService redisService;
@@ -153,7 +157,7 @@ public class UserRepository implements com.achobeta.domain.user.adapter.reposito
                 .currentStatus(userPO.getCurrentStatus())
                 .entryTime(userPO.getEntryTime())
                 .likeCount(userPO.getLikeCount())
-                .liked(false)
+                .liked(likeMapper.queryLikedById(userId,userId)==1)
                 .positions(positionNames)
                 .build();
 
