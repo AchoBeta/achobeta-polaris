@@ -80,4 +80,5 @@ public interface IPositionRepository {
      * @return
      */
     List<PositionEntity> queryTeamByUserId(String userId);
+
 }

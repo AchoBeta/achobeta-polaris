@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.achobeta.infrastructure.dao.PermissionMapper">
+
+    <resultMap id="permissionResultMap" type="com.achobeta.infrastructure.dao.po.PermissionPO">
+        <id property="id" column="id" />
+        <result property="permissionId" column="permission_id" />
+        <result property="permissionName" column="permission_name" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <select id="listPermission" resultMap="permissionResultMap">
+        select t1.id, t1.permission_id, t1.permission_name, t1.create_time, t1.update_time
+        from permission as t1, role_permission as t2
+        where t2.role_id in
+        <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+            and t1.permission_id = t2.permission_id
+            and t1.is_deleted = 0
+            and t2.is_deleted = 0
+    </select>
+
+</mapper>

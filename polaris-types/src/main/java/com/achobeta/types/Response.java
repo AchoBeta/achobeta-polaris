@@ -2,8 +2,11 @@ package com.achobeta.types;
 
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
+
 import java.io.Serializable;
 import java.util.Optional;
+
+import com.achobeta.types.exception.AppException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,10 +34,10 @@ public final class Response<T> implements Serializable {
      */
     public static <T> Response<T> SYSTEM_SUCCESS() {
         return Response.<T>builder()
-            .traceId(MDC.get(Constants.TRACE_ID))
-            .code(GlobalServiceStatusCode.SYSTEM_SUCCESS.getCode())
-            .info(GlobalServiceStatusCode.SYSTEM_SUCCESS.getMessage())
-            .build();
+                .traceId(MDC.get(Constants.TRACE_ID))
+                .code(GlobalServiceStatusCode.SYSTEM_SUCCESS.getCode())
+                .info(GlobalServiceStatusCode.SYSTEM_SUCCESS.getMessage())
+                .build();
     }
 
     /**
@@ -45,11 +48,11 @@ public final class Response<T> implements Serializable {
      */
     public static <T> Response<T> SYSTEM_SUCCESS(T data) {
         return Response.<T>builder()
-            .traceId(MDC.get(Constants.TRACE_ID))
-            .code(GlobalServiceStatusCode.SYSTEM_SUCCESS.getCode())
-            .info(GlobalServiceStatusCode.SYSTEM_SUCCESS.getMessage())
-            .data(data)
-            .build();
+                .traceId(MDC.get(Constants.TRACE_ID))
+                .code(GlobalServiceStatusCode.SYSTEM_SUCCESS.getCode())
+                .info(GlobalServiceStatusCode.SYSTEM_SUCCESS.getMessage())
+                .data(data)
+                .build();
     }
 
     /**
@@ -59,10 +62,10 @@ public final class Response<T> implements Serializable {
      */
     public static <T> Response<T> SYSTEM_FAIL() {
         return Response.<T>builder()
-            .traceId(MDC.get(Constants.TRACE_ID))
-            .code(GlobalServiceStatusCode.SYSTEM_SERVICE_FAIL.getCode())
-            .info(GlobalServiceStatusCode.SYSTEM_SERVICE_FAIL.getMessage())
-            .build();
+                .traceId(MDC.get(Constants.TRACE_ID))
+                .code(GlobalServiceStatusCode.SYSTEM_SERVICE_FAIL.getCode())
+                .info(GlobalServiceStatusCode.SYSTEM_SERVICE_FAIL.getMessage())
+                .build();
     }
 
     /**
@@ -72,10 +75,10 @@ public final class Response<T> implements Serializable {
      */
     public static <T> Response<T> SERVICE_ERROR() {
         return Response.<T>builder()
-            .traceId(MDC.get(Constants.TRACE_ID))
-            .code(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR.getCode())
-            .info(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR.getMessage())
-            .build();
+                .traceId(MDC.get(Constants.TRACE_ID))
+                .code(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR.getCode())
+                .info(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR.getMessage())
+                .build();
     }
 
     /**
@@ -85,10 +88,10 @@ public final class Response<T> implements Serializable {
      */
     public static <T> Response<T> SERVICE_ERROR(String msg) {
         return Response.<T>builder()
-            .traceId(MDC.get(Constants.TRACE_ID))
-            .code(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR.getCode())
-            .info(Optional.ofNullable(msg).orElseGet(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR::getMessage))
-            .build();
+                .traceId(MDC.get(Constants.TRACE_ID))
+                .code(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR.getCode())
+                .info(Optional.ofNullable(msg).orElseGet(GlobalServiceStatusCode.SYSTEM_SERVICE_ERROR::getMessage))
+                .build();
     }
 
     /**
@@ -99,10 +102,10 @@ public final class Response<T> implements Serializable {
      */
     public static <T> Response<T> CUSTOMIZE_ERROR(GlobalServiceStatusCode code) {
         return Response.<T>builder()
-            .traceId(MDC.get(Constants.TRACE_ID))
-            .code(code.getCode())
-            .info(code.getMessage())
-            .build();
+                .traceId(MDC.get(Constants.TRACE_ID))
+                .code(code.getCode())
+                .info(code.getMessage())
+                .build();
     }
 
     /**
@@ -114,9 +117,23 @@ public final class Response<T> implements Serializable {
      */
     public static <T> Response<T> CUSTOMIZE_MSG_ERROR(GlobalServiceStatusCode code, String msg) {
         return Response.<T>builder()
-            .code(code.getCode())
-            .info(Optional.ofNullable(msg).orElseGet(code::getMessage))
-            .build();
+                .code(code.getCode())
+                .info(Optional.ofNullable(msg).orElseGet(code::getMessage))
+                .build();
+    }
+
+    /**
+     * 系统异常返回, 自定义错误 {@link GlobalServiceStatusCode#SYSTEM_SERVICE_ERROR}
+     *
+     * @param e APPException
+     * @return code对应的错误信息
+     */
+    public static <T> Response<T> APP_ECEPTION(AppException e) {
+        return Response.<T>builder()
+                .traceId(MDC.get(Constants.TRACE_ID))
+                .code(Integer.valueOf(e.getCode()))
+                .info(e.getInfo())
+                .build();
     }
 
 }

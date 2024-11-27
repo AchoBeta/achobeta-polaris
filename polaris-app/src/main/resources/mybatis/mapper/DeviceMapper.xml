@@ -2,25 +2,65 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.achobeta.infrastructure.dao.DeviceMapper">
 
-    <resultMap id="DevicesResultMap" type="com.achobeta.infrastructure.dao.po.DevicePO">
+    <resultMap id="DeviceResultMap" type="com.achobeta.infrastructure.dao.po.DevicePO">
         <result column="device_id" property="deviceId" />
         <result column="device_name" property="deviceName" />
-        <result column="ip" property="IP"/>
         <result column="user_id" property="userId"/>
+        <result column="finger_printing" property="fingerPrinting"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <result column="is_cancel" property="isCancel"/>
     </resultMap>
 
-    <select id="queryCommonUseAutoLoginDevicesById" resultMap="DevicesResultMap">
+    <insert id="insertDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
+        INSERT INTO device (device_id, device_name, user_id, ip, finger_printing, create_time, update_time ,is_cancel ,is_deleted)
+        VALUES (#{deviceId} ,#{deviceName}, #{userId}, #{ip}, #{fingerPrinting}, #{createTime}, #{updateTime} , #{isCancel}, 0)
+    </insert>
+
+    <update id="updateDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
+        UPDATE device
+        <set>
+            is_cancel = #{isCancel},
+            update_time = #{updateTime}
+        </set>
+        WHERE device_id = #{deviceId}
+          and is_deleted = 0
+    </update>
+
+    <update id="deleteDevice" parameterType="com.achobeta.infrastructure.dao.po.DevicePO">
+        UPDATE device
+        <set>
+            is_deleted = 1,
+            update_time = #{updateTime}
+        </set>
+        WHERE device_id = #{deviceId}
+          and is_deleted = 0
+    </update>
+
+    <select id="getDeviceByFingerPrinting" resultMap="DeviceResultMap">
+        SELECT * FROM device
+                 WHERE user_id = #{userId}
+                   and finger_printing = #{fingerPrinting}
+                   and is_deleted = 0
+    </select>
+
+    <select id="getUserIdByDeviceId" resultMap="DeviceResultMap">
+        SELECT user_id FROM device
+                 WHERE device_id = #{deviceId}
+                   and is_deleted = 0
+    </select>
+
+    <select id="queryCommonUseAutoLoginDevicesById" resultMap="DeviceResultMap">
         select device_id,device_name,update_time,ip,create_time from device
         where user_id = #{userId} and is_deleted = 0
-              <if test="lastDeviceId != null">
-                  and  device_id > #{lastDeviceId}
-              </if>
-               and is_cancel = 1
+        <if test="lastDeviceId != null">
+            and  device_id > #{lastDeviceId}
+        </if>
+        and is_cancel = 1
         order by device_id
-            limit #{limit}
+        limit #{limit}
     </select>
+
     <select id="queryCommonUserDeviceCountById" resultType="int">
         select count(1) from device
         where user_id = #{userId} and is_deleted = 0

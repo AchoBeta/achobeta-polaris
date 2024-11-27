@@ -34,12 +34,14 @@ public class DefalutSendCodeService extends AbstractPostProcessor<SendCodeBO> im
     public void sendCode(String phone) {
         PostContext<SendCodeBO> postContext = buildPostContext(phone);
         postContext = super.doPostProcessor(postContext, SendCodePostProcessor.class);
+        //不需要返回值
     }
 
     @Override
     public PostContext<SendCodeBO> doMainProcessor(PostContext<SendCodeBO> postContext) {
         String phone = postContext.getBizData().getCodeVO().getPhone();
         log.info("正在为手机号{}发送验证码", phone);
+        //调用外部短信服务发送验证码
         String code = shortMessageService.sms(phone);
         postContext.getBizData().getCodeVO().setCode(code);
         log.info("手机号{}的验证码{}发送成功", phone, code);

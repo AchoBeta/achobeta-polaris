@@ -37,7 +37,7 @@ public enum GlobalServiceStatusCode {
     USER_CREDENTIALS_EXPIRED(2004, "密码过期"),
     USER_ACCOUNT_DISABLE(2005, "账号不可用"),
     USER_ACCOUNT_LOCKED(2006, "账号被锁定"),
-    USER_ACCOUNT_NOT_EXIST(2007, "账号不存在"),
+    USER_ACCOUNT_NOT_EXIST(2007, "暂无此账号，请联系管理员"),
     USER_ACCOUNT_ALREADY_EXIST(2008, "账号已存在"),
     USER_ACCOUNT_USE_BY_OTHERS(2009, "账号下线"),
     USER_ACCOUNT_REGISTER_ERROR(2010, "账号注册错误"),
@@ -45,7 +45,7 @@ public enum GlobalServiceStatusCode {
     USER_TYPE_EXCEPTION(2101, "用户类别异常"),
 
     USER_NO_PERMISSION(2403, "用户无权限"),
-    USER_CAPTCHA_CODE_ERROR(2500, "验证码错误"),
+    USER_CAPTCHA_CODE_ERROR(2500, "验证码错误,请重试"),
 
     /* 团队异常 3001-4000 */
     TEAM_NOT_EXIST(3001, "团队不存在"),
@@ -58,6 +58,18 @@ public enum GlobalServiceStatusCode {
     /* 登录模块错误 6001-7000*/
     LOGIN_CODE_EXIT(6001,"需要等待一段时间后才能再次尝试"),
     LOGIN_SMS_SEND_FAIL(6002, "验证码发送失败"),
+    LOGIN_REFLASH_TOKEN_MISSING(6003, "refreshToken缺失"),
+    LOGIN_REFRESH_TOKEN_EXPIRED(6004, "refreshToken已过期"),
+    LOGIN_REFRESH_TOKEN_INVALID(6005, "refreshToken无效"),
+    LOGIN_ACCESS_TOKEN_MISSING(6006, "accessToken缺失"),
+    LOGIN_ACCESS_TOKEN_EXPIRED(6007, "accessToken已过期"),
+    LOGIN_ACCESS_TOKEN_INVALID(6008, "accessToken无效"),
+    LOGIN_ACCESS_TOKEN_NEED_REFLAH(6009, "accessToken即将过期，需要刷新"),
+    LOGIN_FAILED_TO_FORCE_LOGOUT(6010, "强制下线失败"),
+    LOGIN_FAILED_TO_LOGOUT(6011, "登出失败"),
+    LOGIN_UNKNOWN_ERROR(6012, "登陆模块未知错误,请联系管理员"),
+    LOGIN_ACCESS_TOKEN_HAVE_REFRESHED(6013, "accessToken已被刷新,请重新发送请求"),
+
     ;
 
     private Integer code;
