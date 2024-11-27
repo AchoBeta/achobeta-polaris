@@ -36,9 +36,9 @@ public class DeviceRepository implements com.achobeta.domain.login.adapter.repos
      * @return DeviceEntity 设备信息
      */
     @Override
-    public DeviceEntity getDeviceByMac(String userId, String mac) {
+    public DeviceEntity getDeviceByFingerPrinting(String userId, String fingerPrinting) {
 
-        DevicePO devicePO = deviceMapper.getDeviceByMac(userId, mac);
+        DevicePO devicePO = deviceMapper.getDeviceByFingerPrinting(userId, fingerPrinting);
         if (devicePO == null) {
             return null;
         }
@@ -47,7 +47,7 @@ public class DeviceRepository implements com.achobeta.domain.login.adapter.repos
                 .deviceName(devicePO.getDeviceName())
                 .userId(devicePO.getUserId())
                 .IP(devicePO.getIp())
-                .mac(devicePO.getMac())
+                .fingerPrinting(devicePO.getFingerPrinting())
                 .createTime(devicePO.getCreateTime())
                 .updateTime(devicePO.getUpdateTime())
                 .build();
@@ -68,7 +68,7 @@ public class DeviceRepository implements com.achobeta.domain.login.adapter.repos
                 .createTime(deviceEntity.getCreateTime())
                 .updateTime(deviceEntity.getUpdateTime())
                 .isCancel(deviceEntity.getIsCancel())
-                .mac(deviceEntity.getMac())
+                .fingerPrinting(deviceEntity.getFingerPrinting())
                 .build();
         deviceMapper.insertDevice(devicePO);
 

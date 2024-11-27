@@ -22,6 +22,16 @@ public class LoginResponseDTO {
     private String phone;
 
     /**
+     * 登录用户的accessToken
+     */
+    private String accessToken;
+
+    /**
+     * 登录用户的refreshToken
+     */
+    private String refreshToken;
+
+    /**
      * 登录用户的角色
      */
     private String role;
@@ -36,5 +46,10 @@ public class LoginResponseDTO {
      * 实际为List<PositionEntity>，PositionEntity包括该该类中的其他字段
      */
     private Object positionList;
+
+    /**
+     * 登录用户的设备id
+     */
+    private String deviceId;
 
 }

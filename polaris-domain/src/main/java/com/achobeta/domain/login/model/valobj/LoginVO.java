@@ -20,9 +20,33 @@ import java.util.List;
 @ToString
 public class LoginVO {
 
+    /**
+     * 访问令牌
+     */
     private String accessToken;
+
+    /**
+     * 刷新令牌
+     */
     private String refreshToken;
+
+    /**
+     * 用户id
+     */
     private String userId;
+
+    /**
+     * 用户的团队信息
+     */
     private List<PositionEntity> positionList;
+
+    /**
+     * 用户手机号
+     */
     private String phone;
+
+    /**
+     * 设备id
+     */
+    private String deviceId;
 }

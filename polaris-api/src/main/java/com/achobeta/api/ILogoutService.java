@@ -21,6 +21,6 @@ public interface ILogoutService {
      * 登出
      * @return 登出响应体
      */
-    Response<LogoutResponseDTO> logout(LogoutRequestDTO logoutRequestDTO, HttpServletRequest request, HttpServletResponse response);
+    Response<LogoutResponseDTO> logout(@Valid @RequestBody LogoutRequestDTO logoutRequestDTO, HttpServletRequest request, HttpServletResponse response);
 
 }
