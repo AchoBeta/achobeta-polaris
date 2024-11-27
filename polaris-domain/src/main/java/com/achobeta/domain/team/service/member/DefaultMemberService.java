@@ -28,6 +28,38 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     private final IMemberRepository memberRepository;
 
     @Override
+    public void deleteMember(String userId, String memberId, String teamId) {
+        PostContext<TeamBO> postContext = buildPostContext(userId, memberId, teamId);
+        super.doPostProcessor(postContext, DeleteMemberPostProcessor.class,
+                new AbstractPostProcessorOperation<TeamBO>() {
+                    @Override
+                    public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
+                        TeamBO teamBO = postContext.getBizData();
+                      String userId = teamBO.getUserId();
+                        String memberId = teamBO.getUserEntity().getUserId();
+                        String teamId = teamBO.getTeamId();
+
+                        log.info("删除成员信息, userId:{}, memberId:{}, teamId:{}", userId, memberId, teamId);
+                        memberRepository.deleteMember(userId, memberId, teamId);
+
+                        return postContext;
+                    }
+                });
+    }
+
+    private static PostContext<TeamBO> buildPostContext(String userId, String memberId, String teamId) {
+      return PostContext.<TeamBO>builder()
+                .bizId(BizModule.TEAM.getCode())
+                .bizName(BizModule.TEAM.getName())
+                .bizData(TeamBO.builder()
+                        .userEntity(UserEntity.builder().userId(memberId).build())
+                        .teamId(teamId)
+                        .userId(userId)
+                        .build())
+                .build();
+    }
+
+    @Override
     public UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds) {
         PostContext<TeamBO> postContext = buildPostContext(userEntity, userId, teamId, positionIds);
         postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,

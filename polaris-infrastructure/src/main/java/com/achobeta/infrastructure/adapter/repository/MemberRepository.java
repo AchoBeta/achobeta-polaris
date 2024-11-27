@@ -1,5 +1,8 @@
 package com.achobeta.infrastructure.adapter.repository;
 
+import com.achobeta.domain.team.adapter.repository.IMemberRepository;
+import com.achobeta.infrastructure.dao.UserMapper;
+import com.achobeta.infrastructure.redis.RedissonService;
 import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
@@ -54,6 +57,16 @@ public class MemberRepository implements IMemberRepository {
 
     @Resource
     private IRedisService redisService;
+
+    @Override
+    public void deleteMember(String userId, String memberId, String teamId) {
+
+        log.info("成员表中删除成员，userId:{}, memberId:{}", userId, memberId);
+        userMapper.deleteMember(userId, memberId, teamId);
+
+        log.info("用户职位关联表删除关联数据，userId:{}, memberId:{}，teamId:{}", userId, memberId, teamId);
+        userMapper.deleteUserPosition(userId, memberId, teamId);
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override

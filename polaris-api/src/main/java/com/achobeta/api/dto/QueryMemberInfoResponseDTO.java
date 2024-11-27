@@ -53,7 +53,7 @@ public class QueryMemberInfoResponseDTO implements Serializable {
     @FieldDesc(name = "用户现状")
     private String currentStatus;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
     @FieldDesc(name = "用户加入时间")
     private LocalDateTime entryTime;
 

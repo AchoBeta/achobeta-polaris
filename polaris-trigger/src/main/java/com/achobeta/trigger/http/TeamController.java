@@ -1,9 +1,6 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.ITeamService;
-import com.achobeta.api.dto.AddMemberRequestDTO;
-import com.achobeta.api.dto.AddMemberResponseDTO;
-import com.achobeta.domain.team.service.IMemberService;
 import com.achobeta.api.dto.*;
 import com.achobeta.api.dto.team.RequestMemberListDTO;
 import com.achobeta.api.dto.team.ResponseMemberListDTO;
@@ -41,6 +38,39 @@ public class TeamController implements ITeamService {
     private final IMemberService memberService;
 
     private final IStructureService structureService;
+  
+    /**
+     * 删除团队成员
+     * @param requestDTO
+     * @return
+     */
+    @Override
+    @DeleteMapping("member")
+    public Response<DeleteMemberResponseDTO> deleteMember(@Valid DeleteMemberRequestDTO requestDTO) {
+        try {
+            log.info("用户访问添加团队成员接口，requestDTO:{}", requestDTO);
+
+            memberService.deleteMember(requestDTO.getUserId(), requestDTO.getMemberId(), requestDTO.getTeamId());
+
+            log.info("用户访问添加团队成员接口，requestDTO:{}", requestDTO);
+            return Response.SYSTEM_SUCCESS(DeleteMemberResponseDTO.builder()
+                            .userId(requestDTO.getUserId())
+                            .teamId(requestDTO.getTeamId())
+                            .memberId(requestDTO.getMemberId())
+                            .build());
+        } catch (AppException e) {
+            log.error("用户访问添加团队成员接口失败！{}, error:{}",
+                    requestDTO, e.toString(), e);
+            return Response.<DeleteMemberResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+        }catch (Exception e) {
+          log.error("访问添加团队成员接口失败！",e);
+            return Response.SYSTEM_FAIL();
+        }
+    }
   
     /**
      * 添加团队成员接口
@@ -130,10 +160,10 @@ public class TeamController implements ITeamService {
     @Override
     public Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid QueryMemberInfoRequestDTO requestDTO) {
         try {
-            log.info("用户访问个人中心信息页面系统开始，{}", requestDTO);
+            log.info("用户访问团队成员信息详情服务开始，{}", requestDTO);
 
             UserEntity userEntity = memberService.queryMemberInfo(requestDTO.getMemberId());
-            log.info("用户访问个人中心信息页面系统结束，{}", requestDTO);
+            log.info("用户访问团队成员信息详情服务结束，{}", requestDTO);
 
             return Response.SYSTEM_SUCCESS(QueryMemberInfoResponseDTO.builder()
                     .userId(userEntity.getUserId())
@@ -153,14 +183,14 @@ public class TeamController implements ITeamService {
                     .positions(userEntity.getPositions())
                     .build());
         } catch (AppException e) {
-            log.error("用户访问个人中心信息页面系统失败！{}", requestDTO, e);
+            log.error("用户访问团队成员信息详情服务失败！{}", requestDTO, e);
             return Response.<QueryMemberInfoResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Integer.valueOf(e.getCode()))
                     .info(e.getInfo())
                     .build();
         } catch (Exception e) {
-            log.error("用户访问个人中心信息页面系统失败！{}", requestDTO, e);
+            log.error("用户访问团队成员信息详情服务失败！{}", requestDTO, e);
             return Response.SERVICE_ERROR();
         }
     }

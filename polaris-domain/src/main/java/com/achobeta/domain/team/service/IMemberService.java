@@ -12,6 +12,15 @@ import java.util.List;
 public interface IMemberService {
 
     /**
+     * 删除成员
+     * @param userId 发出操作的用户id
+     * @param memberId 被删除的成员id
+     * @param teamId 团队id
+     * @date 2024/11/21
+     */
+   void deleteMember(String userId, String memberId, String teamId);
+
+    /**
      * 添加成员方法接口
      * @param userEntity
      * @param userId

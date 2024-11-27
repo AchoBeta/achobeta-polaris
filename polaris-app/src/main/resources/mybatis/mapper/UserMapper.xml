@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.achobeta.infrastructure.dao.UserMapper">
 
+    <update id="deleteMember">
+        update member
+        set is_deleted = 1, update_by = #{userId}
+        where user_id = #{memberId}
+              and team_id = #{teamId}
+    </update>
+
+    <update id="deleteUserPosition">
+        update user_position
+        set is_deleted = 1, update_by = #{userId}
+        where user_id = #{memberId}
+              and team_id = #{teamId}
+    </update>
+
     <resultMap id="UserResultMap" type="com.achobeta.infrastructure.dao.po.UserPO">
         <id column="user_id" property="userId" />
         <result column="user_name" property="userName" />

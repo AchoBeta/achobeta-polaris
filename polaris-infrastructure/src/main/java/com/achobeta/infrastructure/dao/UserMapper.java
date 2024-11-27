@@ -1,5 +1,7 @@
 package com.achobeta.infrastructure.dao;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.achobeta.infrastructure.dao.po.UserPO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +15,18 @@ import java.util.List;
  */
 @Mapper
 public interface UserMapper {
+
+    /**
+     * 逻辑删除团队成员
+     * @param userId
+     */
+    void deleteMember(String userId, String memberId, String teamId);
+
+    /**
+     * 逻辑删除用户职位关系
+     * @param userId
+     */
+    void deleteUserPosition(String userId, String memberId, String teamId);
 
     UserPO getMemberByPhone(String phone);
 
@@ -49,4 +63,5 @@ public interface UserMapper {
      * @return 用户PO
      */
     UserPO getUserByPhone(String phone);
+
 }

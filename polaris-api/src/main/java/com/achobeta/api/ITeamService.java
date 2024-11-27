@@ -1,5 +1,7 @@
 package com.achobeta.api;
 
+import com.achobeta.api.dto.DeleteMemberRequestDTO;
+import com.achobeta.api.dto.DeleteMemberResponseDTO;
 import com.achobeta.api.dto.AddMemberRequestDTO;
 import com.achobeta.api.dto.AddMemberResponseDTO;
 import com.achobeta.api.dto.ModifyMemberInfoRequestDTO;
@@ -23,6 +25,15 @@ import javax.validation.Valid;
  * @date 2024/11/7
  */
 public interface ITeamService {
+
+    /**
+     * 删除团队成员接口
+     * @author yangzhiyao
+     * @date 2024/11/21
+     * @param requestDTO
+     * @return userId, memberId, teamId
+     */
+    Response<DeleteMemberResponseDTO> deleteMember(@Valid DeleteMemberRequestDTO requestDTO);
 
     /**
      * 添加团队成员接口
