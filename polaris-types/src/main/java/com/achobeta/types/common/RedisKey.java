@@ -9,6 +9,10 @@ package com.achobeta.types.common;
 
 public class RedisKey {
 
+    public static final String USER_PERMISSION = "ab:polaris:user:permission:";
+
+    public static final String USER_ROLE = "ab:polaris:user:role:";
+
     public static final String CODE = "ab:polaris:login:code:";
 
     public static final String RATE_LIMIT = "ab:polaris:login:rateLimit:";

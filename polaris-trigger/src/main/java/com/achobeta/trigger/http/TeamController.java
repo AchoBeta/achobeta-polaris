@@ -9,6 +9,7 @@ import com.achobeta.domain.team.service.IMemberService;
 import com.achobeta.domain.team.service.IStructureService;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.types.Response;
+import com.achobeta.types.annotation.AuthVerify;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @DeleteMapping("member")
+    @AuthVerify("MEMBER:MEMBER_DELETE")
     public Response<DeleteMemberResponseDTO> deleteMember(@Valid DeleteMemberRequestDTO requestDTO) {
         try {
             log.info("用户访问添加团队成员接口，requestDTO:{}", requestDTO);
@@ -81,6 +83,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @PostMapping("member")
+    @AuthVerify("MEMBER:MEMBER_ADD")
     public Response<AddMemberResponseDTO> addMember(@Valid @RequestBody AddMemberRequestDTO requestDTO) {
         try {
             log.info("访问添加团队成员接口开始, userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
@@ -130,6 +133,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @PutMapping("member/detail")
+    @AuthVerify("MEMBER:MEMBER_MODIFY")
     public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequestDTO requestDTO) {
         String teamId = requestDTO.getTeamId();
         String memberId = requestDTO.getMemberId();
@@ -202,6 +206,7 @@ public class TeamController implements ITeamService {
      */
     @PutMapping("structure")
     @Override
+    @AuthVerify("STRUCTURE:STRUCTURE_MODIFY")
     public Response<ModifyStructureResponseDTO> modifyStructure(@Valid @RequestBody ModifyStructureRequestDTO modifyStructureRequestDTO) {
         try {
             log.info("用户访问团队管理系统修改团队组织架构开始，userId:{} teamId:{}",
@@ -293,6 +298,7 @@ public class TeamController implements ITeamService {
      */
     @GetMapping("structure")
     @Override
+    @AuthVerify("STRUCTURE:STRUCTURE_VIEW")
     public Response<QueryStructureResponseDTO> queryStructure(@Valid QueryStructureRequestDTO querystructureRequestDTO) {
         try {
             log.info("用户访问团队管理系统查询团队组织架构开始，userId:{} teamId:{}",
