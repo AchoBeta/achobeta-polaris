@@ -2,7 +2,10 @@ package com.achobeta.domain.auth.model.bo;
 
 import com.achobeta.domain.auth.model.entity.PermissionEntity;
 import com.achobeta.domain.auth.model.entity.RoleEntity;
+import com.achobeta.domain.team.model.entity.TeamEntity;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @author yangzhiyao
@@ -18,6 +21,8 @@ public class AuthBO {
 
     private String teamId;
     private String userId;
+    private TeamEntity teamEntity;
+    private List<TeamEntity> teamEntityList;
     private RoleEntity roleEntity;
     private PermissionEntity permissionEntity;
 
