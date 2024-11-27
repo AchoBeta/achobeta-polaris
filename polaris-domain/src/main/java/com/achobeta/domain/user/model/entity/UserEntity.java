@@ -1,5 +1,6 @@
 package com.achobeta.domain.user.model.entity;
 
+import com.achobeta.types.annotation.FieldDesc;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -90,4 +91,6 @@ public class UserEntity {
      */
     private List<String> positionList;
 
+    @FieldDesc(name = "赋予的角色id")
+    private List<String> roles;
 }

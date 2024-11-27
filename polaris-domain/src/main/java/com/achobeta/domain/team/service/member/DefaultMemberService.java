@@ -1,5 +1,6 @@
 package com.achobeta.domain.team.service.member;
 
+import com.achobeta.domain.auth.adapter.repository.IAuthRepository;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.service.IMemberService;
@@ -26,6 +27,8 @@ import java.util.UUID;
 public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> implements IMemberService {
 
     private final IMemberRepository memberRepository;
+
+    private final IAuthRepository authRepository;
 
     @Override
     public void deleteMember(String userId, String memberId, String teamId) {

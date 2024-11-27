@@ -16,4 +16,16 @@ public interface RoleMapper {
      */
     List<RolePO> listRole(String userId, String teamId);
 
+    /**
+     * 给用户添加角色
+     * @param userId
+     * @param roles
+     */
+    void addUserRoles(String userId, List<String> roles);
+
+    /**
+     * 删除用户的角色
+     * @param userId
+     */
+    void deleteUserRoles(String userId);
 }

@@ -81,4 +81,7 @@ public class ModifyMemberInfoRequestDTO implements Serializable {
 
     @FieldDesc(name ="删除的职位/分组")
     private List<String> deletePositions;
+
+    @FieldDesc(name = "赋予的角色id")
+    private List<String> roles;
 }

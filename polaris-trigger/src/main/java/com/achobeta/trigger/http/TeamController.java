@@ -100,6 +100,7 @@ public class TeamController implements ITeamService {
                         .experience(requestDTO.getExperience())
                         .currentStatus(requestDTO.getCurrentStatus())
                         .entryTime(requestDTO.getEntryTime())
+                        .roles(requestDTO.getRoles())
                         .build();
             userEntity = memberService.addMember(userEntity,
                     requestDTO.getUserId(),
@@ -152,6 +153,7 @@ public class TeamController implements ITeamService {
                         .studentId(requestDTO.getStudentId())
                         .experience(requestDTO.getExperience())
                         .currentStatus(requestDTO.getCurrentStatus())
+                        .roles(requestDTO.getRoles())
                         .build(), requestDTO.getAddPositions(), requestDTO.getDeletePositions());
 
         return Response.SYSTEM_SUCCESS(ModifyMemberInfoResponseDTO.builder().userInfo(requestDTO).build());

@@ -1,42 +1,23 @@
 package com.achobeta.infrastructure.adapter.repository;
 
-import com.achobeta.domain.team.adapter.repository.IMemberRepository;
-import com.achobeta.infrastructure.dao.UserMapper;
-import com.achobeta.infrastructure.redis.RedissonService;
 import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
+import com.achobeta.infrastructure.dao.RoleMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
+import com.achobeta.types.common.RedisKey;
+import com.achobeta.types.enums.GlobalServiceStatusCode;
+import com.achobeta.types.exception.AppException;
+import jodd.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import com.achobeta.infrastructure.dao.po.UserPO;
-import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.RedisKey;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
-import com.achobeta.types.exception.AppException;
-import com.achobeta.infrastructure.dao.po.PositionPO;
-import com.achobeta.infrastructure.dao.po.UserPO;
-import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.Constants;
-import com.achobeta.types.common.RedisKey;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
-import com.achobeta.types.exception.AppException;
-import com.achobeta.infrastructure.redis.RedissonService;
-import com.achobeta.types.common.RedisKey;
-import jodd.util.StringUtil;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
-
-import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +35,9 @@ public class MemberRepository implements IMemberRepository {
 
     @Resource
     private PositionMapper positionMapper;
+
+    @Resource
+    private RoleMapper roleMapper;
 
     @Resource
     private IRedisService redisService;
@@ -86,6 +70,7 @@ public class MemberRepository implements IMemberRepository {
                 .entryTime(userEntity.getEntryTime())
                 .build());
         userMapper.addMember(userEntity.getUserId(), teamId);
+        roleMapper.addUserRoles(userId, userEntity.getRoles());
         if (!CollectionUtil.isEmpty(positionIds)) {
             positionMapper.addPositionsToMember(userId, userEntity.getUserId(), positionIds, teamId);
         }
@@ -160,23 +145,26 @@ public class MemberRepository implements IMemberRepository {
 
     @Override
     public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<String> addPositions, List<String> deletePositions) {
+        String userId = userEntity.getUserId();
         // 这里保证用户存在，不能查缓存的得直接查数据库的
-        UserPO userPO = userMapper.getUserByUserId(userEntity.getUserId());
+        UserPO userPO = userMapper.getUserByUserId(userId);
         if (userPO == null) {
-            log.error("用户不存在！userId：{}",userEntity.getUserId());
+            log.error("用户不存在！userId：{}",userId);
             throw new AppException(String.valueOf(GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getCode()),
                     GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
         }
 
         if (!CollectionUtil.isEmpty(addPositions)) {
-            positionMapper.addPositionToUser(addPositions, userEntity.getUserId(), teamId);
+            positionMapper.addPositionToUser(addPositions, userId, teamId);
         }
         if (!CollectionUtil.isEmpty(deletePositions)) {
-            positionMapper.deletePositionWithUser(deletePositions, userEntity.getUserId());
+            positionMapper.deletePositionWithUser(deletePositions, userId);
         }
 
+        roleMapper.deleteUserRoles(userId);
+        roleMapper.addUserRoles(userId, userEntity.getRoles());
         userMapper.updateMemberInfo(UserPO.builder()
-                .userId(userEntity.getUserId())
+                .userId(userId)
                 .userName(userEntity.getUserName())
                 .phone(userEntity.getPhone())
                 .gender(userEntity.getGender())
@@ -192,7 +180,7 @@ public class MemberRepository implements IMemberRepository {
                 .updateBy(userEntity.getUserId())
                 .build());
 
-        redisService.remove(RedisKey.USER_INFO + userEntity.getUserId());
+        redisService.remove(RedisKey.USER_INFO + userId);
         return userEntity;
     }
 
