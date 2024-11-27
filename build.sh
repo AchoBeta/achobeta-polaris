@@ -40,17 +40,17 @@ base(){
 
 # 启动程序模块（必须）
 services(){
-  $COMPOSE_COMMAND -f docker-compose-app.yml up -d
+  $COMPOSE_COMMAND -f docker-compose-app.yml up
 }
 
 # 关闭服务模块
 stop(){
-  $COMPOSE_COMMAND stop polaris
+  docker stop polaris
 }
 
 # 删除服务模块
 rm(){
-  $COMPOSE_COMMAND rm polaris
+  docker rm polaris
 }
 
 # 删除所有未使用的镜像
