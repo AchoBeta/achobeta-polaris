@@ -33,12 +33,12 @@
     <select id="queryReadByUserIdAnnounceId" resultMap="AnnounceRevicer">
         select announce_id,is_read from user_announce
         where user_id = #{userId}
-              <if test="announceId != null">
-                  and announce_id > #{announceId}
-              </if>
+        <if test="announceId != null">
+            and announce_id > #{announceId}
+        </if>
         and is_deleted = 0
         order by announce_id
-            limit #{limit}
+        limit #{limit}
     </select>
 
     <select id="getAnnounceCount" resultType="int">
