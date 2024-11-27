@@ -11,6 +11,8 @@ import com.achobeta.types.annotation.Updater;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+
+import com.achobeta.types.constraint.LoginVerification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,6 +42,7 @@ public class ReadController implements IReadService {
      * @return
      */
     @PostMapping("render")
+    @LoginVerification
     @Override
     public Response<RenderResponseDTO> render(@Valid @RequestBody RenderRequestDTO renderRequestDTO) {
         try {

@@ -17,10 +17,10 @@ public interface IDeviceRepository {
     /**
      * 设备信息查询
      * @param userId 用户id
-     * @param mac mac地址
+     * @param fingerPrinting 设备指纹信息
      * @return
      */
-    DeviceEntity getDeviceByMac(String userId,String mac);
+    DeviceEntity getDeviceByFingerPrinting(String userId,String fingerPrinting);
 
     /**
      * 插入设备

@@ -19,5 +19,5 @@ public interface IAuthorizationService {
      * @param isAutoLogin 是否自动登录
      * @return
      */
-    LoginVO login(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String mac);
+    LoginVO login(String phone, String code, String ip, Boolean isAutoLogin, String deviceName, String fingerPrinting);
 }

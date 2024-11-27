@@ -25,7 +25,7 @@ public class TeamInfoPort implements ITeamInfoPort {
 
     @Override
     public List<PositionEntity> queryTeamByUserId(String userId) {
-        List<PositionPO> positionPOList = positionMapper.listPositionByUserId(userId);
+        List<PositionPO> positionPOList = positionMapper.listTeamByUserId(userId);
         if (CollectionUtil.isEmpty(positionPOList)) {
             return Collections.emptyList();
         }

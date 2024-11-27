@@ -9,6 +9,7 @@ import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ import javax.validation.Valid;
  */
 @Slf4j
 @RestController()
+@Validated
 @CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/auth/")
 @RequiredArgsConstructor
@@ -54,7 +56,7 @@ public class LogoutController implements ILogoutService {
         } catch (AppException e) {
             log.info("用户访问登出接口失败,access_token:{}", request.getHeader("access_token"));
 
-            return Response.SERVICE_ERROR(e.getInfo());
+            return Response.APP_ECEPTION(e);
         }catch (Exception e) {
             log.info("用户访问登出接口失败,access_token:{}", request.getHeader("access_token"));
 

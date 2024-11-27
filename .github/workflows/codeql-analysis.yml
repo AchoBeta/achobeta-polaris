@@ -19,6 +19,8 @@ on:
   push:
     branches:
       - master
+      - test
+      - prod
     paths:
       - '**/*.java'
   pull_request:

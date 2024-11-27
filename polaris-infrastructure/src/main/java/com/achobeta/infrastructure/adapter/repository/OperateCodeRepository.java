@@ -3,7 +3,7 @@ package com.achobeta.infrastructure.adapter.repository;
 import com.achobeta.domain.login.adapter.repository.IOperateCodeRepository;
 import com.achobeta.infrastructure.redis.RedissonService;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
-import com.achobeta.types.enums.RedisKey;
+import com.achobeta.types.common.RedisKey;
 import com.achobeta.types.exception.AppException;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class OperateCodeRepository implements IOperateCodeRepository {
 
     private final long EXPIRED = 55*1000;
+    private final long TRY_LOCK_TIME = 5;
 
     private final String PHONE = "phone";
     private final String CODE = "code";
@@ -35,7 +36,7 @@ public class OperateCodeRepository implements IOperateCodeRepository {
      */
     @Override
     public String getCodeByPhone(String phone) {
-        return redissonService.<String>getValue(RedisKey.CODE.getKeyPrefix()+phone);
+        return redissonService.<String>getValue(RedisKey.CODE+phone);
     }
 
     /*
@@ -46,26 +47,26 @@ public class OperateCodeRepository implements IOperateCodeRepository {
      */
     @Override
     public void setCode(String phone, String code, long expired) {
-        String key=RedisKey.CODE.getKeyPrefix()+phone;
+        String key=RedisKey.CODE+phone;
         redissonService.setValue(key,code,expired);
     }
 
     @Override
     public void setRateLimit(String phone) {
-        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+        String key=RedisKey.RATE_LIMIT+phone;
         redissonService.setValue(key,1,EXPIRED);
     }
 
     @Override
     public Boolean checkRateLimit(String phone) {
-        String key=RedisKey.RATE_LIMIT.getKeyPrefix()+phone;
+        String key=RedisKey.RATE_LIMIT+phone;
 
         return redissonService.getValue(key) == null;
     }
 
     @Override
     public void deleteCode(String phone, String code) {
-        String key=RedisKey.CODE.getKeyPrefix()+phone;
+        String key=RedisKey.CODE+phone;
 
         try {
             redissonService.remove(key);
@@ -76,9 +77,9 @@ public class OperateCodeRepository implements IOperateCodeRepository {
 
     @Override
     public void lockCheckCode(String phone, String code) {
-        String key=RedisKey.CODE_LOCK.getKeyPrefix()+PHONE+phone+CODE+code;
+        String key=RedisKey.CODE_LOCK+PHONE+phone+CODE+code;
         try {
-            redissonService.getLock(key).tryLock(5, TimeUnit.SECONDS);
+            redissonService.getLock(key).tryLock(TRY_LOCK_TIME, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getCode()),GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getMessage());
         }
@@ -86,7 +87,7 @@ public class OperateCodeRepository implements IOperateCodeRepository {
 
     @Override
     public void unlockCheckCode(String phone, String code) {
-        String key=RedisKey.CODE_LOCK.getKeyPrefix()+PHONE+phone+CODE+code;
+        String key=RedisKey.CODE_LOCK+PHONE+phone+CODE+code;
         redissonService.unLock(key);
     }
 

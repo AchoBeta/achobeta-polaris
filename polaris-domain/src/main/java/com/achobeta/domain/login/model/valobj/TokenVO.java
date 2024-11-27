@@ -59,8 +59,8 @@ public class TokenVO {
     private Boolean isAutoLogin;
 
     /*
-     * 登录用户的mac
+     * 登录用户的设备指纹
      */
-    private String mac;
+    private String fingerPrinting;
 
 }

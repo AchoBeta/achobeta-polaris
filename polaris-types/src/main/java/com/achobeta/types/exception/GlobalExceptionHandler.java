@@ -76,4 +76,16 @@ public class GlobalExceptionHandler {
         return Response.CUSTOMIZE_MSG_ERROR(PARAM_FAILED_VALIDATE, message);
     }
 
+    /**
+     * 自定义验证异常 BindException
+     */
+    @ExceptionHandler(AppException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public <T> Response<T> handleAPPException(AppException e) {
+        log.error("系统异常", e);
+        return Response.APP_ECEPTION(e);
+    }
+
+
+
 }
