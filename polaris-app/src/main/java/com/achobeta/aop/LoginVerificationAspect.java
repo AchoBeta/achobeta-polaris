@@ -10,7 +10,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @Component
 @Aspect
-@Order(Integer.MIN_VALUE)
 public class LoginVerificationAspect {
 
     private final long EXPIRED = 100*1000;
@@ -89,7 +87,7 @@ public class LoginVerificationAspect {
         }
 
         if(accessTokenExpired <= EXPIRED){
-            //如果token已经超时失效也会进这里
+            //如果token是持久化的或者已经超时失效也会进这里
             response.setHeader(ACCESS_TOKEN_NEED_REFRESH, "true");
         }
 
