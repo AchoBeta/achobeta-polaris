@@ -32,7 +32,7 @@ public class AuthController {
      * @return
      */
     @GetMapping("test")
-    @AuthVerify("MEMBER:MEMBER_MODIFY")
+    @AuthVerify("TEAM_DELETE")
     public Response test(@Valid AuthRequestDTO authRequestDTO) {
         log.info("进入鉴权测试接口，参数：{}", authRequestDTO);
 

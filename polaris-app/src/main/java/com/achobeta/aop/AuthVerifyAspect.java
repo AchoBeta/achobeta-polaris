@@ -1,5 +1,6 @@
 package com.achobeta.aop;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.achobeta.domain.auth.adapter.repository.IAuthRepository;
 import com.achobeta.domain.auth.model.entity.RoleEntity;
 import com.achobeta.types.Response;
@@ -45,7 +46,7 @@ public class AuthVerifyAspect {
         // 获取用户ID，团队ID
         String userId = (String) arg.getClass().getMethod("getUserId").invoke(arg);
         String teamId = (String) arg.getClass().getMethod("getTeamId").invoke(arg);
-        // 获取需要的角色和权限
+        // 获取需要权限
         String[] needed = method.getAnnotation(AuthVerify.class).value().split(":");
         // 查询用户角色和权限
         List<RoleEntity> userRoles = authRepository.queryRoles(userId, teamId);
@@ -55,6 +56,9 @@ public class AuthVerifyAspect {
         }
         List<String> userPermissions = authRepository.queryPermissions(userId, userRoleIds);
         // 判断用户是否有权限
+        if (ArrayUtil.isEmpty(needed) || userPermissions.contains("SUPER")) {
+            return point.proceed();
+        }
         for (String neededPermission : needed) {
             if (userPermissions.contains(neededPermission)) {
                 return point.proceed();
