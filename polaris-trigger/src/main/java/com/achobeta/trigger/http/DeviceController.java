@@ -5,8 +5,6 @@ import com.achobeta.api.dto.device.GetUserDeviceResponseDTO;
 import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
 import com.achobeta.types.Response;
-import com.achobeta.types.constraint.LoginVerification;
-import com.achobeta.types.constraint.SelfPermissionVerification;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +32,6 @@ public class DeviceController implements com.achobeta.api.IDeviceService {
      * @return
      */
     @GetMapping("/getDevices")
-    @LoginVerification
-    @SelfPermissionVerification
     @Override
     public Response<GetUserDeviceResponseDTO> getDevices(@Valid  GetUserDeviceRequestDTO getUserDeviceRequestDTO) {
         try {

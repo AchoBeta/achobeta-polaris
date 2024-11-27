@@ -12,7 +12,6 @@ import com.achobeta.domain.user.service.IUserInfoService;
 
 import com.achobeta.types.Response;
 import com.achobeta.types.common.Constants;
-import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,6 @@ public class UserController implements IUserService {
      * @date 2024/11/9
      */
     @PutMapping("info")
-    @LoginVerification
     @Override
     public Response<ModifyUserInfoResponseDTO> modifyUserInfo(@Valid @RequestBody ModifyUserInfoRequestDTO modifyUserInfoRequestDTO) {
         try {
@@ -87,7 +85,6 @@ public class UserController implements IUserService {
      * @date 2024/11/6
      */
     @GetMapping("info")
-    @LoginVerification
     @Override
     public Response<QueryUserInfoResponseDTO> queryUserCenterInfo(@Valid QueryUserInfoRequestDTO queryUserInfoRequestDTO) {
         try {
