@@ -1,5 +1,5 @@
 CONTAINER_NAME=polaris
-IMAGE_NAME=ghcr.io/bantanger/achobeta/polaris-app:latest
+IMAGE_NAME=ghcr.io/bantanger/achobeta/polaris:latest
 PORT=8091
 
 echo "容器部署开始 ${CONTAINER_NAME}"
@@ -9,6 +9,8 @@ docker stop ${CONTAINER_NAME}
 
 # 删除容器
 docker rm ${CONTAINER_NAME}
+
+docker rmi ${IMAGE_NAME}
 
 # 启动容器
 docker run --name ${CONTAINER_NAME} \
