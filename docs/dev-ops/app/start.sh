@@ -1,5 +1,5 @@
 CONTAINER_NAME=polaris
-IMAGE_NAME=ghcr.io/bantanger/achobeta/polaris-app:1.0
+IMAGE_NAME=ghcr.io/bantanger/achobeta/polaris-app:latest
 PORT=8091
 
 echo "容器部署开始 ${CONTAINER_NAME}"

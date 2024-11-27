@@ -92,3 +92,21 @@ fix: fix a bug
 2. application-dev.yml、application-prod.yml 最新配置请团队内部保管，不要上传到 git，任何方式都不被允许，因为 git 一旦提交，记录永久存在
 
 3. 任何时候不要用 git push --force 除非你知道你在干什么。
+
+## 部署
+两种部署方式
+
+方式一：服务器拉取 polaris 项目, 在根目录执行 build.sh 脚本文件
+
+```shell
+git pull
+sh build.sh rm && sh build.sh rmi
+sh build.sh base && sh build.sh services
+```
+
+方式二：服务器拉取 polaris 项目, 在已有基础环境（mysql，redis，mq）的情况下，可以在 `docs/dev-ops/app` 目录下执行 start.sh 文件
+
+```shell
+git pull
+sh docs/dev-ops/app/start.sh
+```
