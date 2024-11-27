@@ -5,28 +5,50 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 /**
- * @author huangwenxing
- * @description 设备持久化对象
- * @data 2024/11/7
- * */
+ * @Author: 严豪哲
+ * @Description:
+ * @Date: 2024/11/11 20:10
+ * @Version: 1.0
+ */
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class DevicePO {
-    /**主键id*/
-    private long id;
-    /**设备业务id*/
+
+    /**
+     * 设备业务id
+     */
     private String deviceId;
-    /**设备名*/
+    /**
+     * 设备名称
+     */
     private String deviceName;
-    /**用户业务id*/
+    /**
+     * 用户业务id
+     */
     private String userId;
-    /**设备ip*/
-    private String IP;
-    /**创建时间*/
+    /**
+     * 设备ip地址
+     */
+    private String ip;
+    /**
+     * 创建时间
+     */
     private LocalDateTime createTime;
-    /**更新时间*/
+    /**
+     *更新时间
+     */
     private LocalDateTime updateTime;
+    /**
+     * 是否自动登录
+     */
+    private Integer isCancel;
+
+    /**
+     * 设备的指纹信息
+     */
+    private String fingerPrinting;
+
 }
