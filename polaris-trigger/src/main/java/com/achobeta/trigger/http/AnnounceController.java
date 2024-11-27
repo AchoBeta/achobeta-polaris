@@ -4,6 +4,7 @@ import com.achobeta.api.dto.announce.*;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 import com.achobeta.domain.announce.service.IAnnounceService;
 import com.achobeta.types.Response;
+import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
      * @return
      */
     @GetMapping("/getUserAnnounce")
+    @LoginVerification
     @Override
     public Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid GetUserAnnounceRequestDTO getUserAnnounceRequestDTO) {
         try {
@@ -55,6 +57,7 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
     }
 
     @Override
+    @LoginVerification
     @PostMapping("/readUserAnnounce")
     public Response readAnnounce(@Valid @RequestBody ReadAnnounceRequestDTO readAnnounceRequestDTO) {
         try {
@@ -76,6 +79,7 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
     }
 
     @Override
+    @LoginVerification
     @GetMapping("/getAnnounceCount")
     public Response<GetUserAnnounceCountResponseDTO> getUserAnnounceCount(@Valid GetUserAnnounceCountRequestDTO getUserAnnounceCountRequestDTO) {
         try {
@@ -94,6 +98,7 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
     }
 
     @Override
+    @LoginVerification
     @PostMapping("/readAllAnnounce")
     public Response readAllAnnounce(@Valid @RequestBody ReadAllAnnounceRequestDTO readAllAnnounceRequestDTO) {
         try {

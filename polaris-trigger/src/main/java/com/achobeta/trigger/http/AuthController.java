@@ -3,6 +3,7 @@ package com.achobeta.trigger.http;
 import com.achobeta.api.dto.AuthRequestDTO;
 import com.achobeta.types.Response;
 import com.achobeta.types.annotation.AuthVerify;
+import com.achobeta.types.constraint.LoginVerification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +33,7 @@ public class AuthController {
      * @return
      */
     @GetMapping("test")
+    @LoginVerification
     @AuthVerify("TEAM_DELETE")
     public Response test(@Valid AuthRequestDTO authRequestDTO) {
         log.info("进入鉴权测试接口，参数：{}", authRequestDTO);

@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * @Author: 严豪哲
- * @Description: 登录验证注解
- * @Date: 2024/11/18 10:27
+ * @Description: 访问个人私有资源权限注解
+ * @Date: 2024/11/27 21:40
  * @Version: 1.0
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LoginVerification {
+public @interface SelfPermissionVerification {
 }
