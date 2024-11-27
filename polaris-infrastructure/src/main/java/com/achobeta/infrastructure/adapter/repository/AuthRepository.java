@@ -53,8 +53,6 @@ public class AuthRepository implements IAuthRepository {
             roleEntityList.add(RoleEntity.builder()
                     .roleId(rolePO.getRoleId())
                     .roleName(rolePO.getRoleName())
-                    .createTime(rolePO.getCreateTime())
-                    .updateTime(rolePO.getUpdateTime())
                     .build());
         }
 
@@ -97,8 +95,6 @@ public class AuthRepository implements IAuthRepository {
                     roleEntityList.add(RoleEntity.builder()
                             .roleId(rolePO.getRoleId())
                             .roleName(rolePO.getRoleName())
-                            .createTime(rolePO.getCreateTime())
-                            .updateTime(rolePO.getUpdateTime())
                             .build());
                 }
                 redisService.setValue(RedisKey.TEAM_ROLE + teamId, roleEntityList);
