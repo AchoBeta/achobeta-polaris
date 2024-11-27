@@ -28,4 +28,11 @@ public interface RoleMapper {
      * @param userId
      */
     void deleteUserRoles(String userId);
+
+    /**
+     * 获取指定团队的所有角色列表
+     * @param teamId
+     * @return
+     */
+    List<RolePO> listRoleByTeamId(String teamId);
 }

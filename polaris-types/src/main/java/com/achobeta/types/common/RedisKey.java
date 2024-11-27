@@ -9,9 +9,9 @@ package com.achobeta.types.common;
 
 public class RedisKey {
 
-    public static final String USER_PERMISSION = "ab:polaris:user:permission:";
+    public static final String USER_PERMISSION_IN_TEAM = "ab:polaris:user:permission:";
 
-    public static final String USER_ROLE = "ab:polaris:user:role:";
+    public static final String USER_ROLE_IN_TEAM = "ab:polaris:user:role:";
 
     public static final String CODE = "ab:polaris:login:code:";
 
@@ -26,5 +26,7 @@ public class RedisKey {
     public final static String TEAM_STRUCTURE = "ab:polaris:team:structure:";
 
     public final static String USER_INFO = "ab:polaris:user:info:";
+
+    public final static String TEAM_ROLE = "ab:polaris:team:role:";
 
 }
