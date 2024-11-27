@@ -1,8 +1,7 @@
 SET character_set_client = utf8;
 SET character_set_results = utf8;
 SET character_set_connection = utf8;
-drop database if exists achobeta_polaris;
-create database achobeta_polaris character set utf8mb4 collate utf8mb4_bin;
+CREATE database if NOT EXISTS `achobeta_polaris` default character set utf8mb4;
 use achobeta_polaris;
 
 DROP TABLE IF EXISTS `user`;

@@ -7,6 +7,7 @@ import com.achobeta.domain.auth.service.IRoleService;
 import com.achobeta.domain.team.model.entity.TeamEntity;
 import com.achobeta.types.Response;
 import com.achobeta.types.annotation.AuthVerify;
+import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ public class AuthController {
      * @return
      */
     @GetMapping("test")
+    @LoginVerification
     @AuthVerify("TEAM_DELETE")
     public Response test(@Valid AuthRequestDTO authRequestDTO) {
         log.info("进入鉴权测试接口，参数：{}", authRequestDTO);
