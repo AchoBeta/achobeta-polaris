@@ -20,6 +20,7 @@ public enum BizModule {
     READANNOUNCE("biz_012","读公告模块"),
     USER("biz_002", "用户模块"),
     LOGIN("biz_006", "用户登陆模块"),
+    LIKE("biz_013","点赞模块")
     ;
 
     private String code;
