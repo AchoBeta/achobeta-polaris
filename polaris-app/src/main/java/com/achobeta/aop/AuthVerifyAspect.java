@@ -54,7 +54,7 @@ public class AuthVerifyAspect {
         for (RoleEntity userRole : userRoles) {
             userRoleIds.add(userRole.getRoleId());
         }
-        List<String> userPermissions = authRepository.queryPermissions(userId, userRoleIds);
+        List<String> userPermissions = authRepository.queryPermissions(userId, userRoleIds, teamId);
         // 判断用户是否有权限
         if (ArrayUtil.isEmpty(needed) || userPermissions.contains("SUPER")) {
             return point.proceed();
