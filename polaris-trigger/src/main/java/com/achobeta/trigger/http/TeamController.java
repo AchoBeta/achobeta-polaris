@@ -101,6 +101,7 @@ public class TeamController implements ITeamService {
                         .currentStatus(requestDTO.getCurrentStatus())
                         .entryTime(requestDTO.getEntryTime())
                         .roles(requestDTO.getRoles())
+                        .teams(requestDTO.getTeams())
                         .build();
             userEntity = memberService.addMember(userEntity,
                     requestDTO.getUserId(),

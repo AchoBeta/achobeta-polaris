@@ -79,6 +79,6 @@ public class AddMemberRequestDTO implements Serializable {
     @FieldDesc(name = "赋予的角色id")
     private List<String> roles;
 
-    @FieldDesc(name = "所属团队名称")
-    private List<String> teamNames;
+    @FieldDesc(name = "所属团队")
+    private List<String> teams;
 }
