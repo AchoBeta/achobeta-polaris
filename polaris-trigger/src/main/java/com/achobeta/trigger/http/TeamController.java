@@ -166,7 +166,7 @@ public class TeamController implements ITeamService {
         try {
             log.info("用户访问团队成员信息详情服务开始，{}", requestDTO);
 
-            UserEntity userEntity = memberService.queryMemberInfo(requestDTO.getMemberId());
+            UserEntity userEntity = memberService.queryMemberInfo(requestDTO.getUserId(), requestDTO.getMemberId());
             log.info("用户访问团队成员信息详情服务结束，{}", requestDTO);
 
             return Response.SYSTEM_SUCCESS(QueryMemberInfoResponseDTO.builder()

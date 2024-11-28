@@ -16,7 +16,7 @@ public interface LikeMapper {
     /**插入用户点赞状态*/
     Integer insertLiked(String fromId, String toId, boolean liked);
     /**查询用户点赞状态*/
-    boolean queryLikedById(String fromId, String toId);
+    Integer queryLikedById(String fromId, String toId);
     /**查询用户是否存在*/
     Integer queryUserById(String userId);
 }

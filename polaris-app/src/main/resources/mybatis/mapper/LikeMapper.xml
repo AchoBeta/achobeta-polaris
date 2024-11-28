@@ -17,7 +17,7 @@
     <select id="queryUserById" resultType="int">
         select count(1) from `user` where user_id = #{userId}
     </select>
-    <select id="queryLikedById" resultType="boolean">
+    <select id="queryLikedById" resultType="Integer">
         select is_liked from `like`
         where user_id = #{fromId} and to_Id = #{toId}
     </select>
