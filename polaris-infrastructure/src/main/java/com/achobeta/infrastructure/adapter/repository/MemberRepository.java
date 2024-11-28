@@ -2,6 +2,7 @@ package com.achobeta.infrastructure.adapter.repository;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
+import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.RoleMapper;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yangzhiyao
@@ -54,7 +56,8 @@ public class MemberRepository implements IMemberRepository {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void addMember(UserEntity userEntity,String userId, String teamId, List<String> positionIds) {
+    public void addMember(UserEntity userEntity,String userId, String teamId, List<List<String>> originAddPositions) {
+        List<String> teams = (List<String>) userEntity.getTeams();
         userMapper.addUser(UserPO.builder()
                 .userId(userEntity.getUserId())
                 .userName(userEntity.getUserName())
@@ -69,11 +72,41 @@ public class MemberRepository implements IMemberRepository {
                 .currentStatus(userEntity.getCurrentStatus())
                 .entryTime(userEntity.getEntryTime())
                 .build());
-        userMapper.addMember(userEntity.getUserId(), teamId);
-        roleMapper.addUserRoles(userId, userEntity.getRoles());
-        if (!CollectionUtil.isEmpty(positionIds)) {
-            positionMapper.addPositionsToMember(userId, userEntity.getUserId(), positionIds, teamId);
+
+        // 处理职位
+        List<PositionEntity> addPositions = new ArrayList<>();
+        if (!CollectionUtil.isEmpty(originAddPositions)) {
+            // 拿到每个职位的团队名称
+            List<String> addPositionTeamNames = originAddPositions.stream()
+                    .map(list -> list.get(0))
+                    .collect(Collectors.toList());
+            List<String> addPositionNames = originAddPositions.stream()
+                    .map(list -> list.get(list.size() - 1))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < addPositionNames.size(); i++) {
+                addPositions.add(PositionEntity.builder()
+                        .positionName(addPositionNames.get(i))
+                        .teamName(addPositionTeamNames.get(i))
+                        .build());
+            }
+            addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
+            if (!CollectionUtil.isEmpty(addPositions)){
+                positionMapper.addPositionToUser(addPositions, userId);
+            }
         }
+
+        // 修改用户的所属团队，先全部删掉，再添加回去
+        // 取到团队名称
+        List<String> teamNames = teams.stream()
+                .map(item -> item.split("-"))
+                .map(parts -> parts[0])
+                .collect(Collectors.toList());
+        List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
+        // 修改用户所属团队，先全部删掉，再添加
+        userMapper.deleteMemberTeam(userId);
+        userMapper.addMemberTeam(userId, teamIds);
+
+        roleMapper.addUserRoles(userId, userEntity.getRoles());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -144,8 +177,9 @@ public class MemberRepository implements IMemberRepository {
     }
 
     @Override
-    public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<String> addPositions, List<String> deletePositions) {
+    public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<List<String>> originAddPositions, List<List<String>> originDeletePositions) {
         String userId = userEntity.getUserId();
+        List<String> teams = (List<String>) userEntity.getTeams();
         // 这里保证用户存在，不能查缓存的得直接查数据库的
         UserPO userPO = userMapper.getUserByUserId(userId);
         if (userPO == null) {
@@ -154,15 +188,63 @@ public class MemberRepository implements IMemberRepository {
                     GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
         }
 
-        if (!CollectionUtil.isEmpty(addPositions)) {
-            positionMapper.addPositionToUser(addPositions, userId, teamId);
+        List<PositionEntity> addPositions = new ArrayList<>();
+        List<PositionEntity> deletePositions = new ArrayList<>();
+        // 处理删除职位
+        if (!CollectionUtil.isEmpty(originDeletePositions)) {
+            // 拿到每个职位的团队名称
+            List<String> deletePositionTeamNames = originDeletePositions.stream()
+                    .map(list -> list.get(0))
+                    .collect(Collectors.toList());
+            List<String> deletePositionNames = originDeletePositions.stream()
+                    .map(list -> list.get(list.size() - 1))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < deletePositionNames.size(); i++) {
+                addPositions.add(PositionEntity.builder()
+                        .positionName(deletePositionNames.get(i))
+                        .teamName(deletePositionTeamNames.get(i))
+                        .build());
+            }
+            deletePositions = positionMapper.listPositionIdAndTeamIdByNames(deletePositions);
+            if (!CollectionUtil.isEmpty(deletePositions)){
+                positionMapper.addPositionToUser(deletePositions, userId);
+            }
         }
-        if (!CollectionUtil.isEmpty(deletePositions)) {
-            positionMapper.deletePositionWithUser(deletePositions, userId);
+        // 处理新增职位
+        if (!CollectionUtil.isEmpty(originAddPositions)) {
+            // 拿到每个职位的团队名称
+            List<String> addPositionTeamNames = originAddPositions.stream()
+                    .map(list -> list.get(0))
+                    .collect(Collectors.toList());
+            List<String> addPositionNames = originAddPositions.stream()
+                    .map(list -> list.get(list.size() - 1))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < addPositionNames.size(); i++) {
+                addPositions.add(PositionEntity.builder()
+                        .positionName(addPositionNames.get(i))
+                        .teamName(addPositionTeamNames.get(i))
+                        .build());
+            }
+            addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
+            if (!CollectionUtil.isEmpty(addPositions)){
+                positionMapper.addPositionToUser(addPositions, userId);
+            }
         }
 
+        // 取到团队名称
+        List<String> teamNames = teams.stream()
+                .map(item -> item.split("-"))
+                .map(parts -> parts[0])
+                .collect(Collectors.toList());
+        List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
+        // 修改用户所属团队，先全部删掉，再添加
+        userMapper.deleteMemberTeam(userId);
+        userMapper.addMemberTeam(userId, teamIds);
+
+        // 修改用户角色，全删再添加
         roleMapper.deleteUserRoles(userId);
         roleMapper.addUserRoles(userId, userEntity.getRoles());
+
         userMapper.updateMemberInfo(UserPO.builder()
                 .userId(userId)
                 .userName(userEntity.getUserName())

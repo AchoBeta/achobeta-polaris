@@ -25,9 +25,9 @@ public interface IMemberService {
      * @param userEntity
      * @param userId
      * @param teamId
-     * @param positionIds
+     * @param positions
      */
-    UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
+    UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<List<String>> positions);
 
     /**
      * 修改团队成员信息
@@ -37,7 +37,7 @@ public interface IMemberService {
      * @param deletePositions 删除职位
      * @return 修改后的用户实体
      */
-    UserEntity modifyMember(String teamId, UserEntity userEntity, List<String> addPositions, List<String> deletePositions);
+    UserEntity modifyMember(String teamId, UserEntity userEntity, List<List<String>> addPositions, List<List<String>> deletePositions);
 
     /**
      * 查询成员信息详情

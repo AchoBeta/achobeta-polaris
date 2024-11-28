@@ -16,6 +16,12 @@
               and team_id = #{teamId}
     </update>
 
+    <update id="deleteMemberTeam">
+        update member
+        set is_deleted = 1
+        where user_id = #{userId}
+    </update>
+
     <resultMap id="UserResultMap" type="com.achobeta.infrastructure.dao.po.UserPO">
         <id column="user_id" property="userId" />
         <result column="user_name" property="userName" />
@@ -62,6 +68,13 @@
                <if test="grade    != null">,#{grade}</if>
                <if test="major    != null">,#{major}</if>
                <if test="experience!= null">,#{experience}</if>)
+    </insert>
+
+    <insert id="addMemberTeam">
+        insert into member (user_id,team_id) values
+        <foreach collection="teamIds" item="teamId" separator=",">
+            (#{userId},#{teamId})
+        </foreach>
     </insert>
 
     <select id="getMemberByPhone" resultMap="UserResultMap">

@@ -77,11 +77,14 @@ public class ModifyMemberInfoRequestDTO implements Serializable {
     private String currentStatus;
 
     @FieldDesc(name ="添加的职位/分组")
-    private List<String> addPositions;
+    private List<List<String>> addPositions;
 
     @FieldDesc(name ="删除的职位/分组")
-    private List<String> deletePositions;
+    private List<List<String>> deletePositions;
 
     @FieldDesc(name = "赋予的角色id")
     private List<String> roles;
+
+    @FieldDesc(name = "所属团队名称")
+    private List<String> teamNames;
 }

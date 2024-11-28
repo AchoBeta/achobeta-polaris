@@ -1,7 +1,5 @@
 package com.achobeta.infrastructure.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.achobeta.infrastructure.dao.po.UserPO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -64,4 +62,16 @@ public interface UserMapper {
      */
     UserPO getUserByPhone(String phone);
 
+    /**
+     * 删除用户和团队所有关联
+     * @param userId
+     */
+    void deleteMemberTeam(String userId);
+
+    /**
+     * 批量添加用户和团队关联
+     * @param userId
+     * @param teamIds
+     */
+    void addMemberTeam(String userId, List<String> teamIds);
 }

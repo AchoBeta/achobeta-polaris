@@ -101,12 +101,12 @@ public class TeamController implements ITeamService {
                         .currentStatus(requestDTO.getCurrentStatus())
                         .entryTime(requestDTO.getEntryTime())
                         .roles(requestDTO.getRoles())
-                        .teams(requestDTO.getTeams())
+                        .teams(requestDTO.getTeamNames())
                         .build();
             userEntity = memberService.addMember(userEntity,
                     requestDTO.getUserId(),
                     requestDTO.getTeamId(),
-                    requestDTO.getPositions());
+                    requestDTO.getAddPositions());
             Integer statusCode = userEntity.getLikeCount() == null ? 0 : 1;
 
             log.info("访问添加团队成员接口结束userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
@@ -155,6 +155,7 @@ public class TeamController implements ITeamService {
                         .experience(requestDTO.getExperience())
                         .currentStatus(requestDTO.getCurrentStatus())
                         .roles(requestDTO.getRoles())
+                        .teams(requestDTO.getTeamNames())
                         .build(), requestDTO.getAddPositions(), requestDTO.getDeletePositions());
 
         return Response.SYSTEM_SUCCESS(ModifyMemberInfoResponseDTO.builder().userInfo(requestDTO).build());

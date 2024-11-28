@@ -60,8 +60,8 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     }
 
     @Override
-    public UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds) {
-        PostContext<TeamBO> postContext = buildPostContext(userEntity, userId, teamId, positionIds);
+    public UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<List<String>> positions) {
+        PostContext<TeamBO> postContext = buildPostContext(userEntity, userId, teamId, positions);
         postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
@@ -78,7 +78,7 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                         }
 
                         userEntity.setUserId(UUID.randomUUID().toString());
-                        memberRepository.addMember(userEntity, teamBO.getUserId(), teamBO.getTeamId(), teamBO.getPositionIds());
+                        memberRepository.addMember(userEntity, teamBO.getUserId(), teamBO.getTeamId(), (List<List<String>>)postContext.getExtraData("addPositions"));
                       return postContext;
                     }
                 });
@@ -86,7 +86,7 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     }
 
     @Override
-    public UserEntity modifyMember(String teamId, UserEntity userEntity, List<String> addPositions, List<String> deletePositions) {
+    public UserEntity modifyMember(String teamId, UserEntity userEntity, List<List<String>> addPositions, List<List<String>> deletePositions) {
         PostContext<TeamBO> postContext = buildPostContext(teamId, userEntity);
         postContext.addExtraData("addPositions", addPositions);
         postContext.addExtraData("deletePositions", deletePositions);
@@ -100,8 +100,8 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                         log.info("访问修改团队成员功能，开始处理，teamId: {}, userId: {}",teamId, userEntity.getUserId());
 
                         memberRepository.modifyMemberInfo(userEntity, teamId,
-                                (List<String>)postContext.getExtraData("addPositions"),
-                                (List<String>)postContext.getExtraData("deletePositions"));
+                                (List<List<String>>)postContext.getExtraData("addPositions"),
+                                (List<List<String>>)postContext.getExtraData("deletePositions"));
 
                         log.info("访问修改团队成员功能，处理结束，teamId: {}, userId: {}",teamId, userEntity.getUserId());
                         return postContext;
@@ -136,17 +136,20 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
         return postContext.getBizData().getUserEntity();
     }
 
-    private static PostContext<TeamBO> buildPostContext(UserEntity userEntity, String userId, String teamId, List<String> positionIds) {
-        return PostContext.<TeamBO>builder()
+    private static PostContext<TeamBO> buildPostContext(UserEntity userEntity, String userId, String teamId, List<List<String>> positions) {
+        PostContext<TeamBO> postContext = PostContext.<TeamBO>builder()
                 .bizId(BizModule.TEAM.getCode())
                 .bizName(BizModule.TEAM.getName())
                 .bizData(TeamBO.builder()
                         .userEntity(userEntity)
                         .userId(userId)
                         .teamId(teamId)
-                        .positionIds(positionIds)
-                         .build())
+                        .build())
                 .build();
+
+        postContext.addExtraData("positions", positions);
+
+        return postContext;
     }
 
     private static PostContext<TeamBO> buildPostContext(String teamId, UserEntity userEntity) {
