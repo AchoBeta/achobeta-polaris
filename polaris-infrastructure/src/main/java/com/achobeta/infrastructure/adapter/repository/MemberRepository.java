@@ -101,6 +101,9 @@ public class MemberRepository implements IMemberRepository {
                 .map(item -> item.split("-"))
                 .map(parts -> parts[0])
                 .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(teamNames)) {
+            teamNames.add("未选择团队");
+        }
         List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
         // 修改用户所属团队，先全部删掉，再添加
         userMapper.deleteMemberTeam(userId);
@@ -236,6 +239,9 @@ public class MemberRepository implements IMemberRepository {
                 .map(item -> item.split("-"))
                 .map(parts -> parts[0])
                 .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(teamNames)) {
+            teamNames.add("未选择团队");
+        }
         List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
         // 修改用户所属团队，先全部删掉，再添加
         userMapper.deleteMemberTeam(userId);
