@@ -38,7 +38,7 @@
         </where>
     </select>
 
-    <select id="listRoleByTeamId" resultType="com.achobeta.infrastructure.dao.po.RolePO">
+    <select id="listRoleByTeamId" resultMap="roleResultMap">
         select id, role_id, role_name, team_id, create_time, update_time
         from role
         where team_id = #{teamId} and is_deleted = 0

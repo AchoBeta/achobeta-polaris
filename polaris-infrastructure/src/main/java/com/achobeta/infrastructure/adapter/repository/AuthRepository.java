@@ -90,6 +90,7 @@ public class AuthRepository implements IAuthRepository {
             String teamId = team.getPositionId();
             List<RoleEntity> roleEntityList = redisService.getValue(RedisKey.TEAM_ROLE + teamId);
             if (roleEntityList == null) {
+                roleEntityList = new ArrayList<>();
                 List<RolePO> rolePOList = roleMapper.listRoleByTeamId(teamId);
                 for (RolePO rolePO : rolePOList) {
                     roleEntityList.add(RoleEntity.builder()

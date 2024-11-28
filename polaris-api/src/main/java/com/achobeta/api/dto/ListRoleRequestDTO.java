@@ -21,4 +21,7 @@ public class ListRoleRequestDTO {
     @FieldDesc(name = "用户id")
     private String userId;
 
+    @NotBlank(message = "团队id不能为空")
+    @FieldDesc(name = "团队id")
+    private String teamId;
 }
