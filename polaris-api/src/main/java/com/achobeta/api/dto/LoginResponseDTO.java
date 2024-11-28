@@ -42,10 +42,10 @@ public class LoginResponseDTO {
     private String userId;
 
     /**
-     * 登录用户的职位列表
-     * 实际为List<PositionEntity>，PositionEntity包括该该类中的其他字段
+     * 登录用户所属的团队信息
+     * 实际为List<TeamEntity>，TeamEntity包括该该类中的其他字段
      */
-    private Object positionList;
+    private Object teams;
 
     /**
      * 登录用户的设备id

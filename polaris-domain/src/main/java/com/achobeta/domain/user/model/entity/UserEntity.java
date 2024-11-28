@@ -93,4 +93,7 @@ public class UserEntity {
 
     @FieldDesc(name = "赋予的角色id")
     private List<String> roles;
+
+    @FieldDesc(name = "所属团队")
+    private Object teams;
 }
