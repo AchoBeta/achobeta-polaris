@@ -23,7 +23,7 @@
         <foreach collection="roles" item="role" separator=",">
             #{role}
         </foreach>
-        and deleted = 0
+        and is_deleted = 0
     </update>
 
     <select id="listRole" resultMap="roleResultMap">
@@ -33,15 +33,15 @@
             t2.user_id = #{userId} and t1.role_id = t2.role_id and
             (<if test="teamId!= null and teamId!= ''">t1.team_id = #{teamId} or </if>
             t1.team_id = '')
-            and t1.deleted = 0
-            and t2.deleted = 0
+            and t1.is_deleted = 0
+            and t2.is_deleted = 0
         </where>
     </select>
 
     <select id="listRoleByTeamId" resultType="com.achobeta.infrastructure.dao.po.RolePO">
         select id, role_id, role_name, team_id, create_time, update_time
         from role
-        where team_id = #{teamId} and deleted = 0
+        where team_id = #{teamId} and is_deleted = 0
     </select>
 
 </mapper>
