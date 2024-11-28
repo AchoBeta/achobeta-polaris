@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class LikeRequestDTO {
     @NotBlank(message = "点赞的用户id不能为空")
     @FieldDesc(name = "点赞人id")
-    private String userId;
+    private String fromId;
     @NotBlank(message = "获赞的人id不能为空")
     @FieldDesc(name = "获赞人id")
     private String toId;

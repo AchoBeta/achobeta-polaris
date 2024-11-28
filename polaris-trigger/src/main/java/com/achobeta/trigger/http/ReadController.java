@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import com.achobeta.types.constraint.LoginVerification;
-import com.achobeta.types.constraint.SelfPermissionVerification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,7 +43,6 @@ public class ReadController implements IReadService {
      */
     @PostMapping("render")
     @LoginVerification
-    @SelfPermissionVerification
     @Override
     public Response<RenderResponseDTO> render(@Valid @RequestBody RenderRequestDTO renderRequestDTO) {
         try {
