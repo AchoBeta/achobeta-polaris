@@ -20,7 +20,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController()
 @Validated
-@CrossOrigin("${app.config.cross-origin}:*")
+@CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/announce/")
 @RequiredArgsConstructor
 public class AnnounceController implements com.achobeta.api.IAnnounceService {

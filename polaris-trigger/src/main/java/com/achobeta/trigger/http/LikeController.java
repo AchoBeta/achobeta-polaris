@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController()
 @Validated
-@CrossOrigin("${app.config.cross-origin}:*")
+@CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/user")
 @RequiredArgsConstructor
 public class LikeController implements com.achobeta.api.ILikeService {
