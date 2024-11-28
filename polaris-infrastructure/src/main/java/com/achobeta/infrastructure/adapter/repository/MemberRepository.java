@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.achobeta.types.support.util.buildKeyUtil.buildUserInfoKey;
@@ -278,23 +279,23 @@ public class MemberRepository implements IMemberRepository {
     }
 
     @Override
-    public UserEntity queryMemberInfo(String userId) {
-        log.info("尝试从redis中获取用户信息，userId: {}",userId);
-        UserEntity userBaseInfo = redisService.getValue(buildUserInfoKey(userId));
+    public UserEntity queryMemberInfo(String userId, String memberId) {
+        log.info("尝试从redis中获取用户信息，userId: {}",memberId);
+        UserEntity userBaseInfo = redisService.getValue(buildUserInfoKey(memberId));
         if(userBaseInfo!= null) {
             return userBaseInfo;
         }
 
-        UserPO userPO = userMapper.getUserByUserId(userId);
+        UserPO userPO = userMapper.getUserByUserId(memberId);
         if(userPO == null) {
-            log.error("用户不存在！userId：{}",userId);
+            log.error("用户不存在！userId：{}",memberId);
             throw new AppException(String.valueOf(GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getCode()),
                     GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
         }
 
         // 封装position信息，先存根节点
         List<List<PositionPO>> positionPOList = new ArrayList<>();
-        List<PositionPO> listPositions = positionMapper.listPositionByUserId(userId);
+        List<PositionPO> listPositions = positionMapper.listPositionByUserId(memberId);
         for(PositionPO rootPosition : listPositions) {
             List<PositionPO> tempList = new ArrayList<>();
             tempList.add(rootPosition);
@@ -327,7 +328,7 @@ public class MemberRepository implements IMemberRepository {
             }
             positionNames.add(tempList);
         }
-        log.info("从数据库中查询用户信息成功，userId: {}",userId);
+        log.info("从数据库中查询用户信息成功，userId: {}",memberId);
         // TODO:待添加获取用户点赞状态
         UserEntity userEntity = UserEntity.builder()
                 .userId(userPO.getUserId())
@@ -343,11 +344,11 @@ public class MemberRepository implements IMemberRepository {
                 .currentStatus(userPO.getCurrentStatus())
                 .entryTime(userPO.getEntryTime())
                 .likeCount(userPO.getLikeCount())
-                .liked(likeMapper.queryLikedById(userId, memberId)==1)
+                .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, memberId)).map(i -> i == 1).orElse(false))
                 .positions(positionNames)
                 .build();
 
-        redisService.setValue(buildUserInfoKey(userId),userEntity);
+        redisService.setValue(buildUserInfoKey(memberId),userEntity);
         return userEntity;
     }
 

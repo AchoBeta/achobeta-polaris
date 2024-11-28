@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.achobeta.types.enums.GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST;
 
@@ -157,7 +158,7 @@ public class UserRepository implements com.achobeta.domain.user.adapter.reposito
                 .currentStatus(userPO.getCurrentStatus())
                 .entryTime(userPO.getEntryTime())
                 .likeCount(userPO.getLikeCount())
-                .liked(likeMapper.queryLikedById(userId,userId)==1)
+                .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, userId)).map(i -> i == 1).orElse(false))
                 .positions(positionNames)
                 .build();
 
