@@ -74,11 +74,11 @@ public class AddMemberRequestDTO implements Serializable {
     private String currentStatus;
 
     @FieldDesc(name ="添加的职位/分组")
-    private List<String> positions;
+    private List<List<String>> positions;
 
     @FieldDesc(name = "赋予的角色id")
     private List<String> roles;
 
-    @FieldDesc(name = "所属团队")
-    private List<String> teams;
+    @FieldDesc(name = "所属团队名称列表")
+    private List<String> teamNames;
 }

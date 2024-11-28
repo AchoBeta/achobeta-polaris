@@ -106,7 +106,7 @@ public class TeamController implements ITeamService {
             userEntity = memberService.addMember(userEntity,
                     requestDTO.getUserId(),
                     requestDTO.getTeamId(),
-                    requestDTO.getAddPositions());
+                    requestDTO.getPositions());
             Integer statusCode = userEntity.getLikeCount() == null ? 0 : 1;
 
             log.info("访问添加团队成员接口结束userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
