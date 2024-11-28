@@ -10,7 +10,6 @@ import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
 import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.RedisKey;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import jodd.util.StringUtil;
@@ -22,6 +21,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.achobeta.types.support.util.buildKeyUtil.buildUserInfoKey;
 
 /**
  * @author yangzhiyao
@@ -268,14 +269,14 @@ public class MemberRepository implements IMemberRepository {
                 .updateBy(userEntity.getUserId())
                 .build());
 
-        redisService.remove(RedisKey.USER_INFO + userId);
+        redisService.remove(buildUserInfoKey(userId));
         return userEntity;
     }
 
     @Override
     public UserEntity queryMemberInfo(String userId) {
         log.info("尝试从redis中获取用户信息，userId: {}",userId);
-        UserEntity userBaseInfo = redisService.getValue(RedisKey.USER_INFO + userId);
+        UserEntity userBaseInfo = redisService.getValue(buildUserInfoKey(userId));
         if(userBaseInfo!= null) {
             return userBaseInfo;
         }
@@ -344,7 +345,7 @@ public class MemberRepository implements IMemberRepository {
                 .build();
 
         log.info("将用户信息缓存到redis，userId: {}",userId);
-        redisService.setValue(RedisKey.USER_INFO + userId,userEntity);
+        redisService.setValue(buildUserInfoKey(userId),userEntity);
         log.info("将用户信息缓存到redis成功，userId: {}",userId);
         return userEntity;
     }
@@ -358,7 +359,7 @@ public class MemberRepository implements IMemberRepository {
         for (UserPO userPO : userPOList) {
             String userId = userPO.getUserId();
             // 从redis中获取用户信息
-            UserEntity userEntity = redisService.getValue(RedisKey.USER_INFO + userId);
+            UserEntity userEntity = redisService.getValue(buildUserInfoKey(userId));
             if (userEntity!= null) {
                 userEntity = convertToMemberListPositionNames(userEntity);
                 members.add(userEntity);
@@ -418,7 +419,7 @@ public class MemberRepository implements IMemberRepository {
                     .positions(positionNames)
                     .build();
             // 存入redis
-            redisService.setValue(RedisKey.USER_INFO + userId, userEntity);
+            redisService.setValue(buildUserInfoKey(userId), userEntity);
 
             // 转换positionNames格式，便于前端选择显示
             userEntity = convertToMemberListPositionNames(userEntity);
