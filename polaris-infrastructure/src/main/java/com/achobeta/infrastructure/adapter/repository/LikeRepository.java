@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @author huangwenxing
@@ -27,7 +28,7 @@ public class LikeRepository implements ILikeRepository {
     /**键过期时间500ms*/
     private long expired = 500;
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void like(String fromId, String toId, boolean liked) {
         /**更新点赞状态*/
         Integer row = mapper.updateLiked(fromId, toId, liked);
@@ -53,11 +54,12 @@ public class LikeRepository implements ILikeRepository {
 
     @Override
     public boolean queryLikedById(String fromId, String toId) {
-        Integer liked = mapper.queryLikedById(fromId, toId);
-        if(liked==null){
-            return false;
-        }
-        return liked == 1;
+//        Integer liked = mapper.queryLikedById(fromId, toId);
+//        if(liked==null){
+//            return false;
+//        }
+//        return liked == 1;
+        return Optional.ofNullable(mapper.queryLikedById(fromId, toId)).map(i -> i == 1).orElse(false);
     }
 
     @Override
