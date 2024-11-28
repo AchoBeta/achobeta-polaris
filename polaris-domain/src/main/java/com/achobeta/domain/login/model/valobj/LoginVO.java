@@ -1,6 +1,6 @@
 package com.achobeta.domain.login.model.valobj;
 
-import com.achobeta.domain.team.model.entity.PositionEntity;
+import com.achobeta.domain.team.model.entity.TeamEntity;
 import lombok.*;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class LoginVO {
     /**
      * 用户的团队信息
      */
-    private List<PositionEntity> positionList;
+    private List<TeamEntity> teams;
 
     /**
      * 用户手机号
