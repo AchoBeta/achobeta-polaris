@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.domain.user.model.entity.UserEntity;
+import com.achobeta.infrastructure.dao.LikeMapper;
 import com.achobeta.infrastructure.dao.PositionMapper;
 import com.achobeta.infrastructure.dao.RoleMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
@@ -41,6 +42,9 @@ public class MemberRepository implements IMemberRepository {
 
     @Resource
     private RoleMapper roleMapper;
+
+    @Resource
+    private LikeMapper likeMapper;
 
     @Resource
     private IRedisService redisService;
@@ -281,7 +285,6 @@ public class MemberRepository implements IMemberRepository {
             return userBaseInfo;
         }
 
-        log.info("从数据库中查询用户信息，userId: {}",userId);
         UserPO userPO = userMapper.getUserByUserId(userId);
         if(userPO == null) {
             log.error("用户不存在！userId：{}",userId);
@@ -340,13 +343,11 @@ public class MemberRepository implements IMemberRepository {
                 .currentStatus(userPO.getCurrentStatus())
                 .entryTime(userPO.getEntryTime())
                 .likeCount(userPO.getLikeCount())
-                .liked(false)
+                .liked(likeMapper.queryLikedById(userId, memberId)==1)
                 .positions(positionNames)
                 .build();
 
-        log.info("将用户信息缓存到redis，userId: {}",userId);
         redisService.setValue(buildUserInfoKey(userId),userEntity);
-        log.info("将用户信息缓存到redis成功，userId: {}",userId);
         return userEntity;
     }
 

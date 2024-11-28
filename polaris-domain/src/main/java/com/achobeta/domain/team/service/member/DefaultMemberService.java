@@ -111,24 +111,24 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     }
 
     @Override
-    public UserEntity queryMemberInfo(String memberId) {
+    public UserEntity queryMemberInfo(String userId, String memberId) {
         PostContext<TeamBO> postContext = buildPostContext(memberId);
         postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
                     public PostContext<TeamBO> doMainProcessor(PostContext<TeamBO> postContext) {
-                        TeamBO userBO = postContext.getBizData();
+                        TeamBO teamBO = postContext.getBizData();
                         log.info("开始查询团队成员信息，userId:{}，memberId:{}, teamId:{}",
-                                userBO.getUserId(),
-                                userBO.getUserEntity().getUserId(),
-                                userBO.getTeamId());
+                                teamBO.getUserId(),
+                                teamBO.getUserEntity().getUserId(),
+                                teamBO.getTeamId());
 
-                        UserEntity userEntity = memberRepository.queryMemberInfo(userBO.getUserEntity().getUserId());
+                        UserEntity userEntity = memberRepository.queryMemberInfo(teamBO.getUserId(), teamBO.getUserEntity().getUserId());
 
                         log.info("查询团队成员信息成功，userId:{}，memberId:{}, teamId:{}",
-                                userBO.getUserId(),
-                                userBO.getUserEntity().getUserId(),
-                                userBO.getTeamId());
+                                teamBO.getUserId(),
+                                teamBO.getUserEntity().getUserId(),
+                                teamBO.getTeamId());
                         postContext.setBizData(TeamBO.builder().userEntity(userEntity).build());
                         return postContext;
                     }
