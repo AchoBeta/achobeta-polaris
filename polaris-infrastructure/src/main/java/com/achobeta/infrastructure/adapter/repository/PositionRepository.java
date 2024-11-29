@@ -4,15 +4,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IPositionRepository;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.PositionMapper;
-import com.achobeta.infrastructure.dao.po.PositionPO;
-import com.achobeta.infrastructure.redis.RedissonService;
-import com.achobeta.types.common.Constants;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
-
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.redis.IRedisService;
@@ -155,6 +146,20 @@ public class PositionRepository implements IPositionRepository {
                    .build());
         }
         return positionEntityList;
+    }
+
+    @Override
+    public PositionEntity queryPositionById(String positionId) {
+        PositionPO positionPO = positionMapper.getPositionByPositionId(positionId);
+        if (positionPO == null) {
+            return null;
+        }
+        return PositionEntity.builder()
+               .positionId(positionPO.getPositionId())
+               .positionName(positionPO.getPositionName())
+               .level(positionPO.getLevel())
+               .teamId(positionPO.getTeamId())
+               .build();
     }
 
 }

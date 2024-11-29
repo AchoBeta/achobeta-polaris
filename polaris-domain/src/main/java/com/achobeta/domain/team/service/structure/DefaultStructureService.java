@@ -181,7 +181,7 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         }
 
                         // 查询团队组织架构
-                        positionEntity.setPositionId(teamId);
+                        positionEntity = repository.queryPositionById(teamId);
                         Queue<PositionEntity> queue = new LinkedList<>();
                         queue.add(positionEntity);
                         while(!queue.isEmpty()) {
