@@ -35,4 +35,11 @@ public interface RoleMapper {
      * @return
      */
     List<RolePO> listRoleByTeamId(String teamId);
+
+    /**
+     * 根据角色名称获取角色的id列表
+     * @param roleNames
+     * @return
+     */
+    List<String> listRoleIdsByNames(List<String> roleNames);
 }

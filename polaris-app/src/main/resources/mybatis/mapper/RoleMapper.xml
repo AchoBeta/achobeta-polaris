@@ -42,4 +42,13 @@
         where team_id = #{teamId} and is_deleted = 0
     </select>
 
+    <select id="listRoleIdsByNames" resultType="java.lang.String">
+        select role_id
+        from role
+        where role_name in
+        <foreach collection="roleNames" item="roleName" separator="," open="(" close=")">
+            #{roleName}
+        </foreach>
+    </select>
+
 </mapper>
