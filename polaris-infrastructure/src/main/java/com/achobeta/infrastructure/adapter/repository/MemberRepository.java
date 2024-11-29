@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -189,9 +190,10 @@ public class MemberRepository implements IMemberRepository {
     }
 
     @Override
-    public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<List<String>> originAddPositions, List<List<String>> originDeletePositions) {
+    public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<List<String>> originAddPositions, List<List<String>> originDeletePositions, String operatorId) {
         String userId = userEntity.getUserId();
         List<String> teams = (List<String>) userEntity.getTeams();
+
         // 这里保证用户存在，不能查缓存的得直接查数据库的
         UserPO userPO = userMapper.getUserByUserId(userId);
         if (userPO == null) {
@@ -257,10 +259,12 @@ public class MemberRepository implements IMemberRepository {
         userMapper.addMemberTeam(userId, teamIds);
 
         // 修改用户角色，全删再添加
-        roleMapper.deleteUserRoles(userId);
-        List<String> roles = userEntity.getRoles();
-        if (!CollectionUtil.isEmpty(roles)) {
-            roleMapper.addUserRoles(userId, userEntity.getRoles());
+        if (!Objects.equals(operatorId, userId)) {
+            roleMapper.deleteUserRoles(userId);
+            List<String> roles = userEntity.getRoles();
+            if (!CollectionUtil.isEmpty(roles)) {
+                roleMapper.addUserRoles(userId, userEntity.getRoles());
+            }
         }
 
         userMapper.updateMemberInfo(UserPO.builder()

@@ -37,7 +37,7 @@ public interface IMemberService {
      * @param deletePositions 删除职位
      * @return 修改后的用户实体
      */
-    UserEntity modifyMember(String teamId, UserEntity userEntity, List<List<String>> addPositions, List<List<String>> deletePositions);
+    UserEntity modifyMember(String userId, String teamId, UserEntity userEntity, List<List<String>> addPositions, List<List<String>> deletePositions);
 
     /**
      * 查询成员信息详情

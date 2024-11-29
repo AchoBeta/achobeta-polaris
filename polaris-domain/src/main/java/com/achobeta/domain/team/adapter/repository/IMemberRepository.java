@@ -41,7 +41,7 @@ public interface IMemberRepository {
      * @param teamId
      * @return
      */
-    UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<List<String>> addPositions,List<List<String>> deletePositions);
+    UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<List<String>> addPositions,List<List<String>> deletePositions, String operatorId);
 
     /**
      * 查询团队成员信息详情

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 /**
@@ -86,10 +87,11 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     }
 
     @Override
-    public UserEntity modifyMember(String teamId, UserEntity userEntity, List<List<String>> addPositions, List<List<String>> deletePositions) {
+    public UserEntity modifyMember(String userId, String teamId, UserEntity userEntity, List<List<String>> addPositions, List<List<String>> deletePositions) {
         PostContext<TeamBO> postContext = buildPostContext(teamId, userEntity);
         postContext.addExtraData("addPositions", addPositions);
         postContext.addExtraData("deletePositions", deletePositions);
+        postContext.addExtraData("userId", userId);
         postContext = super.doPostProcessor(postContext, ModifyMemberInfoPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
@@ -99,9 +101,15 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                         UserEntity userEntity = teamBO.getUserEntity();
                         log.info("访问修改团队成员功能，开始处理，teamId: {}, userId: {}",teamId, userEntity.getUserId());
 
+                        // 过滤掉元素不到2个的，即没有同时包含团队和对应职位的
                         memberRepository.modifyMemberInfo(userEntity, teamId,
-                                (List<List<String>>)postContext.getExtraData("addPositions"),
-                                (List<List<String>>)postContext.getExtraData("deletePositions"));
+                                ((List<List<String>>)postContext.getExtraData("addPositions")).stream()
+                                        .filter(list -> list.size() >= 2)
+                                        .collect(Collectors.toList()),
+                                ((List<List<String>>)postContext.getExtraData("deletePositions")).stream()
+                                        .filter(list -> list.size() >= 2)
+                                        .collect(Collectors.toList()),
+                                (String)postContext.getExtraData("userId"));
 
                         log.info("访问修改团队成员功能，处理结束，teamId: {}, userId: {}",teamId, userEntity.getUserId());
                         return postContext;

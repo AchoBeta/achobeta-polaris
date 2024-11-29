@@ -142,7 +142,7 @@ public class TeamController implements ITeamService {
             String memberId = requestDTO.getMemberId();
             log.info("用户访问修改团队成员信息接口，userId：{}, memberId：{}, teamId:{}", requestDTO.getUserId(), memberId, teamId);
 
-            memberService.modifyMember(teamId, UserEntity.builder()
+            memberService.modifyMember(requestDTO.getUserId(), teamId, UserEntity.builder()
                     .phone(requestDTO.getPhone())
                     .entryTime(requestDTO.getEntryTime())
                     .userId(memberId)
