@@ -8,10 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -51,7 +48,7 @@ public class ModifyMemberInfoRequestDTO implements Serializable {
     @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    @Past(message = "加入时间必须是过去时间")
+    @PastOrPresent(message = "加入时间必须是过去时间或现在")
     @FieldDesc(name = "加入时间")
     private LocalDate entryTime;
 
