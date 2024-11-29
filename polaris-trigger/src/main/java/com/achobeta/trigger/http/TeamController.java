@@ -137,28 +137,40 @@ public class TeamController implements ITeamService {
     @PutMapping("member/detail")
     @AuthVerify("MEMBER:MEMBER_MODIFY")
     public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequestDTO requestDTO) {
-        String teamId = requestDTO.getTeamId();
-        String memberId = requestDTO.getMemberId();
-        log.info("用户访问修改团队成员信息接口，userId：{}, memberId：{}, teamId:{}", requestDTO.getUserId(), memberId, teamId);
+        try {
+            String teamId = requestDTO.getTeamId();
+            String memberId = requestDTO.getMemberId();
+            log.info("用户访问修改团队成员信息接口，userId：{}, memberId：{}, teamId:{}", requestDTO.getUserId(), memberId, teamId);
 
-        memberService.modifyMember(teamId, UserEntity.builder()
-                        .phone(requestDTO.getPhone())
-                        .entryTime(requestDTO.getEntryTime())
-                        .userId(memberId)
-                        .userName(requestDTO.getUserName())
-                        .gender(requestDTO.getGender())
-                        .idCard(requestDTO.getIdCard())
-                        .email(requestDTO.getEmail())
-                        .grade(requestDTO.getGrade())
-                        .major(requestDTO.getMajor())
-                        .studentId(requestDTO.getStudentId())
-                        .experience(requestDTO.getExperience())
-                        .currentStatus(requestDTO.getCurrentStatus())
-                        .roles(requestDTO.getRoles())
-                        .teams(requestDTO.getTeamNames())
-                        .build(), requestDTO.getAddPositions(), requestDTO.getDeletePositions());
+            memberService.modifyMember(teamId, UserEntity.builder()
+                    .phone(requestDTO.getPhone())
+                    .entryTime(requestDTO.getEntryTime())
+                    .userId(memberId)
+                    .userName(requestDTO.getUserName())
+                    .gender(requestDTO.getGender())
+                    .idCard(requestDTO.getIdCard())
+                    .email(requestDTO.getEmail())
+                    .grade(requestDTO.getGrade())
+                    .major(requestDTO.getMajor())
+                    .studentId(requestDTO.getStudentId())
+                    .experience(requestDTO.getExperience())
+                    .currentStatus(requestDTO.getCurrentStatus())
+                    .roles(requestDTO.getRoles())
+                    .teams(requestDTO.getTeamNames())
+                    .build(), requestDTO.getAddPositions(), requestDTO.getDeletePositions());
 
-        return Response.SYSTEM_SUCCESS(ModifyMemberInfoResponseDTO.builder().userInfo(requestDTO).build());
+            return Response.SYSTEM_SUCCESS(ModifyMemberInfoResponseDTO.builder().userInfo(requestDTO).build());
+        } catch (AppException e) {
+            log.error("用户访问修改团队成员信息接口失败！{}", requestDTO, e);
+            return Response.<ModifyMemberInfoResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+        } catch (Exception e) {
+            log.error("用户访问修改团队成员信息接口失败！{}", requestDTO, e);
+            return Response.SERVICE_ERROR();
+        }
     }
   
     /**
