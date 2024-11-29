@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.LikeMapper;
 import com.achobeta.infrastructure.dao.PositionMapper;
+import com.achobeta.infrastructure.dao.RoleMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
@@ -37,6 +38,9 @@ public class UserRepository implements com.achobeta.domain.user.adapter.reposito
 
     @Resource
     private LikeMapper likeMapper;
+
+    @Resource
+    private RoleMapper roleMapper;
 
     @Resource
     private IRedisService redisService;
@@ -160,6 +164,7 @@ public class UserRepository implements com.achobeta.domain.user.adapter.reposito
                 .likeCount(userPO.getLikeCount())
                 .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, userId)).map(i -> i == 1).orElse(false))
                 .positions(positionNames)
+                .roles(roleMapper.listRoleNamesByUserId(userId))
                 .build();
 
         log.info("将用户信息缓存到redis，userId: {}",userId);

@@ -65,4 +65,7 @@ public class QueryUserInfoResponseDTO implements Serializable {
 
     @FieldDesc(name = "用户职位信息")
     private List<List<String>> positions;
+
+    @FieldDesc(name = "用户角色信息")
+    private List<String> roles;
 }

@@ -193,7 +193,7 @@ public class MemberRepository implements IMemberRepository {
         log.info("从数据库中查询用户信息成功，userId: {}",userId);
         // TODO:待添加获取用户点赞状态
         UserEntity userEntity = UserEntity.builder()
-                .userId(userPO.getUserId())
+                .userId(userId)
                 .userName(userPO.getUserName())
                 .phone(userPO.getPhone())
                 .gender(userPO.getGender())
@@ -206,8 +206,9 @@ public class MemberRepository implements IMemberRepository {
                 .currentStatus(userPO.getCurrentStatus())
                 .entryTime(userPO.getEntryTime())
                 .likeCount(userPO.getLikeCount())
-                .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, userPO.getUserId())).map(i -> i == 1).orElse(false))
+                .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, userId)).map(i -> i == 1).orElse(false))
                 .positions(positionNames)
+                .roles(roleMapper.listRoleNamesByUserId(userId))
                 .build();
 
         return userEntity;
@@ -385,6 +386,7 @@ public class MemberRepository implements IMemberRepository {
                 .likeCount(userPO.getLikeCount())
                 .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, memberId)).map(i -> i == 1).orElse(false))
                 .positions(positionNames)
+                .roles(roleMapper.listRoleNamesByUserId(memberId))
                 .build();
 
         redisService.setValue(buildUserInfoKey(memberId),userEntity);
@@ -458,6 +460,7 @@ public class MemberRepository implements IMemberRepository {
                     .likeCount(userPO.getLikeCount())
                     .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, userPO.getUserId())).map(i -> i == 1).orElse(false))
                     .positions(positionNames)
+                    .roles(roleMapper.listRoleNamesByUserId(userId))
                     .build();
             // 存入redis
             redisService.setValue(buildUserInfoKey(userId), userEntity);

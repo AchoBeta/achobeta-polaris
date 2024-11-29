@@ -112,6 +112,7 @@ public class UserController implements IUserService {
                     .likeCount(userEntity.getLikeCount())
                     .liked(userEntity.getLiked())
                     .positions(userEntity.getPositions())
+                    .roles(userEntity.getRoles())
                     .build());
         } catch (AppException e) {
             log.error("用户访问个人中心信息页面系统失败！userId:{}",

@@ -91,7 +91,7 @@ public class UserEntity {
      */
     private List<String> positionList;
 
-    @FieldDesc(name = "赋予的角色id")
+    @FieldDesc(name = "赋予的角色")
     private List<String> roles;
 
     @FieldDesc(name = "所属团队")

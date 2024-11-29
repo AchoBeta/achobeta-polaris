@@ -204,6 +204,7 @@ public class TeamController implements ITeamService {
                     .likeCount(userEntity.getLikeCount())
                     .liked(userEntity.getLiked())
                     .positions(userEntity.getPositions())
+                    .roles(userEntity.getRoles())
                     .build());
         } catch (AppException e) {
             log.error("用户访问团队成员信息详情服务失败！{}", requestDTO, e);
