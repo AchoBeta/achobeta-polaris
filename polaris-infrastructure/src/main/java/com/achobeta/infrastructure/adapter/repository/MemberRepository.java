@@ -113,9 +113,12 @@ public class MemberRepository implements IMemberRepository {
         List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
         // 修改用户所属团队，先全部删掉，再添加
         userMapper.deleteMemberTeam(userId);
-        userMapper.addMemberTeam(userId, teamIds);
-
-        roleMapper.addUserRoles(userId, userEntity.getRoles());
+        if (!CollectionUtil.isEmpty(teamIds)) {
+            userMapper.addMemberTeam(userId, teamIds);
+        }
+        if (CollectionUtil.isEmpty(userEntity.getRoles())) {
+            roleMapper.addUserRoles(userId, userEntity.getRoles());
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -255,7 +258,10 @@ public class MemberRepository implements IMemberRepository {
 
         // 修改用户角色，全删再添加
         roleMapper.deleteUserRoles(userId);
-        roleMapper.addUserRoles(userId, userEntity.getRoles());
+        List<String> roles = userEntity.getRoles();
+        if (!CollectionUtil.isEmpty(roles)) {
+            roleMapper.addUserRoles(userId, userEntity.getRoles());
+        }
 
         userMapper.updateMemberInfo(UserPO.builder()
                 .userId(userId)

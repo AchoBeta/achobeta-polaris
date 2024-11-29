@@ -165,6 +165,7 @@
             #{teamName}
         </foreach>
                 and is_deleted = 0
+        group by position_id
     </select>
 
 </mapper>

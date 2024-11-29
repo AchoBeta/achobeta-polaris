@@ -19,11 +19,9 @@
     </insert>
 
     <update id="deleteUserRoles">
-        update user_role set deleted = 1 where user_id = #{userId} and role_id in
-        <foreach collection="roles" item="role" separator=",">
-            #{role}
-        </foreach>
-        and is_deleted = 0
+        update user_role set is_deleted = 1
+        where user_id = #{userId}
+                and is_deleted = 0
     </update>
 
     <select id="listRole" resultMap="roleResultMap">
