@@ -58,7 +58,7 @@ public class AuthVerifyAspect {
         List<String> userPermissions = authRepository.queryPermissions(userId, userRoleIds, teamId);
         // 对未选择团队相关进行特判
         if ("0000".equals(teamId)) {
-            if (!"queryMemberList".equals(signature.getName())) {
+            if (!("queryMemberList".equals(signature.getName()) || "queryRoles".equals(signature.getName()))) {
                 return Response.CUSTOMIZE_ERROR(TEAM_INVALID_OPERATION);
             } else if (userPermissions.contains("SUPER")) {
                 return Response.CUSTOMIZE_ERROR(USER_NO_PERMISSION);
