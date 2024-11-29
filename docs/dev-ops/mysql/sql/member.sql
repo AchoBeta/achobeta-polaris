@@ -25,3 +25,40 @@ CREATE TABLE IF NOT EXISTS `member` (
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '团队成员表';
 -- 团队成员id索引
 CREATE INDEX idx_member_user_id ON `member` ( user_id );
+
+
+insert into member (user_id,team_id) values ('1001','0000');
+insert into member (user_id,team_id) values ('1001','0001');
+insert into member (user_id,team_id) values ('1001','0002');
+
+insert into member (user_id,team_id) values ('1002','0001');
+insert into member (user_id,team_id) values ('1003','0001');
+insert into member (user_id,team_id) values ('1004','0001');
+insert into member (user_id,team_id) values ('1005','0001');
+insert into member (user_id,team_id) values ('1006','0001');
+insert into member (user_id,team_id) values ('1007','0001');
+insert into member (user_id,team_id) values ('1008','0001');
+insert into member (user_id,team_id) values ('1009','0001');
+insert into member (user_id,team_id) values ('1010','0001');
+insert into member (user_id,team_id) values ('1011','0001');
+insert into member (user_id,team_id) values ('1012','0001');
+insert into member (user_id,team_id) values ('1013','0001');
+insert into member (user_id,team_id) values ('1014','0001');
+insert into member (user_id,team_id) values ('1015','0001');
+insert into member (user_id,team_id) values ('1016','0001');
+insert into member (user_id,team_id) values ('1017','0001');
+insert into member (user_id,team_id) values ('1018','0001');
+insert into member (user_id,team_id) values ('1019','0001');
+insert into member (user_id,team_id) values ('1020','0001');
+
+insert into member (user_id,team_id) values ('1002','0002');
+insert into member (user_id,team_id) values ('1003','0002');
+insert into member (user_id,team_id) values ('1004','0002');
+insert into member (user_id,team_id) values ('1005','0002');
+insert into member (user_id,team_id) values ('1006','0002');
+insert into member (user_id,team_id) values ('1007','0002');
+insert into member (user_id,team_id) values ('1008','0002');
+insert into member (user_id,team_id) values ('1014','0002');
+insert into member (user_id,team_id) values ('1015','0002');
+insert into member (user_id,team_id) values ('1016','0002');
+insert into member (user_id,team_id) values ('1017','0002');

@@ -20,9 +20,8 @@ CREATE TABLE `device` (
   `is_deleted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0-未删除;1-已删除',
   `finger_printing` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '设备指纹',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `device_id` (`device_id`),
-  UNIQUE KEY `uk_device_id` (`device_id`),
-  UNIQUE KEY `uk_finger_printing` (`finger_printing`),
+  KEY `idx_device_id` (`device_id`),
+  KEY `idx_finger_printing` (`finger_printing`),
   KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='设备表';
 

@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 	-- 当前状况描述
 	`current_status` TEXT COMMENT '现状',
 	-- 加入时间
-	`entry_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
+	`entry_time` DATE COMMENT '加入时间',
 	-- 点赞数量
 	`like_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '点赞数量',
 	-- 创建者
@@ -49,3 +49,25 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE UNIQUE INDEX uk_user_user_id ON `user`(user_id);
 -- 手机号唯一索引
 CREATE UNIQUE INDEX uk_user_phone ON `user`(phone);
+
+
+insert into user (user_id,phone,user_name) values ('1001','13708885777','超级管理员');
+insert into user (user_id,phone,user_name) values ('1002','13708885778','AchoBeta1.0管理员');
+insert into user (user_id,phone,user_name) values ('1003','13708885779','AchoBeta2.0管理员');
+insert into user (user_id,phone,user_name) values ('1004','13708885770','牛一');
+insert into user (user_id,phone,user_name) values ('1005','13708885721','妞儿');
+insert into user (user_id,phone,user_name) values ('1006','13708885722','牛三');
+insert into user (user_id,phone,user_name) values ('1007','13708885723','牛四');
+insert into user (user_id,phone,user_name) values ('1008','13708885724','牛五');
+insert into user (user_id,phone,user_name) values ('1009','13708885726','牛八');
+insert into user (user_id,phone,user_name) values ('1010','13708885727','王大春');
+insert into user (user_id,phone,user_name) values ('1011','13708885711','王尼玛');
+insert into user (user_id,phone,user_name) values ('1012','13708885712','李艳');
+insert into user (user_id,phone,user_name) values ('1013','13708885713','张古泉');
+insert into user (user_id,phone,user_name) values ('1014','13708885714','和风');
+insert into user (user_id,phone,user_name) values ('1015','13708885715','唐武');
+insert into user (user_id,phone,user_name) values ('1016','13708885716','小二');
+insert into user (user_id,phone,user_name) values ('1017','13708885717','小李');
+insert into user (user_id,phone,user_name) values ('1018','13708885718','小王');
+insert into user (user_id,phone,user_name) values ('1019','13708885719','八哥');
+insert into user (user_id,phone,user_name) values ('1020','13708885720','卢本伟');

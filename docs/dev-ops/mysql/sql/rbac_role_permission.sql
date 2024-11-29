@@ -94,3 +94,55 @@ CREATE TABLE IF NOT EXISTS `user_permission` (
     -- 软删除标识 0-未删除 1-已删除
     `is_deleted` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '0-未删除;1-已删除'
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '用户-权限';
+
+
+insert into user_role (user_id,role_id) values ('1001','000');
+insert into user_role (user_id,role_id) values ('1002','001');
+insert into user_role (user_id,role_id) values ('1003','002');
+
+insert into role (role_id,role_name) values ('000','超级管理员');
+insert into role (role_id,role_name,team_id) values ('001','AchoBeta1.0管理员','0001');
+insert into role (role_id,role_name,team_id) values ('002','AchoBeta2.0管理员','0002');
+
+insert into permission (permission_id,permission_name) values ('2001','SUPER');
+insert into permission (permission_id,permission_name) values ('2002','MEMBER');
+insert into permission (permission_id,permission_name) values ('2003','STRUCTURE');
+insert into permission (permission_id,permission_name) values ('2004','USER');
+insert into permission (permission_id,permission_name) values ('2005','MEMBER_MODIFY');
+insert into permission (permission_id,permission_name) values ('2006','MEMBER_ADD');
+insert into permission (permission_id,permission_name) values ('2007','MEMBER_DELETE');
+insert into permission (permission_id,permission_name) values ('2008','STRUCTURE_MODIFY');
+insert into permission (permission_id,permission_name) values ('2009','TEAM_ADD');
+insert into permission (permission_id,permission_name) values ('2010','TEAM_DELETE');
+insert into permission (permission_id,permission_name) values ('2011','MEMBER_LIST');
+insert into permission (permission_id,permission_name) values ('2012','MEMBER_DETAIL');
+insert into permission (permission_id,permission_name) values ('2013','STRUCTURE_VIEW');
+insert into permission (permission_id,permission_name) values ('2014','ROLE_LIST');
+insert into permission (permission_id,permission_name) values ('2015','AUTH');
+
+insert into role_permission (role_id,permission_id) values ('000','2001');
+insert into role_permission (role_id,permission_id) values ('000','2002');
+insert into role_permission (role_id,permission_id) values ('000','2003');
+insert into role_permission (role_id,permission_id) values ('000','2004');
+insert into role_permission (role_id,permission_id) values ('000','2005');
+insert into role_permission (role_id,permission_id) values ('000','2006');
+insert into role_permission (role_id,permission_id) values ('000','2007');
+insert into role_permission (role_id,permission_id) values ('000','2008');
+insert into role_permission (role_id,permission_id) values ('000','2009');
+insert into role_permission (role_id,permission_id) values ('000','2010');
+insert into role_permission (role_id,permission_id) values ('000','2011');
+insert into role_permission (role_id,permission_id) values ('000','2012');
+insert into role_permission (role_id,permission_id) values ('000','2013');
+insert into role_permission (role_id,permission_id) values ('000','2014');
+insert into role_permission (role_id,permission_id) values ('000','2015');
+
+insert into role_permission (role_id,permission_id) values ('001','2002');
+insert into role_permission (role_id,permission_id) values ('001','2003');
+insert into role_permission (role_id,permission_id) values ('001','2005');
+insert into role_permission (role_id,permission_id) values ('001','2006');
+insert into role_permission (role_id,permission_id) values ('001','2007');
+insert into role_permission (role_id,permission_id) values ('001','2008');
+insert into role_permission (role_id,permission_id) values ('001','2011');
+insert into role_permission (role_id,permission_id) values ('001','2012');
+insert into role_permission (role_id,permission_id) values ('001','2013');
+insert into role_permission (role_id,permission_id) values ('001','2014');
