@@ -101,9 +101,18 @@ public class MemberRepository implements IMemberRepository {
             List<List<String>> positionNames = positions.stream()
                     .filter(list -> list.size() >= 2)
                     .collect(Collectors.toList());
+            // 如果在团队下有职位，就不用单独加团队的
+            List<String> positionInTeamNames = positionNames.stream()
+                    .map(list -> list.get(0))
+                    .collect(Collectors.toList());
             for (List<String> position : positionOnlyTeamNames) {
-                position.add(position.get(0));
-                positionNames.add(position);
+                if (positionInTeamNames.contains(position.get(0))) {
+                    continue;
+                }
+                List<String> temp = new ArrayList<>();
+                temp.add(position.get(0));
+                temp.add(position.get(0));
+                positionNames.add(temp);
             }
 
             // 添加职位
@@ -130,9 +139,10 @@ public class MemberRepository implements IMemberRepository {
         }
 
         // 修改用户角色
-        List<String> roles = userEntity.getRoles();
-        if (!CollectionUtil.isEmpty(roles)) {
-            roleMapper.addUserRoles(userId, userEntity.getRoles());
+        List<String> roleNames = userEntity.getRoles();
+        if (!CollectionUtil.isEmpty(roleNames)) {
+            List<String> roleIds = roleMapper.listRoleIdsByNames(roleNames);
+            roleMapper.addUserRoles(userId, roleIds);
         }
     }
 
@@ -239,9 +249,18 @@ public class MemberRepository implements IMemberRepository {
             List<List<String>> positionNames = positions.stream()
                     .filter(list -> list.size() >= 2)
                     .collect(Collectors.toList());
+            // 如果在团队下有职位，就不用单独加团队的
+            List<String> positionInTeamNames = positionNames.stream()
+                    .map(list -> list.get(0))
+                    .collect(Collectors.toList());
             for (List<String> position : positionOnlyTeamNames) {
-                position.add(position.get(0));
-                positionNames.add(position);
+                if (positionInTeamNames.contains(position.get(0))) {
+                    continue;
+                }
+                List<String> temp = new ArrayList<>();
+                temp.add(position.get(0));
+                temp.add(position.get(0));
+                positionNames.add(temp);
             }
 
             // 添加职位
@@ -270,9 +289,10 @@ public class MemberRepository implements IMemberRepository {
         // 修改用户角色，全删再添加
         if (!Objects.equals(operatorId, userId)) {
             roleMapper.deleteUserRoles(userId);
-            List<String> roles = userEntity.getRoles();
-            if (!CollectionUtil.isEmpty(roles)) {
-                roleMapper.addUserRoles(userId, userEntity.getRoles());
+            List<String> roleNames = userEntity.getRoles();
+            if (!CollectionUtil.isEmpty(roleNames)) {
+                List<String> roleIds = roleMapper.listRoleIdsByNames(roleNames);
+                roleMapper.addUserRoles(userId, roleIds);
             }
         }
 

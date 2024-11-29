@@ -1,5 +1,6 @@
 package com.achobeta.domain.team.service.member;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.service.IMemberService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 /**
@@ -78,6 +80,9 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                             return postContext;
                         }
 
+                        // 去重
+                        userEntity.setPositionList(userEntity.getPositionList().stream()
+                               .distinct().collect(Collectors.toList()));
                         userEntity.setUserId(UUID.randomUUID().toString());
                         memberRepository.addMember(userEntity, (String)postContext.getExtraData("userId"));
                       return postContext;
@@ -97,8 +102,14 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                         TeamBO teamBO = postContext.getBizData();
                         String teamId = teamBO.getTeamId();
                         UserEntity userEntity = teamBO.getUserEntity();
+                        List<String> positions = userEntity.getPositionList();
                         log.info("访问修改团队成员功能，开始处理，teamId: {}, userId: {}",teamId, userEntity.getUserId());
 
+                        // 去重
+                        if (!CollectionUtil.isEmpty(positions)) {
+                            userEntity.setPositionList(userEntity.getPositionList().stream()
+                                    .distinct().collect(Collectors.toList()));
+                        }
                         memberRepository.modifyMemberInfo(userEntity, teamId, (String)postContext.getExtraData("userId"));
 
                         log.info("访问修改团队成员功能，处理结束，teamId: {}, userId: {}",teamId, userEntity.getUserId());
