@@ -64,6 +64,10 @@ public class SelfPermissionVerificationAspect {
 
         // 获取用户ID
         Object arg = joinPoint.getArgs()[0];
+        // 校验参数是否为空
+        if(arg == null){
+            throw new AppException(String.valueOf(GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getCode()), GlobalServiceStatusCode.LOGIN_UNKNOWN_ERROR.getMessage());
+        }
         String targetUserId = (String) arg.getClass().getMethod("getUserId").invoke(arg);
 
         // 校验用户ID是否相同
