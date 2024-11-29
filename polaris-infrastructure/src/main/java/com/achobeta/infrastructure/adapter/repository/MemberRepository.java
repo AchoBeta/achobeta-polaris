@@ -76,62 +76,56 @@ public class MemberRepository implements IMemberRepository {
                 .entryTime(userEntity.getEntryTime())
                 .build());
 
-        // 过滤掉不符合格式的职位
-        List<List<String>> positions = userEntity.getPositionList().stream()
-                .map(s -> Arrays.asList(s.split("-")))
-                .collect(Collectors.toList());
-        // 这里保证用户存在，不能查缓存的得直接查数据库的
-        UserPO userPO = userMapper.getUserByUserId(userId);
-        if (userPO == null) {
-            log.error("用户不存在！userId：{}",userId);
-            throw new AppException(String.valueOf(GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getCode()),
-                    GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
-        }
+        if (!CollectionUtil.isEmpty(userEntity.getPositionList())) {
+            // 转换格式
+            List<List<String>> positions = userEntity.getPositionList().stream()
+                    .map(s -> Arrays.asList(s.split("-")))
+                    .collect(Collectors.toList());
 
-        // 取到团队名称团队id
-        List<String> teamNames = positions.stream()
-                .map(list -> list.get(0))
-                .collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(teamNames)) {
-            teamNames.add("未选择团队");
-        }
-        List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
-        // 修改用户所属团队，先全部删掉，再添加
-        userMapper.deleteMemberTeam(userId);
-        userMapper.addMemberTeam(userId, teamIds);
-
-        positionMapper.deletePositionByUserId(userId);
-        // 只到团队的也要加
-        List<List<String>> positionOnlyTeamNames = positions.stream()
-                .filter(list -> list.size() == 1)
-                .collect(Collectors.toList());
-        List<List<String>> positionNames = positions.stream()
-                .filter(list -> list.size() >= 2)
-                .collect(Collectors.toList());
-        for (List<String> position : positionOnlyTeamNames) {
-            position.add(position.get(0));
-            positionNames.add(position);
-        }
-
-        // 添加职位
-        List<PositionEntity> addPositions = new ArrayList<>();
-        if (!CollectionUtil.isEmpty(positions)) {
-            // 拿到每个职位的团队名称
-            List<String> deletePositionTeamNames = positions.stream()
+            // 取到团队名称团队id
+            List<String> teamNames = positions.stream()
                     .map(list -> list.get(0))
                     .collect(Collectors.toList());
-            List<String> deletePositionNames = positions.stream()
-                    .map(list -> list.get(list.size() - 1))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < deletePositionNames.size(); i++) {
-                addPositions.add(PositionEntity.builder()
-                        .positionName(deletePositionNames.get(i))
-                        .teamName(deletePositionTeamNames.get(i))
-                        .build());
+            if (CollectionUtil.isEmpty(teamNames)) {
+                teamNames.add("未选择团队");
             }
-            addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
-            if (!CollectionUtil.isEmpty(addPositions)){
-                positionMapper.addPositionToUser(addPositions, userId);
+            List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
+            // 给用户添加团队
+            userMapper.addMemberTeam(userId, teamIds);
+
+            // 添加职位
+            // 只到团队的也要加
+            List<List<String>> positionOnlyTeamNames = positions.stream()
+                    .filter(list -> list.size() == 1)
+                    .collect(Collectors.toList());
+            List<List<String>> positionNames = positions.stream()
+                    .filter(list -> list.size() >= 2)
+                    .collect(Collectors.toList());
+            for (List<String> position : positionOnlyTeamNames) {
+                position.add(position.get(0));
+                positionNames.add(position);
+            }
+
+            // 添加职位
+            List<PositionEntity> addPositions = new ArrayList<>();
+            if (!CollectionUtil.isEmpty(positionNames)) {
+                // 拿到每个职位的团队名称
+                List<String> addPositionTeamNames = positionNames.stream()
+                        .map(list -> list.get(0))
+                        .collect(Collectors.toList());
+                List<String> addPositionNames = positionNames.stream()
+                        .map(list -> list.get(list.size() - 1))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < addPositionNames.size(); i++) {
+                    addPositions.add(PositionEntity.builder()
+                            .positionName(addPositionNames.get(i))
+                            .teamName(addPositionTeamNames.get(i))
+                            .build());
+                }
+                addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
+                if (!CollectionUtil.isEmpty(addPositions)){
+                    positionMapper.addPositionToUser(addPositions, userId);
+                }
             }
         }
 
@@ -212,11 +206,7 @@ public class MemberRepository implements IMemberRepository {
     @Override
     public UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, String operatorId) {
         String userId = userEntity.getUserId();
-        // 过滤掉不符合格式的职位
-        List<List<String>> positions = userEntity.getPositionList().stream()
-                .map(s -> Arrays.asList(s.split("-")))
-                .collect(Collectors.toList());
-        // 这里保证用户存在，不能查缓存的得直接查数据库的
+        // 这里保证用户存在
         UserPO userPO = userMapper.getUserByUserId(userId);
         if (userPO == null) {
             log.error("用户不存在！userId：{}",userId);
@@ -224,50 +214,56 @@ public class MemberRepository implements IMemberRepository {
                     GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST.getMessage());
         }
 
-        // 取到团队名称团队id
-        List<String> teamNames = positions.stream()
-                .map(list -> list.get(0))
-                .collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(teamNames)) {
-            teamNames.add("未选择团队");
-        }
-        List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
-        // 修改用户所属团队，先全部删掉，再添加
-        userMapper.deleteMemberTeam(userId);
-        userMapper.addMemberTeam(userId, teamIds);
-
-        positionMapper.deletePositionByUserId(userId);
-        // 只到团队的也要加
-        List<List<String>> positionOnlyTeamNames = positions.stream()
-                .filter(list -> list.size() == 1)
-                .collect(Collectors.toList());
-        List<List<String>> positionNames = positions.stream()
-                .filter(list -> list.size() >= 2)
-                .collect(Collectors.toList());
-        for (List<String> position : positionOnlyTeamNames) {
-            position.add(position.get(0));
-            positionNames.add(position);
-        }
-
-        // 添加职位
-        List<PositionEntity> addPositions = new ArrayList<>();
-        if (!CollectionUtil.isEmpty(positions)) {
-            // 拿到每个职位的团队名称
-            List<String> deletePositionTeamNames = positions.stream()
+        if (!CollectionUtil.isEmpty(userEntity.getPositionList())) {
+            // 转换格式
+            List<List<String>> positions = userEntity.getPositionList().stream()
+                    .map(s -> Arrays.asList(s.split("-")))
+                    .collect(Collectors.toList());
+            // 取到团队名称团队id
+            List<String> teamNames = positions.stream()
                     .map(list -> list.get(0))
                     .collect(Collectors.toList());
-            List<String> deletePositionNames = positions.stream()
-                    .map(list -> list.get(list.size() - 1))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < deletePositionNames.size(); i++) {
-                addPositions.add(PositionEntity.builder()
-                        .positionName(deletePositionNames.get(i))
-                        .teamName(deletePositionTeamNames.get(i))
-                        .build());
+            if (CollectionUtil.isEmpty(teamNames)) {
+                teamNames.add("未选择团队");
             }
-            addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
-            if (!CollectionUtil.isEmpty(addPositions)){
-                positionMapper.addPositionToUser(addPositions, userId);
+            List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
+            // 修改用户所属团队，先全部删掉，再添加
+            userMapper.deleteMemberTeam(userId);
+            userMapper.addMemberTeam(userId, teamIds);
+
+            positionMapper.deletePositionByUserId(userId);
+            // 只到团队的也要加
+            List<List<String>> positionOnlyTeamNames = positions.stream()
+                    .filter(list -> list.size() == 1)
+                    .collect(Collectors.toList());
+            List<List<String>> positionNames = positions.stream()
+                    .filter(list -> list.size() >= 2)
+                    .collect(Collectors.toList());
+            for (List<String> position : positionOnlyTeamNames) {
+                position.add(position.get(0));
+                positionNames.add(position);
+            }
+
+            // 添加职位
+            List<PositionEntity> addPositions = new ArrayList<>();
+            if (!CollectionUtil.isEmpty(positionNames)) {
+                // 拿到每个职位的团队名称
+                List<String> addPositionTeamNames = positionNames.stream()
+                        .map(list -> list.get(0))
+                        .collect(Collectors.toList());
+                List<String> addPositionNames = positionNames.stream()
+                        .map(list -> list.get(list.size() - 1))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < addPositionNames.size(); i++) {
+                    addPositions.add(PositionEntity.builder()
+                            .positionName(addPositionNames.get(i))
+                            .teamName(addPositionTeamNames.get(i))
+                            .build());
+                }
+                addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
+                if (!CollectionUtil.isEmpty(addPositions)){
+                    positionMapper.addPositionToUser(addPositions, userId);
+                }
             }
         }
 
