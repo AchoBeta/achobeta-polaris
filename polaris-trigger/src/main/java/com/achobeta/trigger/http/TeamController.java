@@ -11,6 +11,7 @@ import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.types.Response;
 import com.achobeta.types.annotation.AuthVerify;
 import com.achobeta.types.common.Constants;
+import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @DeleteMapping("member")
+    @LoginVerification
     @AuthVerify("MEMBER:MEMBER_DELETE")
     public Response<DeleteMemberResponseDTO> deleteMember(@Valid DeleteMemberRequestDTO requestDTO) {
         try {
@@ -83,6 +85,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @PostMapping("member")
+    @LoginVerification
     @AuthVerify("MEMBER:MEMBER_ADD")
     public Response<AddMemberResponseDTO> addMember(@Valid @RequestBody AddMemberRequestDTO requestDTO) {
         try {
@@ -133,6 +136,7 @@ public class TeamController implements ITeamService {
      */
     @Override
     @PutMapping("member/detail")
+    @LoginVerification
     @AuthVerify("MEMBER:MEMBER_MODIFY")
     public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequestDTO requestDTO) {
         try {
@@ -175,6 +179,7 @@ public class TeamController implements ITeamService {
      * 查看团队成员信息详情接口
      */
     @GetMapping("/member/detail")
+    @LoginVerification
     @Override
     public Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid QueryMemberInfoRequestDTO requestDTO) {
         try {
@@ -220,6 +225,7 @@ public class TeamController implements ITeamService {
      */
     @PutMapping("structure")
     @Override
+    @LoginVerification
     @AuthVerify("STRUCTURE:STRUCTURE_MODIFY")
     public Response<ModifyStructureResponseDTO> modifyStructure(@Valid @RequestBody ModifyStructureRequestDTO modifyStructureRequestDTO) {
         try {
@@ -275,6 +281,7 @@ public class TeamController implements ITeamService {
      * @return
      */
     @Override
+    @LoginVerification
     @GetMapping("/member/list")
     public Response<ResponseMemberListDTO> queryMemberList(@Valid RequestMemberListDTO requestMemberListDTO) {
         try {
@@ -312,6 +319,7 @@ public class TeamController implements ITeamService {
      */
     @GetMapping("structure")
     @Override
+    @LoginVerification
     @AuthVerify("STRUCTURE:STRUCTURE_VIEW")
     public Response<QueryStructureResponseDTO> queryStructure(@Valid QueryStructureRequestDTO querystructureRequestDTO) {
         try {

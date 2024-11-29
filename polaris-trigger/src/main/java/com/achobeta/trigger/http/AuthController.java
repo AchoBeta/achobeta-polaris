@@ -1,10 +1,6 @@
 package com.achobeta.trigger.http;
 
 import com.achobeta.api.dto.AuthRequestDTO;
-import com.achobeta.api.dto.ListRoleRequestDTO;
-import com.achobeta.api.dto.ListRoleResponseDTO;
-import com.achobeta.domain.auth.model.entity.RoleEntity;
-import com.achobeta.domain.auth.service.IRoleService;
 import com.achobeta.types.Response;
 import com.achobeta.types.annotation.AuthVerify;
 import com.achobeta.types.common.Constants;
@@ -42,6 +38,7 @@ public class AuthController {
      * @return
      */
     @GetMapping("test")
+    @LoginVerification
     @AuthVerify("TEAM_DELETE")
     public Response test(@Valid AuthRequestDTO authRequestDTO) {
         log.info("进入鉴权测试接口，参数：{}", authRequestDTO);
