@@ -35,7 +35,7 @@ public class DefaultRoleService extends AbstractFunctionPostProcessor<AuthBO> im
                     @Override
                     public PostContext<AuthBO> doMainProcessor(PostContext<AuthBO> postContext) {
                         String userId = postContext.getBizData().getUserId();
-
+                        log.info("开始查询可以支配赋予他人的团队及角色: {}", userId);
                         List<TeamEntity> teamEntityList = authRepository.queryRoles(userId);
 
                         List<RoleEntity> roleEntityList = new ArrayList<>();

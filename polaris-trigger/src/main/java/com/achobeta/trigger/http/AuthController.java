@@ -57,25 +57,25 @@ public class AuthController {
      * @return 角色列表
      */
     @GetMapping("role")
-    @AuthVerify("AUTH:ROLE_LIST")
+    @AuthVerify("MEMBER_MODIFY:AUTH:ROLE_LIST")
     public Response<ListRoleResponseDTO> queryRoles(@Valid ListRoleRequestDTO listRoleRequestDTO) {
         try {
             String userId = listRoleRequestDTO.getUserId();
-            log.info("用户访问团队成员信息详情服务开始，{}", userId);
+            log.info("用户访问查询可以支配赋予他人的团队及角色服务开始，{}", userId);
 
             List<RoleEntity> roles = roleService.queryRoles(userId);
-            log.info("用户访问团队成员信息详情服务结束，{}", userId);
+            log.info("用户访问查询可以支配赋予他人的团队及角色服务结束，{}", userId);
 
             return Response.SYSTEM_SUCCESS(ListRoleResponseDTO.builder().roles(roles).build());
         } catch (AppException e) {
-            log.error("用户访问团队成员信息详情服务失败！userId: {}", listRoleRequestDTO.getUserId(), e);
+            log.error("用户访问查询可以支配赋予他人的团队及角色服务失败！userId: {}", listRoleRequestDTO.getUserId(), e);
             return Response.<ListRoleResponseDTO>builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Integer.valueOf(e.getCode()))
                     .info(e.getInfo())
                     .build();
         } catch (Exception e) {
-            log.error("用户访问团队成员信息详情服务失败！userId: {}", listRoleRequestDTO.getUserId(), e);
+            log.error("用户访问查询可以支配赋予他人的团队及角色服务失败！userId: {}", listRoleRequestDTO.getUserId(), e);
             return Response.SERVICE_ERROR();
         }
     }
