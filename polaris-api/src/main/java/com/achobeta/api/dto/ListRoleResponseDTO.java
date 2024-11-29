@@ -15,8 +15,8 @@ import lombok.*;
 public class ListRoleResponseDTO {
 
     /**
-     * 实质是一个List<TeamEntity>
-     * 其中TeamEntity有效数据包括teamName, RoleEntity(roleId, roleName)
+     * 实质是一个List<RoleEntity>
+     * RoleEntity(roleId, roleName)
      */
     private Object roles;
 }

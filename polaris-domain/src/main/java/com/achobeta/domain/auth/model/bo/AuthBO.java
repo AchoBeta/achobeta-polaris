@@ -23,6 +23,7 @@ public class AuthBO {
     private String userId;
     private TeamEntity teamEntity;
     private List<TeamEntity> teamEntityList;
+    private List<RoleEntity> roleEntityList;
     private RoleEntity roleEntity;
     private PermissionEntity permissionEntity;
 

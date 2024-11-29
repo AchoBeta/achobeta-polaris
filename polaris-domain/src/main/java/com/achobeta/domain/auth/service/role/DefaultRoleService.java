@@ -2,6 +2,7 @@ package com.achobeta.domain.auth.service.role;
 
 import com.achobeta.domain.auth.adapter.repository.IAuthRepository;
 import com.achobeta.domain.auth.model.bo.AuthBO;
+import com.achobeta.domain.auth.model.entity.RoleEntity;
 import com.achobeta.domain.auth.service.IRoleService;
 import com.achobeta.domain.team.model.entity.TeamEntity;
 import com.achobeta.types.enums.BizModule;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +28,7 @@ public class DefaultRoleService extends AbstractFunctionPostProcessor<AuthBO> im
     private final IAuthRepository authRepository;
 
     @Override
-    public List<TeamEntity> queryRoles(String userId) {
+    public List<RoleEntity> queryRoles(String userId) {
         PostContext<AuthBO> postContext = buildPostContext(userId);
         super.doPostProcessor(postContext, QueryRolesPostProcessor.class,
                 new AbstractPostProcessorOperation<AuthBO>() {
@@ -34,14 +36,19 @@ public class DefaultRoleService extends AbstractFunctionPostProcessor<AuthBO> im
                     public PostContext<AuthBO> doMainProcessor(PostContext<AuthBO> postContext) {
                         String userId = postContext.getBizData().getUserId();
 
-                        List<TeamEntity> roleEntityList = authRepository.queryRoles(userId);
+                        List<TeamEntity> teamEntityList = authRepository.queryRoles(userId);
 
-                        postContext.getBizData().setTeamEntityList(roleEntityList);
+                        List<RoleEntity> roleEntityList = new ArrayList<>();
+                        for (TeamEntity teamEntity : teamEntityList) {
+                            roleEntityList.addAll(teamEntity.getRoles());
+                        }
+                        postContext.getBizData().setRoleEntityList(roleEntityList);
+                        postContext.getBizData().setTeamEntityList(teamEntityList);
 
                         return postContext;
                     }
                 });
-        return postContext.getBizData().getTeamEntityList();
+        return postContext.getBizData().getRoleEntityList();
     }
 
     private static PostContext<AuthBO> buildPostContext(String userId) {

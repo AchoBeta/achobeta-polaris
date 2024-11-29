@@ -1,6 +1,6 @@
 package com.achobeta.domain.auth.service;
 
-import com.achobeta.domain.team.model.entity.TeamEntity;
+import com.achobeta.domain.auth.model.entity.RoleEntity;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface IRoleService {
      * @param userId 用户ID
      * @return 团队及其角色列表
      */
-    public List<TeamEntity> queryRoles(String userId);
+    List<RoleEntity> queryRoles(String userId);
 }

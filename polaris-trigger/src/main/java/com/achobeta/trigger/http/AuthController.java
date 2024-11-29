@@ -3,11 +3,10 @@ package com.achobeta.trigger.http;
 import com.achobeta.api.dto.AuthRequestDTO;
 import com.achobeta.api.dto.ListRoleRequestDTO;
 import com.achobeta.api.dto.ListRoleResponseDTO;
+import com.achobeta.domain.auth.model.entity.RoleEntity;
 import com.achobeta.domain.auth.service.IRoleService;
-import com.achobeta.domain.team.model.entity.TeamEntity;
 import com.achobeta.types.Response;
 import com.achobeta.types.annotation.AuthVerify;
-import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.common.Constants;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +49,11 @@ public class AuthController {
         return Response.SYSTEM_SUCCESS();
     }
 
+    /**
+     * 查询可以支配赋予他人的团队及角色
+     * @param listRoleRequestDTO
+     * @return 角色列表
+     */
     @GetMapping("role")
     @AuthVerify("AUTH:ROLE_LIST")
     public Response<ListRoleResponseDTO> queryRoles(@Valid ListRoleRequestDTO listRoleRequestDTO) {
@@ -57,7 +61,7 @@ public class AuthController {
             String userId = listRoleRequestDTO.getUserId();
             log.info("用户访问团队成员信息详情服务开始，{}", userId);
 
-            List<TeamEntity> roles = roleService.queryRoles(userId);
+            List<RoleEntity> roles = roleService.queryRoles(userId);
             log.info("用户访问团队成员信息详情服务结束，{}", userId);
 
             return Response.SYSTEM_SUCCESS(ListRoleResponseDTO.builder().roles(roles).build());

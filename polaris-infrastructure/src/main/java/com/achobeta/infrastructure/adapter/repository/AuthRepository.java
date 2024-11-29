@@ -96,6 +96,7 @@ public class AuthRepository implements IAuthRepository {
                     roleEntityList.add(RoleEntity.builder()
                             .roleId(rolePO.getRoleId())
                             .roleName(rolePO.getRoleName())
+                            .teamId(rolePO.getTeamId())
                             .build());
                 }
                 redisService.setValue(RedisKey.TEAM_ROLE + teamId, roleEntityList);
