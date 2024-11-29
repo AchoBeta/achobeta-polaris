@@ -42,4 +42,11 @@ public interface RoleMapper {
      * @return
      */
     List<String> listRoleIdsByNames(List<String> roleNames);
+
+    /**
+     * 根据用户id获取用户的角色列表
+     * @param userId
+     * @return
+     */
+    List<String> listRoleNamesByUserId(String userId);
 }

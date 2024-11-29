@@ -51,4 +51,12 @@
         </foreach>
     </select>
 
+    <select id="listRoleNamesByUserId" resultMap="roleResultMap">
+        select t1.role_name
+        from t1.role as t1, t2.user_role as t2
+        where t2.user_id = #{userId}
+                and t1.role_id = t2.role_id
+                and is_deleted = 0
+    </select>
+
 </mapper>
