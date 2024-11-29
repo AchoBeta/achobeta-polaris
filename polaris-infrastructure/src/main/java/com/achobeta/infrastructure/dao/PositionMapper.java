@@ -3,6 +3,7 @@ package com.achobeta.infrastructure.dao;
 import com.achobeta.domain.team.model.entity.PositionEntity;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,21 +22,21 @@ public interface PositionMapper {
      * @param memberId 成员ID
      * @param positionIds 职位ID列表
      */
-    void addPositionsToMember(String userId, String memberId, List<String> positionIds, String teamId);
+    void addPositionsToMember(String userId, String memberId, @Param("positionIds")List<String> positionIds, String teamId);
 
     /**
      * 给用户添加职位
      * @param positions
      * @param userId
      */
-    void addPositionToUser(List<PositionEntity> positions, String userId);
+    void addPositionToUser(@Param("positions")List<PositionEntity> positions, String userId);
 
     /**
      * 删除用户的职位
      * @param positions
      * @param userId
      */
-    void deletePositionWithUser(List<PositionEntity> positions, String userId);
+    void deletePositionWithUser(@Param("positions")List<PositionEntity> positions, String userId);
 
     /**
      * 获取某个职位的所有下属职位
@@ -126,4 +127,10 @@ public interface PositionMapper {
      * @return
      */
     List<String> listTeamIdByNames(List<String> teamNames);
+
+    /**
+     * 根据用户Id删除用户的职位
+     * @param userId
+     */
+    void deletePositionByUserId(String userId);
 }

@@ -80,7 +80,7 @@ public class AddMemberRequestDTO implements Serializable {
     private String currentStatus;
 
     @FieldDesc(name ="添加的职位/分组")
-    private List<List<String>> positions;
+    private List<String> positions;
 
     @FieldDesc(name = "赋予的角色id")
     private List<String> roles;

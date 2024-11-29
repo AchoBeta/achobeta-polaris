@@ -36,6 +36,12 @@
             and is_deleted = 0
     </update>
 
+    <update id="deletePositionByUserId">
+        update user_position set is_deleted = 1
+        where user_id = #{userId}
+        and is_deleted = 0
+    </update>
+
     <insert id="addPosition" parameterType="com.achobeta.infrastructure.dao.po.PositionPO">
         insert into `position` (position_id,position_name,level,subordinate,team_id) values
         <foreach collection="positionPOList" item="position" separator=",">
