@@ -135,6 +135,7 @@
         from position as t1, user_position as t2
         where t2.user_id = #{userId}
                 and t1.position_id = t2.position_id
+                and t1.subordinate = ''
                 and t1.is_deleted = 0
                 and t2.is_deleted = 0
     </select>
@@ -154,14 +155,12 @@
         select t1.position_id, t1.team_id
         from position as t1, position as t2
         where t1.team_id = t2.position_id  and (t1.position_name, t2.position_name) in
-                and t1.is_deleted = 0
-                and t2.is_deleted = 0
-        group by t1.position_id, t1.team_id;
-        <foreach collection="positions" separator="," open="(" close=")">
-            (#{position.positionName}, #{position.teamId})
+        <foreach collection="positions"  item="position" separator="," open="(" close=")">
+            (#{position.positionName}, #{position.teamName})
         </foreach>
                 and t1.is_deleted = 0
                 and t2.is_deleted = 0
+        group by t1.position_id, t1.team_id
     </select>
 
     <select id="listTeamIdByNames" resultType="java.lang.String">

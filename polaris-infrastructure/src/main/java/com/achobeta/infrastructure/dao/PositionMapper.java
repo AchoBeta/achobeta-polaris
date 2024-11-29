@@ -116,10 +116,10 @@ public interface PositionMapper {
 
     /**
      * 根据职位名称和团队名称获取职位Id和团队Id
-     * @param Positions
+     * @param positions
      * @return
      */
-    List<PositionEntity> listPositionIdAndTeamIdByNames(List<PositionEntity> Positions);
+    List<PositionEntity> listPositionIdAndTeamIdByNames(List<PositionEntity> positions);
 
     /**
      * 根据团队名称获取团队Id
