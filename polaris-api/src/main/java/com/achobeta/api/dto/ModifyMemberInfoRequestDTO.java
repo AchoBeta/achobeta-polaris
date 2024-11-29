@@ -2,6 +2,10 @@ package com.achobeta.api.dto;
 
 import com.achobeta.types.annotation.FieldDesc;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -9,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -44,10 +48,12 @@ public class ModifyMemberInfoRequestDTO implements Serializable {
     @FieldDesc(name = "手机号")
     private String phone;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @Past(message = "加入时间必须是过去时间")
     @FieldDesc(name = "加入时间")
-    private LocalDateTime entryTime;
+    private LocalDate entryTime;
 
     @FieldDesc(name = "性别")
     private Integer gender;
