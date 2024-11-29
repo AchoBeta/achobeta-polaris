@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
      * 自定义验证异常 BindException
      */
     @ExceptionHandler(AppException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public <T> Response<T> handleAPPException(AppException e) {
         log.error("系统异常", e);
         return Response.APP_ECEPTION(e);
