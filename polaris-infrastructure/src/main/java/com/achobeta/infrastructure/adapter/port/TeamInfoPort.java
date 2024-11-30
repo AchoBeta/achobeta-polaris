@@ -12,13 +12,15 @@ import com.achobeta.infrastructure.dao.po.PermissionPO;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.RolePO;
 import com.achobeta.infrastructure.redis.IRedisService;
-import com.achobeta.types.common.RedisKey;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.achobeta.types.support.util.BuildKeyUtil.buildUserPermissionInTeamKey;
+import static com.achobeta.types.support.util.BuildKeyUtil.buildUserRoleInTeamKey;
 
 /**
  * @author yuangzhiyao
@@ -69,7 +71,7 @@ public class TeamInfoPort implements ITeamInfoPort {
     }
 
     private List<RoleEntity> queryRoles(String userId, String teamId) {
-        List<RoleEntity> roleEntityList = redisService.getValue(RedisKey.USER_ROLE_IN_TEAM + userId + teamId);
+        List<RoleEntity> roleEntityList = redisService.getValue(buildUserRoleInTeamKey(userId, teamId));
         if (!CollectionUtil.isEmpty(roleEntityList)) {
             return roleEntityList;
         }
@@ -84,12 +86,12 @@ public class TeamInfoPort implements ITeamInfoPort {
                     .build());
         }
 
-        redisService.setValue(RedisKey.USER_ROLE_IN_TEAM + userId + teamId, roleEntityList);
+        redisService.setValue(buildUserRoleInTeamKey(userId, teamId), roleEntityList);
         return roleEntityList;
     }
 
     private List<String> queryPermissions(String userId, List<String> roleIds, String teamId) {
-        List<String> permissionNames = redisService.getValue(RedisKey.USER_PERMISSION_IN_TEAM + userId + teamId);
+        List<String> permissionNames = redisService.getValue(buildUserPermissionInTeamKey(userId, teamId));
         if (!CollectionUtil.isEmpty(permissionNames)) {
             return permissionNames;
         }
@@ -104,7 +106,7 @@ public class TeamInfoPort implements ITeamInfoPort {
             permissionNames.add(permission.getPermissionName());
         }
 
-        redisService.setValue(RedisKey.USER_PERMISSION_IN_TEAM + userId + teamId, permissionNames);
+        redisService.setValue(buildUserPermissionInTeamKey(userId, teamId), permissionNames);
         return permissionNames;
     }
 
