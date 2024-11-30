@@ -5,8 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: 严豪哲
@@ -39,7 +39,7 @@ public class TokenUtil {
      */
     public static String getAccessToken(String userId, String phone, String deviceId, String ip, String fingerPrinting) {
         //存储数据
-        Map<String,Object> claims = new ConcurrentHashMap<>();
+        Map<String,Object> claims = new HashMap<>();
         claims.put(USER_ID,userId);
         claims.put(PHONE,phone);
         claims.put(DEVICE_ID,deviceId);
@@ -69,7 +69,7 @@ public class TokenUtil {
      */
     public static String getRefreshToken(String userId, String phone, String deviceId, String ip, Boolean autoLogin, String fingerPrinting) {
         //存储数据
-        Map<String,Object> claims = new ConcurrentHashMap<>();
+        Map<String,Object> claims = new HashMap<>();
         claims.put(USER_ID,userId);
         claims.put(PHONE,phone);
         claims.put(DEVICE_ID,deviceId);
