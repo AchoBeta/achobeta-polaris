@@ -89,7 +89,7 @@ public class TeamInfoPort implements ITeamInfoPort {
     }
 
     private List<String> queryPermissions(String userId, List<String> roleIds, String teamId) {
-        List<String> permissionNames = redisService.getValue(RedisKey.USER_PERMISSION_IN_TEAM + userId);
+        List<String> permissionNames = redisService.getValue(RedisKey.USER_PERMISSION_IN_TEAM + userId + teamId);
         if (!CollectionUtil.isEmpty(permissionNames)) {
             return permissionNames;
         }
@@ -104,7 +104,7 @@ public class TeamInfoPort implements ITeamInfoPort {
             permissionNames.add(permission.getPermissionName());
         }
 
-        redisService.setValue(RedisKey.USER_PERMISSION_IN_TEAM + userId, permissionNames);
+        redisService.setValue(RedisKey.USER_PERMISSION_IN_TEAM + userId + teamId, permissionNames);
         return permissionNames;
     }
 
