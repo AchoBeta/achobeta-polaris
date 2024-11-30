@@ -37,7 +37,7 @@ public class TokenUtil {
      * @param ip    用户的ip地址
      * @return 返回生成的AccessToken
      */
-    public static String getAccessToken(Long userId, String phone, String deviceId, String ip, String fingerPrinting) {
+    public static String getAccessToken(String userId, String phone, String deviceId, String ip, String fingerPrinting) {
         //存储数据
         Map<String,Object> claims = new HashMap<>();
         claims.put(USER_ID,userId);
@@ -67,7 +67,7 @@ public class TokenUtil {
      * @return 返回生成的RefreshToken
      *
      */
-    public static String getRefreshToken(Long userId, String phone, String deviceId, String ip, Boolean autoLogin, String fingerPrinting) {
+    public static String getRefreshToken(String userId, String phone, String deviceId, String ip, Boolean autoLogin, String fingerPrinting) {
         //存储数据
         Map<String,Object> claims = new HashMap<>();
         claims.put(USER_ID,userId);

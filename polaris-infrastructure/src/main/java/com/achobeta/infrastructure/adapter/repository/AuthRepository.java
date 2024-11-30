@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.achobeta.types.support.util.BuildKeyUtil.buildUserPermissionInTeamKey;
+import static com.achobeta.types.support.util.BuildKeyUtil.buildUserRoleInTeamKey;
+
 /**
  * @author yangzhiyao
  * @description AuthRepository
@@ -41,7 +44,7 @@ public class AuthRepository implements IAuthRepository {
 
     @Override
     public List<RoleEntity> queryRoles(String userId, String teamId) {
-        List<RoleEntity> roleEntityList = redisService.getValue(RedisKey.USER_ROLE_IN_TEAM + userId + teamId);
+        List<RoleEntity> roleEntityList = redisService.getValue(buildUserRoleInTeamKey(userId, teamId));
         if (!CollectionUtil.isEmpty(roleEntityList)) {
             return roleEntityList;
         }
@@ -56,13 +59,13 @@ public class AuthRepository implements IAuthRepository {
                     .build());
         }
 
-        redisService.setValue(RedisKey.USER_ROLE_IN_TEAM + userId + teamId, roleEntityList);
+        redisService.setValue(buildUserRoleInTeamKey(userId, teamId), roleEntityList);
         return roleEntityList;
     }
 
     @Override
     public List<String> queryPermissions(String userId, List<String> roleIds, String teamId) {
-        List<String> permissionNames = redisService.getValue(RedisKey.USER_PERMISSION_IN_TEAM + userId);
+        List<String> permissionNames = redisService.getValue(buildUserPermissionInTeamKey(userId, teamId));
         if (!CollectionUtil.isEmpty(permissionNames)) {
             return permissionNames;
         }
@@ -77,7 +80,7 @@ public class AuthRepository implements IAuthRepository {
             permissionNames.add(permission.getPermissionName());
         }
 
-        redisService.setValue(RedisKey.USER_PERMISSION_IN_TEAM + userId, permissionNames);
+        redisService.setValue(buildUserPermissionInTeamKey(userId, teamId), permissionNames);
         return permissionNames;
     }
 

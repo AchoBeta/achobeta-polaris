@@ -23,9 +23,9 @@ public interface IMemberRepository {
     /**
      * 添加成员
      * @param userEntity
-     * @param userId
+     * @param operatorId
      */
-    void addMember(UserEntity userEntity, String userId);
+    void addMember(UserEntity userEntity, String operatorId);
 
     /**
      * 根据手机号查询对应用户

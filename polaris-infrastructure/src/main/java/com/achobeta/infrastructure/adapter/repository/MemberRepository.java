@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.achobeta.types.support.util.buildKeyUtil.buildUserInfoKey;
+import static com.achobeta.types.support.util.BuildKeyUtil.buildUserInfoKey;
 
 /**
  * @author yangzhiyao
@@ -60,7 +60,8 @@ public class MemberRepository implements IMemberRepository {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void addMember(UserEntity userEntity,String userId) {
+    public void addMember(UserEntity userEntity,String operatorId) {
+        String userId = userEntity.getUserId();
         userMapper.addUser(UserPO.builder()
                 .userId(userEntity.getUserId())
                 .userName(userEntity.getUserName())
@@ -91,7 +92,7 @@ public class MemberRepository implements IMemberRepository {
             }
             List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
             // 给用户添加团队
-            userMapper.addMemberTeam(userId, teamIds);
+            userMapper.addMemberTeam(userId, teamIds, operatorId);
 
             // 添加职位
             // 只到团队的也要加
@@ -133,7 +134,7 @@ public class MemberRepository implements IMemberRepository {
                 }
                 addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
                 if (!CollectionUtil.isEmpty(addPositions)){
-                    positionMapper.addPositionToUser(addPositions, userId);
+                    positionMapper.addPositionToUser(addPositions, userId, operatorId);
                 }
             }
         }
@@ -239,8 +240,8 @@ public class MemberRepository implements IMemberRepository {
             }
             List<String> teamIds = positionMapper.listTeamIdByNames(teamNames);
             // 修改用户所属团队，先全部删掉，再添加
-            userMapper.deleteMemberTeam(userId);
-            userMapper.addMemberTeam(userId, teamIds);
+            userMapper.deleteMemberTeam(userId, operatorId);
+            userMapper.addMemberTeam(userId, teamIds, operatorId);
 
             positionMapper.deletePositionByUserId(userId);
             // 只到团队的也要加
@@ -282,7 +283,7 @@ public class MemberRepository implements IMemberRepository {
                 }
                 addPositions = positionMapper.listPositionIdAndTeamIdByNames(addPositions);
                 if (!CollectionUtil.isEmpty(addPositions)){
-                    positionMapper.addPositionToUser(addPositions, userId);
+                    positionMapper.addPositionToUser(addPositions, userId, operatorId);
                 }
             }
         }

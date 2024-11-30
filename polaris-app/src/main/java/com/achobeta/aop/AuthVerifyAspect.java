@@ -75,7 +75,7 @@ public class AuthVerifyAspect {
                 return point.proceed();
             }
         }
-        log.error("用户 {} 无权限访问方法 {} ", userId, point.getSignature().getName());
+        log.error("用户 {} 在团队 {} 无权限访问方法 {} ", userId, teamId, point.getSignature().getName());
         return Response.CUSTOMIZE_ERROR(USER_NO_PERMISSION);
     }
 

@@ -36,7 +36,7 @@ public class VerifyTeamMemberPostProcessor implements LoginPostProcessor {
         }else{
             log.info("手机号为{}的用户是团队成员，校验通过",phone);
             log.info("正在记录用户:{}的userId:{}",phone,userEntity.getUserId());
-            postContext.getBizData().getTokenVO().setUserId(Long.valueOf(userEntity.getUserId()));
+            postContext.getBizData().getTokenVO().setUserId(userEntity.getUserId());
             return true;
         }
     }

@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_NOT_EXIST;
@@ -118,7 +117,7 @@ public class DefaultStructureService extends AbstractFunctionPostProcessor<TeamB
                         // 有需要新增的职位/分组
                         if (!CollectionUtil.isEmpty(newPositionList)) {
                             // 哈希表，key-name，value-uuid
-                            ConcurrentHashMap<String, String> positionMap = new ConcurrentHashMap<>();
+                            HashMap<String, String> positionMap = new HashMap<>();
                             for (PositionEntity positionEntity : newPositionList) {
                                 String newId = UUID.randomUUID().toString();
                                 // 为新职位创建固有节点
