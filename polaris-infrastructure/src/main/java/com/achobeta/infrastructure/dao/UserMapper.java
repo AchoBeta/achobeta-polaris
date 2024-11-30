@@ -66,12 +66,12 @@ public interface UserMapper {
      * 删除用户和团队所有关联
      * @param userId
      */
-    void deleteMemberTeam(String userId);
+    void deleteMemberTeam(String userId, String operatorId);
 
     /**
      * 批量添加用户和团队关联
      * @param userId
      * @param teamIds
      */
-    void addMemberTeam(String userId, List<String> teamIds);
+    void addMemberTeam(String userId, List<String> teamIds, String operatorId);
 }

@@ -207,7 +207,7 @@ public class TokenRepository implements ITokenRepository {
         Boolean isAutoLogin = javaMap.get(TYPE).equals(TokenUtil.REFRESH_TOKEN_TYPE[1]);
 
         return TokenVO.builder()
-                .userId(Long.valueOf(javaMap.get(USER_ID)))
+                .userId(javaMap.get(USER_ID))
                 .phone(javaMap.get(PHONE))
                 .deviceId(javaMap.get(DEVICE_ID))
                 .ip(javaMap.get(IP))
@@ -227,7 +227,7 @@ public class TokenRepository implements ITokenRepository {
         }
 
         return TokenVO.builder()
-                .userId(Long.valueOf(javaMap.get(USER_ID)))
+                .userId(javaMap.get(USER_ID))
                 .phone(javaMap.get(PHONE))
                 .deviceId(javaMap.get(DEVICE_ID))
                 .ip(javaMap.get(IP))

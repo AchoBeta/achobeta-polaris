@@ -29,7 +29,7 @@ public interface PositionMapper {
      * @param positions
      * @param userId
      */
-    void addPositionToUser(@Param("positions")List<PositionEntity> positions, String userId);
+    void addPositionToUser(@Param("positions")List<PositionEntity> positions, String userId, String operatorId);
 
     /**
      * 删除用户的职位

@@ -31,7 +31,7 @@ public class TokenVO {
     /*
      * 登录用户的id
      */
-    private Long userId;
+    private String userId;
 
     /*
      * 登录用户的手机号

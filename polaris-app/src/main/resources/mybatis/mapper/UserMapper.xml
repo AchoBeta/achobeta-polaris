@@ -18,7 +18,7 @@
 
     <update id="deleteMemberTeam">
         update member
-        set is_deleted = 1
+        set is_deleted = 1, update_by = #{operatorId}
         where user_id = #{userId}
     </update>
 
@@ -71,9 +71,9 @@
     </insert>
 
     <insert id="addMemberTeam">
-        insert into member (user_id,team_id) values
+        insert into member (user_id,team_id,create_by,update_by) values
         <foreach collection="teamIds" item="teamId" separator=",">
-            (#{userId},#{teamId})
+            (#{userId},#{teamId},#{operatorId},#{operatorId})
         </foreach>
     </insert>
 

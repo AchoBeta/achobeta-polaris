@@ -21,9 +21,9 @@
     </insert>
 
     <insert id="addPositionToUser">
-        insert into user_position (user_id, position_id, team_id) values
+        insert into user_position (user_id, position_id, team_id, create_by, update_by) values
         <foreach collection="positions" item="position" separator=",">
-        (#{userId}, #{position.positionId}, #{position.teamId})
+        (#{userId}, #{position.positionId}, #{position.teamId}, #{operatorId}, #{operatorId})
         </foreach>
     </insert>
 
