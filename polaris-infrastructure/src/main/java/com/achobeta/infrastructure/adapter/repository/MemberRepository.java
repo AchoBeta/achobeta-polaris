@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.achobeta.types.support.util.buildKeyUtil.buildUserInfoKey;
+import static com.achobeta.types.support.util.BuildKeyUtil.buildUserInfoKey;
 
 /**
  * @author yangzhiyao
