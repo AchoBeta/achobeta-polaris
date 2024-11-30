@@ -146,3 +146,14 @@ insert into role_permission (role_id,permission_id) values ('001','2011');
 insert into role_permission (role_id,permission_id) values ('001','2012');
 insert into role_permission (role_id,permission_id) values ('001','2013');
 insert into role_permission (role_id,permission_id) values ('001','2014');
+
+insert into role_permission (role_id,permission_id) values ('002','2002');
+insert into role_permission (role_id,permission_id) values ('002','2003');
+insert into role_permission (role_id,permission_id) values ('002','2005');
+insert into role_permission (role_id,permission_id) values ('002','2006');
+insert into role_permission (role_id,permission_id) values ('002','2007');
+insert into role_permission (role_id,permission_id) values ('002','2008');
+insert into role_permission (role_id,permission_id) values ('002','2011');
+insert into role_permission (role_id,permission_id) values ('002','2012');
+insert into role_permission (role_id,permission_id) values ('002','2013');
+insert into role_permission (role_id,permission_id) values ('002','2014');
