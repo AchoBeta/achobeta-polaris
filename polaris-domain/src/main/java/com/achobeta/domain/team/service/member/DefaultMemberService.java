@@ -1,5 +1,6 @@
 package com.achobeta.domain.team.service.member;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.team.adapter.repository.IMemberRepository;
 import com.achobeta.domain.team.model.bo.TeamBO;
 import com.achobeta.domain.team.service.IMemberService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,8 +62,9 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     }
 
     @Override
-    public UserEntity addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds) {
-        PostContext<TeamBO> postContext = buildPostContext(userEntity, userId, teamId, positionIds);
+    public UserEntity addMember(UserEntity userEntity, String userId) {
+        PostContext<TeamBO> postContext = buildPostContext(userId,userEntity);
+        postContext.addExtraData("userId", userId);
         postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
@@ -69,16 +72,19 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                         TeamBO teamBO = postContext.getBizData();
                         UserEntity userEntity = teamBO.getUserEntity();
 
-                        log.info("判断手机号所属用户是否已存在，phone:{}, teamId:{}",userEntity.getPhone(), teamId);
+                        log.info("判断手机号所属用户是否已存在，phone:{}",userEntity.getPhone());
                         UserEntity user = memberRepository.queryMemberByPhone(userEntity.getPhone());
                         if (user!= null) {
-                            log.warn("手机号所属用户已存在，phone:{}, teamId:{}",userEntity.getPhone(), teamId);
+                            log.warn("手机号所属用户已存在，phone:{}",userEntity.getPhone());
                             postContext.setBizData(TeamBO.builder().userEntity(user).build());
                             return postContext;
                         }
 
+                        // 去重
+                        userEntity.setPositionList(userEntity.getPositionList().stream()
+                               .distinct().collect(Collectors.toList()));
                         userEntity.setUserId(UUID.randomUUID().toString());
-                        memberRepository.addMember(userEntity, teamBO.getUserId(), teamBO.getTeamId(), teamBO.getPositionIds());
+                        memberRepository.addMember(userEntity, (String)postContext.getExtraData("userId"));
                       return postContext;
                     }
                 });
@@ -86,10 +92,9 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
     }
 
     @Override
-    public UserEntity modifyMember(String teamId, UserEntity userEntity, List<String> addPositions, List<String> deletePositions) {
+    public UserEntity modifyMember(String userId, String teamId, UserEntity userEntity) {
         PostContext<TeamBO> postContext = buildPostContext(teamId, userEntity);
-        postContext.addExtraData("addPositions", addPositions);
-        postContext.addExtraData("deletePositions", deletePositions);
+        postContext.addExtraData("userId", userId);
         postContext = super.doPostProcessor(postContext, ModifyMemberInfoPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
@@ -97,11 +102,15 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                         TeamBO teamBO = postContext.getBizData();
                         String teamId = teamBO.getTeamId();
                         UserEntity userEntity = teamBO.getUserEntity();
+                        List<String> positions = userEntity.getPositionList();
                         log.info("访问修改团队成员功能，开始处理，teamId: {}, userId: {}",teamId, userEntity.getUserId());
 
-                        memberRepository.modifyMemberInfo(userEntity, teamId,
-                                (List<String>)postContext.getExtraData("addPositions"),
-                                (List<String>)postContext.getExtraData("deletePositions"));
+                        // 去重
+                        if (!CollectionUtil.isEmpty(positions)) {
+                            userEntity.setPositionList(userEntity.getPositionList().stream()
+                                    .distinct().collect(Collectors.toList()));
+                        }
+                        memberRepository.modifyMemberInfo(userEntity, teamId, (String)postContext.getExtraData("userId"));
 
                         log.info("访问修改团队成员功能，处理结束，teamId: {}, userId: {}",teamId, userEntity.getUserId());
                         return postContext;
@@ -134,19 +143,6 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                     }
                 });
         return postContext.getBizData().getUserEntity();
-    }
-
-    private static PostContext<TeamBO> buildPostContext(UserEntity userEntity, String userId, String teamId, List<String> positionIds) {
-        return PostContext.<TeamBO>builder()
-                .bizId(BizModule.TEAM.getCode())
-                .bizName(BizModule.TEAM.getName())
-                .bizData(TeamBO.builder()
-                        .userEntity(userEntity)
-                        .userId(userId)
-                        .teamId(teamId)
-                        .positionIds(positionIds)
-                         .build())
-                .build();
     }
 
     private static PostContext<TeamBO> buildPostContext(String teamId, UserEntity userEntity) {

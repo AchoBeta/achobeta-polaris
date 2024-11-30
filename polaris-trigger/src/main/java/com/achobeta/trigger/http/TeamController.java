@@ -103,11 +103,11 @@ public class TeamController implements ITeamService {
                         .experience(requestDTO.getExperience())
                         .currentStatus(requestDTO.getCurrentStatus())
                         .entryTime(requestDTO.getEntryTime())
+                        .roles(requestDTO.getRoles())
+                        .teams(requestDTO.getTeamNames())
+                         .positionList(requestDTO.getPositions())
                         .build();
-            userEntity = memberService.addMember(userEntity,
-                    requestDTO.getUserId(),
-                    requestDTO.getTeamId(),
-                    requestDTO.getPositions());
+            userEntity = memberService.addMember(userEntity, requestDTO.getUserId());
             Integer statusCode = userEntity.getLikeCount() == null ? 0 : 1;
 
             log.info("访问添加团队成员接口结束userId:{}, phone:{}, teamId:{}",requestDTO.getUserId(),requestDTO.getPhone(),requestDTO.getTeamId());
@@ -139,26 +139,40 @@ public class TeamController implements ITeamService {
     @LoginVerification
     @AuthVerify("MEMBER:MEMBER_MODIFY")
     public Response<ModifyMemberInfoResponseDTO> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequestDTO requestDTO) {
-        String teamId = requestDTO.getTeamId();
-        String memberId = requestDTO.getMemberId();
-        log.info("用户访问修改团队成员信息接口，userId：{}, memberId：{}, teamId:{}", requestDTO.getUserId(), memberId, teamId);
+        try {
+            String teamId = requestDTO.getTeamId();
+            String memberId = requestDTO.getMemberId();
+            log.info("用户访问修改团队成员信息接口，userId：{}, memberId：{}, teamId:{}", requestDTO.getUserId(), memberId, teamId);
 
-        memberService.modifyMember(teamId, UserEntity.builder()
-                        .phone(requestDTO.getPhone())
-                        .entryTime(requestDTO.getEntryTime())
-                        .userId(memberId)
-                        .userName(requestDTO.getUserName())
-                        .gender(requestDTO.getGender())
-                        .idCard(requestDTO.getIdCard())
-                        .email(requestDTO.getEmail())
-                        .grade(requestDTO.getGrade())
-                        .major(requestDTO.getMajor())
-                        .studentId(requestDTO.getStudentId())
-                        .experience(requestDTO.getExperience())
-                        .currentStatus(requestDTO.getCurrentStatus())
-                        .build(), requestDTO.getAddPositions(), requestDTO.getDeletePositions());
+            memberService.modifyMember(requestDTO.getUserId(), teamId, UserEntity.builder()
+                    .phone(requestDTO.getPhone())
+                    .entryTime(requestDTO.getEntryTime())
+                    .userId(memberId)
+                    .userName(requestDTO.getUserName())
+                    .gender(requestDTO.getGender())
+                    .idCard(requestDTO.getIdCard())
+                    .email(requestDTO.getEmail())
+                    .grade(requestDTO.getGrade())
+                    .major(requestDTO.getMajor())
+                    .studentId(requestDTO.getStudentId())
+                    .experience(requestDTO.getExperience())
+                    .currentStatus(requestDTO.getCurrentStatus())
+                    .roles(requestDTO.getRoles())
+                    .positionList(requestDTO.getPositions())
+                    .build());
 
-        return Response.SYSTEM_SUCCESS(ModifyMemberInfoResponseDTO.builder().userInfo(requestDTO).build());
+            return Response.SYSTEM_SUCCESS(ModifyMemberInfoResponseDTO.builder().userInfo(requestDTO).build());
+        } catch (AppException e) {
+            log.error("用户访问修改团队成员信息接口失败！{}", requestDTO, e);
+            return Response.<ModifyMemberInfoResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
+        } catch (Exception e) {
+            log.error("用户访问修改团队成员信息接口失败！{}", requestDTO, e);
+            return Response.SERVICE_ERROR();
+        }
     }
   
     /**
@@ -190,6 +204,7 @@ public class TeamController implements ITeamService {
                     .likeCount(userEntity.getLikeCount())
                     .liked(userEntity.getLiked())
                     .positions(userEntity.getPositions())
+                    .roles(userEntity.getRoles())
                     .build());
         } catch (AppException e) {
             log.error("用户访问团队成员信息详情服务失败！{}", requestDTO, e);

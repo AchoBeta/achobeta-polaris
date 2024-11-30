@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -55,7 +55,7 @@ public class QueryMemberInfoResponseDTO implements Serializable {
 
     @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
     @FieldDesc(name = "用户加入时间")
-    private LocalDateTime entryTime;
+    private LocalDate entryTime;
 
     @FieldDesc(name = "用户获赞数量")
     private Integer likeCount;
@@ -65,4 +65,7 @@ public class QueryMemberInfoResponseDTO implements Serializable {
 
     @FieldDesc(name = "用户职位信息")
     private List<List<String>> positions;
+
+    @FieldDesc(name = "用户角色信息")
+    private List<String> roles;
 }

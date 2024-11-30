@@ -1,7 +1,7 @@
 package com.achobeta.domain.login.model.bo;
 
 import com.achobeta.domain.login.model.valobj.TokenVO;
-import com.achobeta.domain.team.model.entity.PositionEntity;
+import com.achobeta.domain.team.model.entity.TeamEntity;
 import lombok.*;
 
 import java.util.List;
@@ -32,8 +32,8 @@ public class LoginBO {
     String deviceName;
 
     /*
-     * 职位列表
+     * 团队列表
      */
-    List<PositionEntity> positionList;
+    List<TeamEntity> teams;
 
 }

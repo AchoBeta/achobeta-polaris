@@ -11,6 +11,19 @@
         <result property="updateTime" column="update_time" />
     </resultMap>
 
+    <insert id="addUserRoles">
+        insert into user_role (user_id, role_id) values
+        <foreach collection="roles" item="role" separator=",">
+            (#{userId}, #{role})
+        </foreach>
+    </insert>
+
+    <update id="deleteUserRoles">
+        update user_role set is_deleted = 1
+        where user_id = #{userId}
+                and is_deleted = 0
+    </update>
+
     <select id="listRole" resultMap="roleResultMap">
         select t1.id, t1.role_id, t1.role_name, t1.team_id, t1.create_time, t1.update_time
         from role as t1, user_role as t2
@@ -18,7 +31,34 @@
             t2.user_id = #{userId} and t1.role_id = t2.role_id and
             (<if test="teamId!= null and teamId!= ''">t1.team_id = #{teamId} or </if>
             t1.team_id = '')
+            and t1.is_deleted = 0
+            and t2.is_deleted = 0
         </where>
+    </select>
+
+    <select id="listRoleByTeamId" resultMap="roleResultMap">
+        select id, role_id, role_name, team_id, create_time, update_time
+        from role
+        where team_id = #{teamId} and is_deleted = 0
+    </select>
+
+    <select id="listRoleIdsByNames" resultType="java.lang.String">
+        select role_id
+        from role
+        where role_name in
+        <foreach collection="roleNames" item="roleName" separator="," open="(" close=")">
+            #{roleName}
+        </foreach>
+            and is_deleted = 0
+    </select>
+
+    <select id="listRoleNamesByUserId" resultType="java.lang.String">
+        select t1.role_name
+        from role as t1, user_role as t2
+        where t2.user_id = #{userId}
+                and t1.role_id = t2.role_id
+                and t1.is_deleted = 0
+                and t2.is_deleted = 0
     </select>
 
 </mapper>

@@ -2,14 +2,15 @@ package com.achobeta.api.dto;
 
 import com.achobeta.types.annotation.FieldDesc;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -44,10 +45,12 @@ public class ModifyMemberInfoRequestDTO implements Serializable {
     @FieldDesc(name = "手机号")
     private String phone;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Past(message = "加入时间必须是过去时间")
+    @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @PastOrPresent(message = "加入时间必须是过去时间或现在")
     @FieldDesc(name = "加入时间")
-    private LocalDateTime entryTime;
+    private LocalDate entryTime;
 
     @FieldDesc(name = "性别")
     private Integer gender;
@@ -76,9 +79,9 @@ public class ModifyMemberInfoRequestDTO implements Serializable {
     @FieldDesc(name = "现状")
     private String currentStatus;
 
-    @FieldDesc(name ="添加的职位/分组")
-    private List<String> addPositions;
+    @FieldDesc(name = "赋予的角色id")
+    private List<String> roles;
 
-    @FieldDesc(name ="删除的职位/分组")
-    private List<String> deletePositions;
+    @FieldDesc(name = "所属团队/职位")
+    private List<String> positions;
 }

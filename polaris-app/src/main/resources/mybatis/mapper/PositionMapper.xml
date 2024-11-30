@@ -22,17 +22,24 @@
 
     <insert id="addPositionToUser">
         insert into user_position (user_id, position_id, team_id) values
-        <foreach collection="positionList" item="positionId" separator=",">
-        (#{userId}, #{positionId}, #{teamId})
+        <foreach collection="positions" item="position" separator=",">
+        (#{userId}, #{position.positionId}, #{position.teamId})
         </foreach>
     </insert>
 
     <update id="deletePositionWithUser">
-        update user_position set is_deleted = 1, update_by = #{userId}
+        update user_position set is_deleted = 1
         where user_id = #{userId} and position_id in
-        <foreach collection="deletePositions" item="positionId" separator="," open="(" close=")">
-        #{positionId}
+        <foreach collection="positions" item="position" separator="," open="(" close=")">
+            #{position.positionId}
         </foreach>
+            and is_deleted = 0
+    </update>
+
+    <update id="deletePositionByUserId">
+        update user_position set is_deleted = 1
+        where user_id = #{userId}
+        and is_deleted = 0
     </update>
 
     <insert id="addPosition" parameterType="com.achobeta.infrastructure.dao.po.PositionPO">
@@ -128,6 +135,7 @@
         from position as t1, user_position as t2
         where t2.user_id = #{userId}
                 and t1.position_id = t2.position_id
+                and t1.subordinate = ''
                 and t1.is_deleted = 0
                 and t2.is_deleted = 0
     </select>
@@ -138,8 +146,31 @@
         from position as t1, member as t2
         where t2.user_id = #{userId}
                 and t1.position_id = t2.team_id
+                and subordinate = ''
                 and t1.is_deleted = 0
                 and t2.is_deleted = 0
+    </select>
+
+    <select id="listPositionIdAndTeamIdByNames" resultMap="PositionResultMap">
+        select t1.position_id, t1.team_id
+        from position as t1, position as t2
+        where t1.team_id = t2.position_id  and (t1.position_name, t2.position_name) in
+        <foreach collection="positions"  item="position" separator="," open="(" close=")">
+            (#{position.positionName}, #{position.teamName})
+        </foreach>
+                and t1.is_deleted = 0
+                and t2.is_deleted = 0
+        group by t1.position_id, t1.team_id
+    </select>
+
+    <select id="listTeamIdByNames" resultType="java.lang.String">
+        select position_id from position
+        where position_name in
+        <foreach collection="teamNames" item="teamName" separator="," open="(" close=")" >
+            #{teamName}
+        </foreach>
+                and is_deleted = 0
+        group by position_id
     </select>
 
 </mapper>

@@ -51,6 +51,7 @@ public enum GlobalServiceStatusCode {
     TEAM_NOT_EXIST(3001, "团队不存在"),
     TEAM_NOT_JOIN(3002, "团队未加入"),
     TEAM_NOT_NUMBER(3003, "团队成员不存在"),
+    TEAM_INVALID_OPERATION(3004, "无效的团队操作"),
 
     TEAM_STRUCTURE_ADD_INVALID(3101, "无效的职位/分组添加"),
     TEAM_STRUCTURE_DELETE_INVALID(3102, "无效的职位/分组删除"),

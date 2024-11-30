@@ -16,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -98,7 +97,7 @@ public class LoginController implements ILoginService {
                             .userId(loginVO.getUserId())
                             .accessToken(loginVO.getAccessToken())
                             .refreshToken(loginVO.getRefreshToken())
-                            .positionList(loginVO.getPositionList())
+                            .teams(loginVO.getTeams())
                             .deviceId(loginVO.getDeviceId())
                             .build()
             );
@@ -146,7 +145,7 @@ public class LoginController implements ILoginService {
                             .phone(loginVO.getPhone())
                             .userId(loginVO.getUserId())
                             .accessToken(loginVO.getAccessToken())
-                            .positionList(loginVO.getPositionList())
+                            .teams(loginVO.getTeams())
                             .deviceId(loginVO.getDeviceId())
                             .build()
             );

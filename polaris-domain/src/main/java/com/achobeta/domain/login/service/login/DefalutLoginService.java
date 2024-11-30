@@ -6,7 +6,7 @@ import com.achobeta.domain.login.model.bo.LoginBO;
 import com.achobeta.domain.login.model.valobj.LoginVO;
 import com.achobeta.domain.login.model.valobj.TokenVO;
 import com.achobeta.domain.login.service.IAuthorizationService;
-import com.achobeta.domain.team.model.entity.PositionEntity;
+import com.achobeta.domain.team.model.entity.TeamEntity;
 import com.achobeta.types.enums.BizModule;
 import com.achobeta.types.support.postprocessor.AbstractPostProcessor;
 import com.achobeta.types.support.postprocessor.PostContext;
@@ -42,7 +42,7 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         postContext = super.doPostProcessor(postContext, LoginPostProcessor.class);
         return LoginVO.builder()
                 .userId(String.valueOf(postContext.getBizData().getTokenVO().getUserId()))
-                .positionList(postContext.getBizData().getPositionList())
+                .teams(postContext.getBizData().getTeams())
                 .accessToken(postContext.getBizData().getTokenVO().getAccessToken())
                 .refreshToken(postContext.getBizData().getTokenVO().getRefreshToken())
                 .phone(postContext.getBizData().getTokenVO().getPhone())
@@ -74,12 +74,12 @@ public class DefalutLoginService extends AbstractPostProcessor<LoginBO> implemen
         log.info("AT和RT存入redis成功,userId:{}", tokenVO.getUserId());
 
         log.info("正在查询用户团队信息,userId:{}", tokenVO.getUserId());
-        List<PositionEntity> positionEntities = teamInfoPort.queryTeamByUserId(String.valueOf(tokenVO.getUserId()));
+        List<TeamEntity> teams = teamInfoPort.queryTeamByUserId(String.valueOf(tokenVO.getUserId()));
         log.info("用户团队信息查询成功,userId:{}", tokenVO.getUserId());
 
         postContext.setBizData(LoginBO.builder()
                 .tokenVO(tokenVO)
-                .positionList(positionEntities)
+                .teams(teams)
                 .build());
 
         return postContext;

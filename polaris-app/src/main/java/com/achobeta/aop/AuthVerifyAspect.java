@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.achobeta.types.enums.GlobalServiceStatusCode.TEAM_INVALID_OPERATION;
 import static com.achobeta.types.enums.GlobalServiceStatusCode.USER_NO_PERMISSION;
 
 /**
@@ -56,7 +57,15 @@ public class AuthVerifyAspect {
         for (RoleEntity userRole : userRoles) {
             userRoleIds.add(userRole.getRoleId());
         }
-        List<String> userPermissions = authRepository.queryPermissions(userId, userRoleIds);
+        List<String> userPermissions = authRepository.queryPermissions(userId, userRoleIds, teamId);
+        // 对未选择团队相关进行特判
+        if ("0000".equals(teamId)) {
+            if (checkNoTeam(signature.getName())) {
+                return Response.CUSTOMIZE_ERROR(TEAM_INVALID_OPERATION);
+            } else if (!userPermissions.contains("SUPER")) {
+                return Response.CUSTOMIZE_ERROR(USER_NO_PERMISSION);
+            }
+        }
         // 判断用户是否有权限
         if (ArrayUtil.isEmpty(needed) || userPermissions.contains("SUPER")) {
             return point.proceed();
@@ -70,4 +79,10 @@ public class AuthVerifyAspect {
         return Response.CUSTOMIZE_ERROR(USER_NO_PERMISSION);
     }
 
+    private static Boolean checkNoTeam(String methodName) {
+        return !("queryMemberList".equals(methodName)
+                || "queryRoles".equals(methodName)
+                || "queryMemberInfo".equals(methodName)
+                || "queryStructure".equals(methodName));
+    }
 }

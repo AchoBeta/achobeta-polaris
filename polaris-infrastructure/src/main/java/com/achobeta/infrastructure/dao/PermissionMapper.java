@@ -8,6 +8,12 @@ import java.util.List;
 @Mapper
 public interface PermissionMapper {
 
+    /**
+     * 通过用户ID和角色ID列表查询权限列表
+     * @param userId
+     * @param roleIds
+     * @return
+     */
     List<PermissionPO> listPermission(String userId, List<String> roleIds);
 
 }

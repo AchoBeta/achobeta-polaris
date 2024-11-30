@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @Slf4j
 @Validated
 @RestController()
-@CrossOrigin("${app.config.cross-origin}:*")
+@CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/device/")
 @RequiredArgsConstructor
 public class DeviceController implements com.achobeta.api.IDeviceService {

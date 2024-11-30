@@ -24,10 +24,8 @@ public interface IMemberRepository {
      * 添加成员
      * @param userEntity
      * @param userId
-     * @param teamId
-     * @param positionIds
      */
-    void addMember(UserEntity userEntity, String userId, String teamId, List<String> positionIds);
+    void addMember(UserEntity userEntity, String userId);
 
     /**
      * 根据手机号查询对应用户
@@ -41,7 +39,7 @@ public interface IMemberRepository {
      * @param teamId
      * @return
      */
-    UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, List<String> addPositions,List<String> deletePositions);
+    UserEntity modifyMemberInfo(UserEntity userEntity, String teamId, String operatorId);
 
     /**
      * 查询团队成员信息详情

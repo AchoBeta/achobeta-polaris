@@ -81,4 +81,10 @@ public interface IPositionRepository {
      */
     List<PositionEntity> queryTeamByUserId(String userId);
 
+    /**
+     * 根据positionId查询position信息
+     * @param positionId
+     * @return
+     */
+    PositionEntity queryPositionById(String positionId);
 }

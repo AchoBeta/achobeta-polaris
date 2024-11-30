@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.achobeta.domain.user.model.entity.UserEntity;
 import com.achobeta.infrastructure.dao.LikeMapper;
 import com.achobeta.infrastructure.dao.PositionMapper;
+import com.achobeta.infrastructure.dao.RoleMapper;
 import com.achobeta.infrastructure.dao.UserMapper;
 import com.achobeta.infrastructure.dao.po.PositionPO;
 import com.achobeta.infrastructure.dao.po.UserPO;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.achobeta.types.enums.GlobalServiceStatusCode.USER_ACCOUNT_NOT_EXIST;
 
@@ -36,6 +38,9 @@ public class UserRepository implements com.achobeta.domain.user.adapter.reposito
 
     @Resource
     private LikeMapper likeMapper;
+
+    @Resource
+    private RoleMapper roleMapper;
 
     @Resource
     private IRedisService redisService;
@@ -157,8 +162,9 @@ public class UserRepository implements com.achobeta.domain.user.adapter.reposito
                 .currentStatus(userPO.getCurrentStatus())
                 .entryTime(userPO.getEntryTime())
                 .likeCount(userPO.getLikeCount())
-                .liked(likeMapper.queryLikedById(userId,userId)==1)
+                .liked(Optional.ofNullable(likeMapper.queryLikedById(userId, userId)).map(i -> i == 1).orElse(false))
                 .positions(positionNames)
+                .roles(roleMapper.listRoleNamesByUserId(userId))
                 .build();
 
         log.info("将用户信息缓存到redis，userId: {}",userId);

@@ -7,6 +7,7 @@ import com.achobeta.infrastructure.dao.po.AnnouncePO;
 import com.achobeta.infrastructure.dao.po.AnnounceReciverPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -41,7 +42,10 @@ public class AnnounceRepository implements IAnnounceRepository {
         //将公告id放到集合中，提高查询效率
         List<String> announceIds = announceReciverPOS.stream().map(AnnounceReciverPO::getAnnounceId).collect(Collectors.toList());
         //获取具体公告PO
-        List<AnnouncePO> announcePOS = announceMapper.queryAnnouncesByAnnounceId(announceIds);
+        List<AnnouncePO> announcePOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(announceIds)) {
+            announcePOS = announceMapper.queryAnnouncesByAnnounceId(announceIds);
+        }
         // 遍历announcePOS，更新announceEntityMap中的对象
         for (AnnouncePO announcePO : announcePOS) {
             String announceId = announcePO.getAnnounceId();
