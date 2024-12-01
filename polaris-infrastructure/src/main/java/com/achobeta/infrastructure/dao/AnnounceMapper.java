@@ -27,7 +27,7 @@ public interface AnnounceMapper {
      * @param userId
      * @return 公告接收者持久化对象
      */
-    List<AnnounceReciverPO> queryReadByUserIdAnnounceId(String userId,Integer limit,String announceId);
+    List<AnnounceReciverPO> queryReadByUserIdAnnounceId(@Param("userId")String userId,@Param("limit")Integer limit, @Param("announceId")String announceId);
 
     /**
      *
@@ -35,14 +35,14 @@ public interface AnnounceMapper {
      * @param announceId
      * @return 受影响行数
      */
-    Integer readAnnounce(String userId,String announceId);
+    Integer readAnnounce(@Param("userId")String userId,@Param("announceId")String announceId);
 
     /**
      *
      * @param userId
      * @return 用户公告数量
      */
-    Integer getAnnounceCount(String userId);
-    Integer readAllAnnounce(String userId);
+    Integer getAnnounceCount(@Param("userId")String userId);
+    Integer readAllAnnounce(@Param("userId")String userId);
 
 }
