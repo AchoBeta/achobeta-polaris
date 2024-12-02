@@ -42,8 +42,8 @@ public class LikeController implements com.achobeta.api.ILikeService {
             return Response.SYSTEM_SUCCESS();
         } catch (AppException e){
             log.error("fromId:{} toId:{} liked:{} 已知异常e:{}",
-                    likeRequestDTO.getUserId(),likeRequestDTO.getToId(),likeRequestDTO.isLiked(), e.getMessage(), e);
-            return Response.<Response>builder()
+                    likeRequestDTO.getUserId(),likeRequestDTO.getToId(),likeRequestDTO.isLiked(), e.getInfo(), e);
+            return Response.builder()
                     .traceId(MDC.get(Constants.TRACE_ID))
                     .code(Integer.valueOf(e.getCode()))
                     .info(e.getInfo())
