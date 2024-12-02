@@ -8,7 +8,7 @@
     </update>
 
     <update id="addLikeCount">
-        update `user` set good_count = good_count + #{likeCount}
+        update `user` set like_count = like_count + #{likeCount}
         where user_id = #{userId}
     </update>
     <insert id="insertLiked">

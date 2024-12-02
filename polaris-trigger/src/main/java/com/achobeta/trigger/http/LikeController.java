@@ -3,12 +3,13 @@ package com.achobeta.trigger.http;
 import com.achobeta.api.dto.like.LikeRequestDTO;
 import com.achobeta.domain.like.service.ILikeService;
 import com.achobeta.types.Response;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.constraint.SelfPermissionVerification;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,11 @@ public class LikeController implements com.achobeta.api.ILikeService {
         } catch (AppException e){
             log.error("fromId:{} toId:{} liked:{} 已知异常e:{}",
                     likeRequestDTO.getUserId(),likeRequestDTO.getToId(),likeRequestDTO.isLiked(), e.getMessage(), e);
-            return Response.CUSTOMIZE_ERROR(GlobalServiceStatusCode.REQUEST_NOT_VALID);
+            return Response.<Response>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
         }
         catch (Exception e) {
             log.error("fromId:{} toId:{} liked:{}",
