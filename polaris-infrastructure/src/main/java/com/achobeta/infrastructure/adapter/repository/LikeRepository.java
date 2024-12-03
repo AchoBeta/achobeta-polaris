@@ -4,13 +4,14 @@ import com.achobeta.domain.like.adapter.repository.ILikeRepository;
 import com.achobeta.infrastructure.dao.LikeMapper;
 import com.achobeta.infrastructure.redis.RedissonService;
 import com.achobeta.types.common.Constants;
-import com.achobeta.types.support.util.BuildKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Optional;
+
+import static com.achobeta.types.support.util.BuildKeyUtil.buildOtherUserInfoKey;
 
 /**
  * @author huangwenxing
@@ -39,7 +40,7 @@ public class LikeRepository implements ILikeRepository {
         /**更新点赞数量*/
         int count = liked?1:-1;
         mapper.addLikeCount(toId, count);
-        redissonService.remove(BuildKeyUtil.buildUserInfoKey(toId));
+        redissonService.remove(buildOtherUserInfoKey(fromId, toId));
     }
 
     @Override
