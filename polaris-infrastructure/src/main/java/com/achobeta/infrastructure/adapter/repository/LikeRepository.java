@@ -2,7 +2,7 @@ package com.achobeta.infrastructure.adapter.repository;
 
 import com.achobeta.domain.like.adapter.repository.ILikeRepository;
 import com.achobeta.infrastructure.dao.LikeMapper;
-import com.achobeta.infrastructure.redis.RedissonService;
+import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -26,7 +26,7 @@ public class LikeRepository implements ILikeRepository {
     private LikeMapper mapper;
     /**redis服务*/
     @Resource
-    private RedissonService redissonService;
+    private IRedisService redissonService;
     /**键过期时间500ms*/
     private long expired = 500;
     @Override
