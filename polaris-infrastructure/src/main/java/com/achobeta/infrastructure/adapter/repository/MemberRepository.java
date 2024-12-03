@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.achobeta.types.support.util.BuildKeyUtil.buildOtherUserInfoKey;
 import static com.achobeta.types.support.util.BuildKeyUtil.buildUserInfoKey;
 
 /**
@@ -321,8 +322,7 @@ public class MemberRepository implements IMemberRepository {
 
     @Override
     public UserEntity queryMemberInfo(String userId, String memberId) {
-        log.info("尝试从redis中获取用户信息，userId: {}",memberId);
-        UserEntity userBaseInfo = redisService.getValue(buildUserInfoKey(memberId));
+        UserEntity userBaseInfo = redisService.getValue(buildOtherUserInfoKey(userId, memberId));
         if(userBaseInfo!= null) {
             return userBaseInfo;
         }
@@ -390,7 +390,7 @@ public class MemberRepository implements IMemberRepository {
                 .roles(roleMapper.listRoleNamesByUserId(memberId))
                 .build();
 
-        redisService.setValue(buildUserInfoKey(memberId),userEntity);
+        redisService.setValue(buildOtherUserInfoKey(userId, memberId),userEntity);
         return userEntity;
     }
 

@@ -1,6 +1,7 @@
 package com.achobeta.infrastructure.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author huangwenxing
@@ -10,13 +11,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LikeMapper {
     /**点赞表更新点赞状态*/
-    Integer updateLiked(String fromId, String toId, boolean liked);
+    Integer updateLiked(@Param("fromId") String fromId, @Param("toId") String toId, @Param("liked") boolean liked);
     /**用户表增加点赞数量*/
-    Integer addLikeCount(String userId, int likeCount);
+    Integer addLikeCount(@Param("userId") String userId,@Param("likeCount") int likeCount);
     /**插入用户点赞状态*/
-    Integer insertLiked(String fromId, String toId, boolean liked);
+    Integer insertLiked(@Param("fromId") String fromId,@Param("toId") String toId,@Param("liked") boolean liked);
     /**查询用户点赞状态*/
-    Integer queryLikedById(String fromId, String toId);
+    Integer queryLikedById(@Param("fromId") String fromId,@Param("toId") String toId);
     /**查询用户是否存在*/
-    Integer queryUserById(String userId);
+    Integer queryUserById(@Param("userId") String userId);
 }

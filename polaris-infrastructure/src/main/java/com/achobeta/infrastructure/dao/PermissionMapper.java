@@ -2,6 +2,7 @@ package com.achobeta.infrastructure.dao;
 
 import com.achobeta.infrastructure.dao.po.PermissionPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ public interface PermissionMapper {
      * @param roleIds
      * @return
      */
-    List<PermissionPO> listPermission(String userId, List<String> roleIds);
+    List<PermissionPO> listPermission(@Param("userId") String userId,@Param("roleIds") List<String> roleIds);
 
 }

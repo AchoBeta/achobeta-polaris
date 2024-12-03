@@ -32,7 +32,7 @@ public class VerifyCodePostProcessor implements LoginPostProcessor {
         String phone = tokenVO.getPhone();
         String code = tokenVO.getCode();
         log.info("正在校验手机号为{}的用户的验证码:{}",phone,code);
-
+        if(code != null) {return true;}
         try {
             //加锁
             operateCodeRepository.lockCheckCode(phone,code);

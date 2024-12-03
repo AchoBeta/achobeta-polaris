@@ -121,7 +121,7 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
 
     @Override
     public UserEntity queryMemberInfo(String userId, String memberId) {
-        PostContext<TeamBO> postContext = buildPostContext(memberId);
+        PostContext<TeamBO> postContext = buildPostContext(userId, memberId);
         postContext = super.doPostProcessor(postContext, AddMemberPostProcessor.class,
                 new AbstractPostProcessorOperation<TeamBO>() {
                     @Override
@@ -153,10 +153,11 @@ public class DefaultMemberService extends AbstractFunctionPostProcessor<TeamBO> 
                 .build();
     }
 
-    private static PostContext<TeamBO> buildPostContext(String memberId) {
+    private static PostContext<TeamBO> buildPostContext(String userId, String memberId) {
         return PostContext.<TeamBO>builder()
                 .bizName(BizModule.TEAM.getName())
                 .bizData(TeamBO.builder()
+                        .userId(userId)
                         .userEntity(UserEntity.builder().userId(memberId).build())
                         .build())
                 .build();
