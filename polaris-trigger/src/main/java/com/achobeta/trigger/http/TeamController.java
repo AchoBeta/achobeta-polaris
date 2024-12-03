@@ -179,7 +179,7 @@ public class TeamController implements ITeamService {
      * 查看团队成员信息详情接口
      */
     @GetMapping("/member/detail")
-    @LoginVerification
+//    @LoginVerification
     @Override
     public Response<QueryMemberInfoResponseDTO> queryMemberInfo(@Valid QueryMemberInfoRequestDTO requestDTO) {
         try {
