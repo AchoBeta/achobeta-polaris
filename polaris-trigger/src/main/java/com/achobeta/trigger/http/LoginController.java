@@ -51,6 +51,7 @@ public class LoginController implements ILoginService {
     @PostMapping(value = "login")
     public Response<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest request, HttpServletResponse response) {
         try {
+            loginRequestDTO.setIp("127.0.0.1");
             log.info("用户访问登录系统开始,phone:{}", loginRequestDTO.getPhone());
 
             if(loginRequestDTO.getIsAutoLogin().equals("true")){
