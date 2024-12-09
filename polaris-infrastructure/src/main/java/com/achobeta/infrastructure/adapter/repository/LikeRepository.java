@@ -2,7 +2,7 @@ package com.achobeta.infrastructure.adapter.repository;
 
 import com.achobeta.domain.like.adapter.repository.ILikeRepository;
 import com.achobeta.infrastructure.dao.LikeMapper;
-import com.achobeta.infrastructure.redis.RedissonService;
+import com.achobeta.infrastructure.redis.IRedisService;
 import com.achobeta.types.common.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Optional;
+
+import static com.achobeta.types.support.util.BuildKeyUtil.buildOtherUserInfoKey;
 
 /**
  * @author huangwenxing
@@ -24,7 +26,7 @@ public class LikeRepository implements ILikeRepository {
     private LikeMapper mapper;
     /**redis服务*/
     @Resource
-    private RedissonService redissonService;
+    private IRedisService redissonService;
     /**键过期时间500ms*/
     private long expired = 500;
     @Override
@@ -38,6 +40,7 @@ public class LikeRepository implements ILikeRepository {
         /**更新点赞数量*/
         int count = liked?1:-1;
         mapper.addLikeCount(toId, count);
+        redissonService.remove(buildOtherUserInfoKey(fromId, toId));
     }
 
     @Override

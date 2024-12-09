@@ -5,14 +5,18 @@ import com.achobeta.api.dto.device.GetUserDeviceResponseDTO;
 import com.achobeta.domain.device.model.valobj.UserCommonDevicesVO;
 import com.achobeta.domain.device.service.IDeviceService;
 import com.achobeta.types.Response;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.constraint.LoginVerification;
 import com.achobeta.types.constraint.SelfPermissionVerification;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -54,7 +58,11 @@ public class DeviceController implements com.achobeta.api.IDeviceService {
         }catch (AppException e){
             log.error("用户访问设备渲染页面系统失败!userId:{} deviceId:{} limit:{} lastDeviceId:{}",
                     getUserDeviceRequestDTO.getUserId(), getUserDeviceRequestDTO.getDeviceId(), getUserDeviceRequestDTO.getLimit(),getUserDeviceRequestDTO.getLastDeviceId(), e);
-            return Response.CUSTOMIZE_ERROR(GlobalServiceStatusCode.PARAM_NOT_VALID);
+            return Response.<GetUserDeviceResponseDTO>builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
         }
         catch (Exception e) {
             log.error("用户访问设备渲染页面系统失败！userId:{} deviceId:{} limit:{} lastDeviceId:{}",

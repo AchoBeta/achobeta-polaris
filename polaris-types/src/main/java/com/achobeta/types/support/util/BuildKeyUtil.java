@@ -19,4 +19,8 @@ public class BuildKeyUtil {
     public static String buildUserPermissionInTeamKey(String userId, String teamId) {
         return RedisKey.USER_PERMISSION_IN_TEAM + userId + teamId;
     }
+
+    public static String buildOtherUserInfoKey(String userId, String memberId) {
+        return RedisKey.USER_INFO + userId + memberId;
+    }
 }

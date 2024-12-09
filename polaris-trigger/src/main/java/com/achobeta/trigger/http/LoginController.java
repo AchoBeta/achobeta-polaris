@@ -9,6 +9,7 @@ import com.achobeta.domain.login.service.IRefreshTokenService;
 import com.achobeta.types.Response;
 import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
+import com.achobeta.types.support.util.ClientIpUtil;
 import com.achobeta.types.support.util.DeviceNameUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,7 @@ public class LoginController implements ILoginService {
     @PostMapping(value = "login")
     public Response<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest request, HttpServletResponse response) {
         try {
+            loginRequestDTO.setIp(ClientIpUtil.getIpAdrress(request));
             log.info("用户访问登录系统开始,phone:{}", loginRequestDTO.getPhone());
 
             if(loginRequestDTO.getIsAutoLogin().equals("true")){

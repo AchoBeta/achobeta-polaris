@@ -4,11 +4,12 @@ import com.achobeta.api.dto.announce.*;
 import com.achobeta.domain.announce.model.valobj.UserAnnounceVO;
 import com.achobeta.domain.announce.service.IAnnounceService;
 import com.achobeta.types.Response;
+import com.achobeta.types.common.Constants;
 import com.achobeta.types.constraint.LoginVerification;
-import com.achobeta.types.enums.GlobalServiceStatusCode;
 import com.achobeta.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
      * @return
      */
     @GetMapping("/getUserAnnounce")
-    @LoginVerification
+//    @LoginVerification
     @Override
     public Response<GetUserAnnounceResponseDTO> getUserAnnounce(@Valid GetUserAnnounceRequestDTO getUserAnnounceRequestDTO) {
         try {
@@ -68,8 +69,12 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
             return Response.SYSTEM_SUCCESS();
         }catch (AppException e){
             log.error("用户访问读公告失败，userId:{} announceId:{} 已知异常e:{}",
-                    readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId(), e.getMessage(),e);
-            return Response.CUSTOMIZE_ERROR(GlobalServiceStatusCode.PARAM_NOT_VALID);
+                    readAnnounceRequestDTO.getUserId(),readAnnounceRequestDTO.getAnnounceId(), e.getInfo(),e);
+            return Response.builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
         }
         catch (Exception e){
             log.error("用户访问读公告失败，userId:{} announceId:{}",
@@ -109,8 +114,12 @@ public class AnnounceController implements com.achobeta.api.IAnnounceService {
             return Response.SYSTEM_SUCCESS();
         }catch (AppException e){
             log.error("用户读取所有公告失败，userId:{} 已知异常e:{}",
-                    readAllAnnounceRequestDTO.getUserId(), e.getMessage(),e);
-            return Response.CUSTOMIZE_ERROR(GlobalServiceStatusCode.PARAM_NOT_VALID);
+                    readAllAnnounceRequestDTO.getUserId(), e.getInfo(),e);
+            return Response.builder()
+                    .traceId(MDC.get(Constants.TRACE_ID))
+                    .code(Integer.valueOf(e.getCode()))
+                    .info(e.getInfo())
+                    .build();
         }
         catch (Exception e){
             log.error("用户读取所有公告失败，userId:{} ",
